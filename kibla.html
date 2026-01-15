@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kibla - Ratkoc</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        
+        body { 
+            background: radial-gradient(circle at center, #1e293b, #020617); 
+            min-height: 100vh; 
+            color: white; 
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+        .glass { 
+            background: rgba(255, 255, 255, 0.03); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+        .compass-ring {
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 0 50px rgba(16, 185, 129, 0.1);
+        }
+        .needle {
+            filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.8));
+            transition: transform 0.5s cubic-bezier(0.1, 0.5, 0.1, 1);
+        }
+        .active-nav { color: #10b981; position: relative; }
+        .active-nav::after {
+            content: ''; position: absolute; top: -16px; width: 20px; height: 3px;
+            background: #10b981; border-radius: 0 0 10px 10px;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center">
+
+    <header class="w-full p-8 text-center">
+        <h1 class="text-2xl font-light tracking-[0.3em] uppercase">Kibla</h1>
+        <p class="text-emerald-400 text-xs mt-2 uppercase">Drejtimi nga Qabja</p>
+    </header>
+
+    <main class="flex-1 flex flex-col items-center justify-center w-full px-10 relative">
+        
+        <div id="degree-text" class="mb-8 text-5xl font-extralight tracking-tighter">
+            0°
+        </div>
+
+        <div class="relative w-72 h-72 rounded-full glass compass-ring flex items-center justify-center">
+            
+            <div class="absolute inset-4 border border-white/5 rounded-full"></div>
+            
+            <div id="compass-disc" class="relative w-full h-full flex items-center justify-center">
+                <div class="needle w-1 h-56 bg-gradient-to-t from-transparent via-emerald-500 to-transparent absolute rounded-full"></div>
+                <div class="absolute -top-2">
+                    <i class="fa-solid fa-caret-up text-emerald-400 text-2xl"></i>
+                </div>
+                
+                <div class="glass w-20 h-20 rounded-full flex items-center justify-center z-10 border border-white/10 shadow-2xl">
+                    <i class="fa-solid fa-kaaba text-3xl text-white"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 text-center">
+            <p id="status-text" class="text-gray-400 text-sm font-light leading-relaxed max-w-[250px]">
+                Për saktësi maksimale, mbajeni telefonin horizontalisht dhe larg pajisjeve metalike.
+            </p>
+            <button id="start-btn" class="mt-6 px-6 py-2 border border-emerald-500/30 rounded-full text-xs text-emerald-400 uppercase tracking-widest hover:bg-emerald-500/10 transition-all">
+                Aktivizo Sensorin
+            </button>
+        </div>
+
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-[#020617]/80 backdrop-blur-2xl border-t border-white/5 px-8 py-5 z-50">
+        <div class="flex justify-between items-center max-w-md mx-auto">
+            <a href="index.html" class="flex flex-col items-center text-gray-500 transition-all duration-300">
+                <i class="fa-solid fa-clock-four text-xl"></i>
+                <span class="text-[10px] mt-1 font-medium tracking-wide">Vaktia</span>
+            </a>
+            <a href="lutje.html" class="flex flex-col items-center text-gray-500 transition-all duration-300">
+                <i class="fa-solid fa-hands-praying text-xl"></i>
+                <span class="text-[10px] mt-1 font-medium tracking-wide">Lutje</span>
+            </a>
+            <a href="kibla.html" class="flex flex-col items-center active-nav transition-all duration-300">
+                <i class="fa-solid fa-compass text-xl text-emerald-400"></i>
+                <span class="text-[10px] mt-1 font-medium tracking-wide">Kibla</span>
+            </a>
+            <a href="info.html" class="flex flex-col items-center text-gray-500 transition-all duration-300">
+                <i class="fa-solid fa-circle-info text-xl"></i>
+                <span class="text-[10px] mt-1 font-medium tracking-wide">Info</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        const compassDisc = document.getElementById('compass-disc');
+        const degreeText = document.getElementById('degree-text');
+        const startBtn = document.getElementById('start-btn');
+        const statusText = document.getElementById('status-text');
+
+        // Shkalla e Kiblës për Kosovë (afërsisht 142-145 shkallë nga Veriu)
+        const qiblaDirection = 143; 
+
+        function handleOrientation(event) {
+            let heading = event.webkitCompassHeading || Math.abs(event.alpha - 360);
+            
+            if (heading) {
+                // Rrotullojmë diskun për t'u drejtuar nga Kibla
+                // Formula: -heading (orientimi telefonit) + qiblaDirection
+                const rotation = qiblaDirection - heading;
+                compassDisc.style.transform = `rotate(${rotation}deg)`;
+                degreeText.innerText = Math.round(heading) + "°";
+            }
+        }
+
+        startBtn.addEventListener('click', () => {
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                // Për iOS (iPhone)
+                DeviceOrientationEvent.requestPermission()
+                    .then(permissionState => {
+                        if (permissionState === 'granted') {
+                            window.addEventListener('deviceorientation', handleOrientation, true);
+                            startBtn.style.display = 'none';
+                        }
+                    })
+                    .catch(console.error);
+            } else {
+                // Për Android dhe pajisje të tjera
+                window.addEventListener('deviceorientation', handleOrientation, true);
+                startBtn.style.display = 'none';
+                statusText.innerText = "Sensori u aktivizua. Drejtohuni drejt veriut për të gjetur Kiblën.";
+            }
+        });
+
+        // Kontrollo nëse jemi në Desktop
+        if (!window.DeviceOrientationEvent) {
+            statusText.innerText = "Sensori i orientimit nuk mbështetet në këtë pajisje.";
+            startBtn.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vaktia Ratkoc</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;500;600;700&display=swap');
+        
+        body { 
+            background: #020617; 
+            color: white; 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .glass { 
+            background: rgba(255, 255, 255, 0.02); 
+            backdrop-filter: blur(25px); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+        }
+
+        .progress-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.5s linear;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .active-nav { color: #10b981; position: relative; }
+        .active-nav::after {
+            content: ''; position: absolute; top: -16px; width: 20px; height: 3px;
+            background: #10b981; border-radius: 0 0 10px 10px;
+        }
+
+        .current-active {
+            border: 1px solid rgba(16, 185, 129, 0.4) !important;
+            background: linear-gradient(145deg, rgba(16, 185, 129, 0.12) 0%, rgba(2, 6, 23, 0) 100%) !important;
+        }
+
+        .info-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        ::-webkit-scrollbar { width: 0px; }
+    </style>
+</head>
+<body class="pb-40">
+
+    <header class="p-6 text-center pt-8">
+        <h1 class="text-[11px] uppercase tracking-[0.3em] text-emerald-500 font-bold mb-8 italic">
+            "Namazi është drita e besimtarit"
+        </h1>
+        
+        <div class="progress-container">
+            <svg width="200" height="200">
+                <circle class="text-white/5" stroke-width="3" stroke="currentColor" fill="transparent" r="90" cx="100" cy="100"/>
+                <circle id="progress-bar" class="text-emerald-500 progress-ring__circle" stroke-width="3" stroke-dasharray="565.48" stroke-dashoffset="565.48" stroke-linecap="round" stroke="currentColor" fill="transparent" r="90" cx="100" cy="100"/>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <div id="live-clock" class="text-4xl font-extralight tracking-tighter italic text-white">00:00:00</div>
+                <p id="current-date" class="text-gray-500 text-[10px] mt-2 font-medium uppercase tracking-widest"></p>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto px-6 space-y-6">
+        
+        <section class="glass p-5 rounded-[2rem] text-center border-white/5">
+            <p id="quote-text" class="text-sm text-gray-300 font-light leading-relaxed italic">
+                Duke u ngarkuar...
+            </p>
+        </section>
+
+        <div class="glass rounded-[2.5rem] p-8 text-center relative overflow-hidden border-t border-white/10">
+            <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
+            <span class="text-[10px] uppercase tracking-[0.3em] text-emerald-500/70 font-bold">I Radhës</span>
+            <h2 id="next-prayer-name" class="text-4xl font-bold my-2 italic tracking-tight">-</h2>
+            <div class="inline-block px-4 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                <span id="prayer-countdown" class="text-sm font-mono text-emerald-400">00:00:00</span>
+            </div>
+        </div>
+
+        <div id="vaktet-list" class="grid grid-cols-2 gap-3"></div>
+
+        <div class="pt-4">
+            <div class="glass p-6 rounded-[2.5rem] border-white/5 bg-gradient-to-br from-emerald-500/5 to-transparent">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest italic">Detyrat e Ditës</h3>
+                    <span id="task-count" class="text-[9px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-lg font-bold">0/5 Namaze</span>
+                </div>
+                
+                <div class="flex justify-between gap-2">
+                    <button onclick="toggleTask(this)" class="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-[10px] font-bold hover:border-emerald-500/50 transition-all">S</button>
+                    <button onclick="toggleTask(this)" class="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-[10px] font-bold hover:border-emerald-500/50 transition-all">D</button>
+                    <button onclick="toggleTask(this)" class="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-[10px] font-bold hover:border-emerald-500/50 transition-all">I</button>
+                    <button onclick="toggleTask(this)" class="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-[10px] font-bold hover:border-emerald-500/50 transition-all">A</button>
+                    <button onclick="toggleTask(this)" class="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-[10px] font-bold hover:border-emerald-500/50 transition-all">J</button>
+                </div>
+
+                <div class="mt-6 pt-6 border-t border-white/5 flex items-center justify-between">
+                    <div class="flex flex-col">
+                        <span class="text-[9px] text-gray-500 uppercase font-bold tracking-tighter">Klikoni për Dhikër</span>
+                        <span class="text-xs text-emerald-400 font-medium italic">SubhanAllah</span>
+                    </div>
+                    <div onclick="incrementTasbih()" class="w-12 h-12 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 cursor-pointer active:scale-90 transition-all">
+                        <span id="tasbih-num" class="text-sm font-bold text-white">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pt-10">
+            <div class="flex items-center justify-between mb-8 px-2">
+                <div>
+                    <h3 class="text-lg font-bold text-white italic tracking-tight">Udhëzime mbi Namazin</h3>
+                    <p class="text-[10px] text-emerald-500 uppercase tracking-[0.2em] font-semibold">Thelbësore për besimtarin</p>
+                </div>
+                <div class="w-10 h-10 glass rounded-2xl flex items-center justify-center">
+                    <i class="fa-solid fa-star text-emerald-500 text-xs animate-pulse"></i>
+                </div>
+            </div>
+            
+            <div class="space-y-5">
+                <div class="glass info-card p-6 rounded-[2.5rem] relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-6 text-7xl font-bold text-white/[0.03] italic group-hover:text-emerald-500/[0.05] transition-colors">01</div>
+                    <div class="flex gap-5">
+                        <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-emerald-500/20 to-transparent rounded-2xl flex items-center justify-center border border-emerald-500/20">
+                            <i class="fa-solid fa-bolt-lightning text-emerald-400"></i>
+                        </div>
+                        <div class="z-10">
+                            <h4 class="text-sm font-bold text-emerald-400 mb-1 tracking-wide uppercase text-[10px]">Vlera e Kohës</h4>
+                            <p class="text-[11px] text-gray-400 leading-relaxed">Namazi në fillim të kohës është vepra më e dashur tek Allahu. Çdo minutë që pret shton bereqetin në ditën tënde.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass info-card p-6 rounded-[2.5rem] relative overflow-hidden group">
+                    <div class="absolute -right-4 -top-6 text-7xl font-bold text-white/[0.03] italic group-hover:text-emerald-500/[0.05] transition-colors">02</div>
+                    <div class="flex gap-5">
+                        <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-emerald-500/20 to-transparent rounded-2xl flex items-center justify-center border border-emerald-500/20">
+                            <i class="fa-solid fa-water text-emerald-400"></i>
+                        </div>
+                        <div class="z-10">
+                            <h4 class="text-sm font-bold text-emerald-400 mb-1 tracking-wide uppercase text-[10px]">Pastërtia e Shpirtit</h4>
+                            <p class="text-[11px] text-gray-400 leading-relaxed">Abdesi nuk pastron vetëm trupin, por fshin edhe gjynahet e vogla që bëjmë me sytë, duart dhe këmbët tona.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-emerald-500/10 to-transparent p-6 rounded-[2.5rem] border border-emerald-500/10">
+                    <h4 class="text-[10px] font-bold text-gray-300 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <span class="w-2 h-2 bg-emerald-500 rounded-full"></span> Përgatitja e Shpejtë
+                    </h4>
+                    <div class="grid grid-cols-2 gap-y-3 gap-x-4">
+                        <div class="flex items-center gap-2 text-[10px] text-gray-400">
+                            <i class="fa-solid fa-circle-check text-emerald-500/50"></i> <span>Veshje e pastër</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-[10px] text-gray-400">
+                            <i class="fa-solid fa-circle-check text-emerald-500/50"></i> <span>Vendi i pastër</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-[10px] text-gray-400">
+                            <i class="fa-solid fa-circle-check text-emerald-500/50"></i> <span>Kibla</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-[10px] text-gray-400">
+                            <i class="fa-solid fa-circle-check text-emerald-500/50"></i> <span>Nijeti</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="text-center text-[9px] text-gray-600 mt-12 mb-6 uppercase tracking-[0.5em] italic">Ratkoci 2026</p>
+        </div>
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-[#020617]/90 backdrop-blur-xl border-t border-white/5 px-8 py-5 z-50">
+        <div class="flex justify-between items-center max-w-md mx-auto">
+            <a href="index.html" class="flex flex-col items-center active-nav">
+                <i class="fa-solid fa-clock-four text-xl text-emerald-400"></i>
+                <span class="text-[10px] mt-1 font-medium tracking-wide">Vaktia</span>
+            </a>
+            <a href="lutje.html" class="flex flex-col items-center text-gray-500">
+                <i class="fa-solid fa-hands-praying text-xl"></i>
+                <span class="text-[10px] mt-1 font-medium tracking-wide">Lutje</span>
+            </a>
+            <a href="kibla.html" class="flex flex-col items-center text-gray-500">
+                <i class="fa-solid fa-compass text-xl"></i>
+                <span class="text-[10px] mt-1 font-medium tracking-wide">Kibla</span>
+            </a>
+            <a href="info.html" class="flex flex-col items-center text-gray-500">
+                <i class="fa-solid fa-circle-info text-xl"></i>
+                <span class="text-[10px] mt-1 font-medium tracking-wide">Info</span>
+            </a>
+        </div>
+    </nav>
+
+    <script>
+        const ditet = ["E diel", "E hënë", "E martë", "E mërkurë", "E enjte", "E premte", "E shtunë"];
+        const muajt = ["Janar", "Shkurt", "Mars", "Prill", "Maj", "Qershor", "Korrik", "Gusht", "Shtator", "Tetor", "Nëntor", "Dhjetor"];
+
+        const vaktet = [
+            { emri: 'Sabahu', koha: '05:25', ikona: 'fa-sun-haze', citati: "Namazi i Sabahit të fut në mbrojtjen e Allahut." },
+            { emri: 'Lindja', koha: '06:58', ikona: 'fa-sunrise', citati: "Kujto Allahun gjatë lindjes së diellit." },
+            { emri: 'Dreka', koha: '12:15', ikona: 'fa-sun', citati: "Namazi i Drekës e largon lodhjen e shpirtit." },
+            { emri: 'Ikindia', koha: '14:40', ikona: 'fa-cloud-sun', citati: "Kush fal Ikindinë, Allahu e ruan atë." },
+            { emri: 'Akshami', koha: '16:45', ikona: 'fa-sunset', citati: "Lutu në Aksham, dyert e qiellit janë të hapura." },
+            { emri: 'Jacia', koha: '18:15', ikona: 'fa-moon-stars', citati: "Përfundoje ditën me qetësinë e Jacisë." }
+        ];
+
+        let completedTasks = 0;
+        function toggleTask(btn) {
+            if(!btn.classList.contains('bg-emerald-500')) {
+                btn.classList.add('bg-emerald-500', 'border-emerald-500', 'text-white');
+                completedTasks++;
+            } else {
+                btn.classList.remove('bg-emerald-500', 'border-emerald-500', 'text-white');
+                completedTasks--;
+            }
+            document.getElementById('task-count').innerText = `${completedTasks}/5 Namaze`;
+        }
+
+        let count = 0;
+        function incrementTasbih() {
+            count++; if(count > 33) count = 0;
+            document.getElementById('tasbih-num').innerText = count;
+            if (navigator.vibrate) navigator.vibrate(40);
+        }
+
+        function updateUI() {
+            const now = new Date();
+            document.getElementById('live-clock').innerText = now.toLocaleTimeString('sq-AL', {hour12: false});
+            document.getElementById('current-date').innerText = `${ditet[now.getDay()]}, ${now.getDate()} ${muajt[now.getMonth()]}`;
+
+            const currentMin = (now.getHours() * 60) + now.getMinutes();
+            let currentIdx = -1;
+            vaktet.forEach((v, i) => {
+                const [vh, vm] = v.koha.split(':').map(Number);
+                if (currentMin >= (vh * 60) + vm) currentIdx = i;
+            });
+
+            const cIdx = currentIdx === -1 ? 5 : currentIdx;
+            document.getElementById('quote-text').innerText = `"${vaktet[cIdx].citati}"`;
+
+            const nextIdx = (currentIdx + 1) % vaktet.length;
+            const nextP = vaktet[nextIdx];
+            document.getElementById('next-prayer-name').innerText = nextP.emri;
+
+            const [rh, rm] = nextP.koha.split(':').map(Number);
+            let pTime = new Date(); pTime.setHours(rh, rm, 0);
+            if (pTime < now) pTime.setDate(pTime.getDate() + 1);
+            const diff = pTime - now;
+            const dh = Math.floor(diff/3600000).toString().padStart(2,'0');
+            const dm = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
+            const ds = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
+            document.getElementById('prayer-countdown').innerText = `${dh}:${dm}:${ds}`;
+
+            const circumference = 565.48;
+            const percent = ((now.getHours() * 60) + now.getMinutes()) / 1440;
+            document.getElementById('progress-bar').style.strokeDashoffset = circumference - (percent * circumference);
+
+            document.querySelectorAll('#vaktet-list > div').forEach((c, i) => {
+                c.classList.toggle('current-active', i === currentIdx);
+            });
+        }
+
+        document.getElementById('vaktet-list').innerHTML = vaktet.map(v => `
+            <div class="glass p-4 rounded-3xl flex flex-col items-center gap-1 text-center border-white/5 transition-all">
+                <i class="fa-solid ${v.ikona} text-emerald-500/70 text-lg mb-1"></i>
+                <span class="text-[8px] text-gray-500 uppercase tracking-tighter font-bold">${v.emri}</span>
+                <span class="text-sm font-bold italic">${v.koha}</span>
+            </div>
+        `).join('');
+
+        setInterval(updateUI, 1000);
+        updateUI();
+    </script>
+</body>
+</html>
