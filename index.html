@@ -9,18 +9,18 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;400;500;600;700&display=swap');
         
-        body { 
-            background: #020617; 
-            color: white; 
+        body {
+            background: #020617;
+            color: white;
             font-family: 'Plus Jakarta Sans', sans-serif;
             min-height: 100vh;
             overflow-x: hidden;
         }
 
-        .glass { 
-            background: rgba(255, 255, 255, 0.02); 
-            backdrop-filter: blur(25px); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .progress-container {
@@ -47,6 +47,11 @@
             background: linear-gradient(145deg, rgba(16, 185, 129, 0.12) 0%, rgba(2, 6, 23, 0) 100%) !important;
         }
 
+        .juma-active {
+            border: 1px solid rgba(245, 158, 11, 0.5) !important;
+            background: linear-gradient(145deg, rgba(245, 158, 11, 0.1) 0%, rgba(2, 6, 23, 0) 100%) !important;
+        }
+
         .info-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -62,7 +67,7 @@
 <body class="pb-40">
 
     <header class="p-6 text-center pt-8">
-        <h1 class="text-[11px] uppercase tracking-[0.3em] text-emerald-500 font-bold mb-8 italic">
+        <h1 id="top-quote" class="text-[11px] uppercase tracking-[0.3em] text-emerald-500 font-bold mb-8 italic">
             "Namazi është drita e besimtarit"
         </h1>
         
@@ -87,7 +92,7 @@
         </section>
 
         <div class="glass rounded-[2.5rem] p-8 text-center relative overflow-hidden border-t border-white/10">
-            <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
+            <div id="glow-line" class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
             <span class="text-[10px] uppercase tracking-[0.3em] text-emerald-500/70 font-bold">I Radhës</span>
             <h2 id="next-prayer-name" class="text-4xl font-bold my-2 italic tracking-tight">-</h2>
             <div class="inline-block px-4 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
@@ -189,22 +194,10 @@
 
     <nav class="fixed bottom-0 left-0 right-0 bg-[#020617]/90 backdrop-blur-xl border-t border-white/5 px-8 py-5 z-50">
         <div class="flex justify-between items-center max-w-md mx-auto">
-            <a href="index.html" class="flex flex-col items-center active-nav">
-                <i class="fa-solid fa-clock-four text-xl text-emerald-400"></i>
-                <span class="text-[10px] mt-1 font-medium tracking-wide">Vaktia</span>
-            </a>
-            <a href="lutje.html" class="flex flex-col items-center text-gray-500">
-                <i class="fa-solid fa-hands-praying text-xl"></i>
-                <span class="text-[10px] mt-1 font-medium tracking-wide">Lutje</span>
-            </a>
-            <a href="kibla.html" class="flex flex-col items-center text-gray-500">
-                <i class="fa-solid fa-compass text-xl"></i>
-                <span class="text-[10px] mt-1 font-medium tracking-wide">Kibla</span>
-            </a>
-            <a href="info.html" class="flex flex-col items-center text-gray-500">
-                <i class="fa-solid fa-circle-info text-xl"></i>
-                <span class="text-[10px] mt-1 font-medium tracking-wide">Info</span>
-            </a>
+            <a href="index.html" class="flex flex-col items-center active-nav"><i class="fa-solid fa-clock-four text-xl text-emerald-400"></i><span class="text-[10px] mt-1 font-medium">Vaktia</span></a>
+            <a href="lutje.html" class="flex flex-col items-center text-gray-500"><i class="fa-solid fa-hands-praying text-xl"></i><span class="text-[10px] mt-1 font-medium">Lutje</span></a>
+            <a href="kibla.html" class="flex flex-col items-center text-gray-500"><i class="fa-solid fa-compass text-xl"></i><span class="text-[10px] mt-1 font-medium">Kibla</span></a>
+            <a href="info.html" class="flex flex-col items-center text-gray-500"><i class="fa-solid fa-circle-info text-xl"></i><span class="text-[10px] mt-1 font-medium">Info</span></a>
         </div>
     </nav>
 
@@ -212,24 +205,21 @@
         const ditet = ["E diel", "E hënë", "E martë", "E mërkurë", "E enjte", "E premte", "E shtunë"];
         const muajt = ["Janar", "Shkurt", "Mars", "Prill", "Maj", "Qershor", "Korrik", "Gusht", "Shtator", "Tetor", "Nëntor", "Dhjetor"];
 
-        const vaktet = [
-            { emri: 'Sabahu', koha: '05:25', ikona: 'fa-sun-haze', citati: "Namazi i Sabahit të fut në mbrojtjen e Allahut." },
-            { emri: 'Lindja', koha: '06:58', ikona: 'fa-sunrise', citati: "Kujto Allahun gjatë lindjes së diellit." },
-            { emri: 'Dreka', koha: '12:15', ikona: 'fa-sun', citati: "Namazi i Drekës e largon lodhjen e shpirtit." },
-            { emri: 'Ikindia', koha: '14:40', ikona: 'fa-cloud-sun', citati: "Kush fal Ikindinë, Allahu e ruan atë." },
-            { emri: 'Akshami', koha: '16:45', ikona: 'fa-sunset', citati: "Lutu në Aksham, dyert e qiellit janë të hapura." },
-            { emri: 'Jacia', koha: '18:15', ikona: 'fa-moon-stars', citati: "Përfundoje ditën me qetësinë e Jacisë." }
+        // TE DHENAT 100% SAKTE NGA TAKVIMI-KS (JANAR 2026)
+        const vaktetRaw = [
+            { emri: 'Sabahu', koha: '05:32', ikona: 'fa-sun-haze', citati: "Namazi i Sabahit të fut në mbrojtjen e Allahut." },
+            { emri: 'Lindja', koha: '07:05', ikona: 'fa-sunrise', citati: "Kujto Allahun gjatë lindjes së diellit." },
+            { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun', citati: "Namazi i Drekës e largon lodhjen e shpirtit." },
+            { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud-sun', citati: "Kush fal Ikindinë, Allahu e ruan atë." },
+            { emri: 'Akshami', koha: '16:21', ikona: 'fa-sunset', citati: "Lutu në Aksham, dyert e qiellit janë të hapura." },
+            { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon-stars', citati: "Përfundoje ditën me qetësinë e Jacisë." }
         ];
 
         let completedTasks = 0;
         function toggleTask(btn) {
-            if(!btn.classList.contains('bg-emerald-500')) {
-                btn.classList.add('bg-emerald-500', 'border-emerald-500', 'text-white');
-                completedTasks++;
-            } else {
-                btn.classList.remove('bg-emerald-500', 'border-emerald-500', 'text-white');
-                completedTasks--;
-            }
+            btn.classList.toggle('bg-emerald-500');
+            btn.classList.toggle('text-white');
+            completedTasks = document.querySelectorAll('.bg-emerald-500').length;
             document.getElementById('task-count').innerText = `${completedTasks}/5 Namaze`;
         }
 
@@ -242,48 +232,65 @@
 
         function updateUI() {
             const now = new Date();
+            const isFriday = now.getDay() === 5;
+            
             document.getElementById('live-clock').innerText = now.toLocaleTimeString('sq-AL', {hour12: false});
             document.getElementById('current-date').innerText = `${ditet[now.getDay()]}, ${now.getDate()} ${muajt[now.getMonth()]}`;
 
-            const currentMin = (now.getHours() * 60) + now.getMinutes();
+            // Aktivizimi i Mode-it te Xhuma
+            if (isFriday) {
+                vaktetRaw[2].emri = "Xhumaja";
+                vaktetRaw[2].ikona = "fa-mosque";
+                document.getElementById('top-quote').innerText = "Xhuma e Mubarak - Ditë e Bekuar";
+                document.getElementById('top-quote').style.color = "#f59e0b";
+                document.getElementById('glow-line').style.background = "linear-gradient(to right, transparent, rgba(245, 158, 11, 0.5), transparent)";
+            }
+
+            const currentTotalMin = (now.getHours() * 60) + now.getMinutes();
             let currentIdx = -1;
-            vaktet.forEach((v, i) => {
+
+            vaktetRaw.forEach((v, i) => {
                 const [vh, vm] = v.koha.split(':').map(Number);
-                if (currentMin >= (vh * 60) + vm) currentIdx = i;
+                if (currentTotalMin >= (vh * 60) + vm) currentIdx = i;
             });
 
-            const cIdx = currentIdx === -1 ? 5 : currentIdx;
-            document.getElementById('quote-text').innerText = `"${vaktet[cIdx].citati}"`;
+            const quoteIdx = currentIdx === -1 ? 5 : currentIdx;
+            document.getElementById('quote-text').innerText = `"${vaktetRaw[quoteIdx].citati}"`;
 
-            const nextIdx = (currentIdx + 1) % vaktet.length;
-            const nextP = vaktet[nextIdx];
+            const nextIdx = (currentIdx + 1) % vaktetRaw.length;
+            const nextP = vaktetRaw[nextIdx];
             document.getElementById('next-prayer-name').innerText = nextP.emri;
 
-            const [rh, rm] = nextP.koha.split(':').map(Number);
-            let pTime = new Date(); pTime.setHours(rh, rm, 0);
-            if (pTime < now) pTime.setDate(pTime.getDate() + 1);
-            const diff = pTime - now;
-            const dh = Math.floor(diff/3600000).toString().padStart(2,'0');
-            const dm = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
-            const ds = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
-            document.getElementById('prayer-countdown').innerText = `${dh}:${dm}:${ds}`;
+            const [nh, nm] = nextP.koha.split(':').map(Number);
+            let target = new Date(); target.setHours(nh, nm, 0);
+            if (target < now) target.setDate(target.getDate() + 1);
+            
+            const diff = target - now;
+            const h = Math.floor(diff/3600000).toString().padStart(2,'0');
+            const m = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
+            const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
+            document.getElementById('prayer-countdown').innerText = `${h}:${m}:${s}`;
 
-            const circumference = 565.48;
-            const percent = ((now.getHours() * 60) + now.getMinutes()) / 1440;
-            document.getElementById('progress-bar').style.strokeDashoffset = circumference - (percent * circumference);
+            const percent = currentTotalMin / 1440;
+            document.getElementById('progress-bar').style.strokeDashoffset = 565.48 - (percent * 565.48);
 
-            document.querySelectorAll('#vaktet-list > div').forEach((c, i) => {
-                c.classList.toggle('current-active', i === currentIdx);
-            });
+            // Renderimi i listes
+            const listHtml = vaktetRaw.map((v, i) => {
+                let activeClass = "";
+                if(i === currentIdx) {
+                    activeClass = (isFriday && i === 2) ? "juma-active" : "current-active";
+                }
+                
+                return `
+                <div class="glass p-4 rounded-3xl flex flex-col items-center gap-1 text-center border-white/5 transition-all ${activeClass}">
+                    <i class="fa-solid ${v.ikona} ${isFriday && i===2 ? 'text-amber-500' : 'text-emerald-500/70'} text-lg mb-1"></i>
+                    <span class="text-[8px] text-gray-500 uppercase tracking-tighter font-bold">${v.emri}</span>
+                    <span class="text-sm font-bold italic">${v.koha}</span>
+                </div>`;
+            }).join('');
+            
+            document.getElementById('vaktet-list').innerHTML = listHtml;
         }
-
-        document.getElementById('vaktet-list').innerHTML = vaktet.map(v => `
-            <div class="glass p-4 rounded-3xl flex flex-col items-center gap-1 text-center border-white/5 transition-all">
-                <i class="fa-solid ${v.ikona} text-emerald-500/70 text-lg mb-1"></i>
-                <span class="text-[8px] text-gray-500 uppercase tracking-tighter font-bold">${v.emri}</span>
-                <span class="text-sm font-bold italic">${v.koha}</span>
-            </div>
-        `).join('');
 
         setInterval(updateUI, 1000);
         updateUI();
