@@ -24,15 +24,26 @@
         .compass-ring {
             border: 2px solid rgba(16, 185, 129, 0.2);
             box-shadow: 0 0 50px rgba(16, 185, 129, 0.1);
+            position: relative;
+        }
+        #compass-disc {
+            transition: transform 0.2s ease-out; /* Lëvizje e butë */
+            transform-style: preserve-3d;
         }
         .needle {
             filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.8));
-            transition: transform 0.5s cubic-bezier(0.1, 0.5, 0.1, 1);
         }
         .active-nav { color: #10b981; position: relative; }
         .active-nav::after {
             content: ''; position: absolute; top: -16px; width: 20px; height: 3px;
             background: #10b981; border-radius: 0 0 10px 10px;
+        }
+        /* Pikat e horizontit */
+        .direction-label {
+            position: absolute;
+            font-size: 10px;
+            font-weight: bold;
+            color: rgba(255,255,255,0.3);
         }
     </style>
 </head>
@@ -40,19 +51,21 @@
 
     <header class="w-full p-8 text-center">
         <h1 class="text-2xl font-light tracking-[0.3em] uppercase">Kibla</h1>
-        <p class="text-emerald-400 text-xs mt-2 uppercase">Drejtimi nga Qabja</p>
+        <p class="text-emerald-400 text-xs mt-2 uppercase italic font-semibold">Drejtimi: 143° nga Veriu</p>
     </header>
 
     <main class="flex-1 flex flex-col items-center justify-center w-full px-10 relative">
         
-        <div id="degree-text" class="mb-8 text-5xl font-extralight tracking-tighter">
+        <div id="degree-text" class="mb-8 text-5xl font-extralight tracking-tighter text-emerald-400">
             0°
         </div>
 
         <div class="relative w-72 h-72 rounded-full glass compass-ring flex items-center justify-center">
-            
-            <div class="absolute inset-4 border border-white/5 rounded-full"></div>
-            
+            <div class="direction-label top-4">N</div>
+            <div class="direction-label bottom-4">S</div>
+            <div class="direction-label right-4">E</div>
+            <div class="direction-label left-4">W</div>
+
             <div id="compass-disc" class="relative w-full h-full flex items-center justify-center">
                 <div class="needle w-1 h-56 bg-gradient-to-t from-transparent via-emerald-500 to-transparent absolute rounded-full"></div>
                 <div class="absolute -top-2">
@@ -65,12 +78,12 @@
             </div>
         </div>
 
-        <div class="mt-12 text-center">
-            <p id="status-text" class="text-gray-400 text-sm font-light leading-relaxed max-w-[250px]">
-                Për saktësi maksimale, mbajeni telefonin horizontalisht dhe larg pajisjeve metalike.
+        <div class="mt-12 text-center px-4">
+            <p id="status-text" class="text-gray-400 text-[11px] font-light leading-relaxed max-w-[280px] uppercase tracking-widest">
+                Mbajeni telefonin horizontalisht dhe larg metaleve.
             </p>
-            <button id="start-btn" class="mt-6 px-6 py-2 border border-emerald-500/30 rounded-full text-xs text-emerald-400 uppercase tracking-widest hover:bg-emerald-500/10 transition-all">
-                Aktivizo Sensorin
+            <button id="start-btn" class="mt-6 px-8 py-3 bg-emerald-500/10 border border-emerald-500/50 rounded-full text-[10px] text-emerald-400 uppercase tracking-[0.2em] font-bold hover:bg-emerald-500/20 transition-all active:scale-95 shadow-lg shadow-emerald-500/10">
+                Aktivizo Busullën
             </button>
         </div>
 
@@ -103,45 +116,76 @@
         const startBtn = document.getElementById('start-btn');
         const statusText = document.getElementById('status-text');
 
-        // Shkalla e Kiblës për Kosovë (afërsisht 142-145 shkallë nga Veriu)
+        // Shkalla e Kiblës për Kosovë
         const qiblaDirection = 143; 
 
         function handleOrientation(event) {
-            let heading = event.webkitCompassHeading || Math.abs(event.alpha - 360);
-            
-            if (heading) {
-                // Rrotullojmë diskun për t'u drejtuar nga Kibla
-                // Formula: -heading (orientimi telefonit) + qiblaDirection
+            let heading = 0;
+
+            // Për pajisjet iOS
+            if (event.webkitCompassHeading) {
+                heading = event.webkitCompassHeading;
+            } 
+            // Për pajisjet Android
+            else if (event.alpha) {
+                heading = 360 - event.alpha;
+            }
+
+            if (heading !== 0) {
+                // Llogaritja: -heading (ku po sheh telefoni) + qibla (drejtimi fiks i qabes)
                 const rotation = qiblaDirection - heading;
+                
+                // Rrotullojmë diskun vizualisht
                 compassDisc.style.transform = `rotate(${rotation}deg)`;
+                
+                // Shfaqim shkallët aktuale ku po sheh telefoni
                 degreeText.innerText = Math.round(heading) + "°";
+
+                // Nëse jemi afër Kiblës (toleranca 5 shkallë), ndryshojmë ngjyrën
+                if (Math.abs(Math.round(heading) - qiblaDirection) < 5) {
+                    degreeText.classList.replace('text-emerald-400', 'text-white');
+                    statusText.innerText = "JEI NË DREJTIMIN E DUHUR!";
+                    statusText.classList.add('text-emerald-400', 'font-bold');
+                } else {
+                    degreeText.classList.replace('text-white', 'text-emerald-400');
+                    statusText.innerText = "Mbajeni telefonin horizontalisht dhe larg metaleve.";
+                    statusText.classList.remove('text-emerald-400', 'font-bold');
+                }
             }
         }
 
-        startBtn.addEventListener('click', () => {
+        startBtn.addEventListener('click', async () => {
+            // Kontrollojmë nëse pajisja kërkon leje (iOS)
             if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-                // Për iOS (iPhone)
-                DeviceOrientationEvent.requestPermission()
-                    .then(permissionState => {
-                        if (permissionState === 'granted') {
-                            window.addEventListener('deviceorientation', handleOrientation, true);
-                            startBtn.style.display = 'none';
-                        }
-                    })
-                    .catch(console.error);
+                try {
+                    const permission = await DeviceOrientationEvent.requestPermission();
+                    if (permission === 'granted') {
+                        activateCompass();
+                    } else {
+                        statusText.innerText = "Leja për sensorin u refuzua.";
+                    }
+                } catch (err) {
+                    statusText.innerText = "Gabim gjatë kërkesës së lejes.";
+                }
             } else {
-                // Për Android dhe pajisje të tjera
-                window.addEventListener('deviceorientation', handleOrientation, true);
-                startBtn.style.display = 'none';
-                statusText.innerText = "Sensori u aktivizua. Drejtohuni drejt veriut për të gjetur Kiblën.";
+                // Për Android
+                activateCompass();
             }
         });
 
-        // Kontrollo nëse jemi në Desktop
-        if (!window.DeviceOrientationEvent) {
-            statusText.innerText = "Sensori i orientimit nuk mbështetet në këtë pajisje.";
+        function activateCompass() {
+            window.addEventListener('deviceorientation', handleOrientation, true);
             startBtn.style.display = 'none';
+            statusText.innerText = "Busulla u aktivizua. Kthehuni derisa shigjeta të jetë lart.";
         }
+
+        // Testo nëse pajisja ka sensorë
+        window.addEventListener('load', () => {
+            if (!window.DeviceOrientationEvent) {
+                statusText.innerText = "Ky telefon nuk mbështet sensorin e busullës.";
+                startBtn.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
