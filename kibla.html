@@ -27,9 +27,11 @@
             position: relative;
         }
         #compass-disc {
-            transition: transform 0.2s ease-out; /* Lëvizje e butë */
+            transition: transform 0.2s ease-out;
             transform-style: preserve-3d;
+            cursor: grab;
         }
+        #compass-disc:active { cursor: grabbing; }
         .needle {
             filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.8));
         }
@@ -38,7 +40,6 @@
             content: ''; position: absolute; top: -16px; width: 20px; height: 3px;
             background: #10b981; border-radius: 0 0 10px 10px;
         }
-        /* Pikat e horizontit */
         .direction-label {
             position: absolute;
             font-size: 10px;
@@ -80,7 +81,7 @@
 
         <div class="mt-12 text-center px-4">
             <p id="status-text" class="text-gray-400 text-[11px] font-light leading-relaxed max-w-[280px] uppercase tracking-widest">
-                Mbajeni telefonin horizontalisht dhe larg metaleve.
+                Mbajeni telefonin horizontalisht ose rrotulloni busullën me mi (në PC).
             </p>
             <button id="start-btn" class="mt-6 px-8 py-3 bg-emerald-500/10 border border-emerald-500/50 rounded-full text-[10px] text-emerald-400 uppercase tracking-[0.2em] font-bold hover:bg-emerald-500/20 transition-all active:scale-95 shadow-lg shadow-emerald-500/10">
                 Aktivizo Busullën
@@ -115,60 +116,66 @@
         const degreeText = document.getElementById('degree-text');
         const startBtn = document.getElementById('start-btn');
         const statusText = document.getElementById('status-text');
-
-        // Shkalla e Kiblës për Kosovë
         const qiblaDirection = 143; 
 
-        function handleOrientation(event) {
-            let heading = 0;
+        // Funksioni kryesor i rrotullimit (Përdoret nga të dyja metodat)
+        function updateRotation(heading) {
+            const rotation = qiblaDirection - heading;
+            compassDisc.style.transform = `rotate(${rotation}deg)`;
+            degreeText.innerText = Math.round(heading) + "°";
 
-            // Për pajisjet iOS
-            if (event.webkitCompassHeading) {
-                heading = event.webkitCompassHeading;
-            } 
-            // Për pajisjet Android
-            else if (event.alpha) {
-                heading = 360 - event.alpha;
-            }
-
-            if (heading !== 0) {
-                // Llogaritja: -heading (ku po sheh telefoni) + qibla (drejtimi fiks i qabes)
-                const rotation = qiblaDirection - heading;
-                
-                // Rrotullojmë diskun vizualisht
-                compassDisc.style.transform = `rotate(${rotation}deg)`;
-                
-                // Shfaqim shkallët aktuale ku po sheh telefoni
-                degreeText.innerText = Math.round(heading) + "°";
-
-                // Nëse jemi afër Kiblës (toleranca 5 shkallë), ndryshojmë ngjyrën
-                if (Math.abs(Math.round(heading) - qiblaDirection) < 5) {
-                    degreeText.classList.replace('text-emerald-400', 'text-white');
-                    statusText.innerText = "JEI NË DREJTIMIN E DUHUR!";
-                    statusText.classList.add('text-emerald-400', 'font-bold');
-                } else {
-                    degreeText.classList.replace('text-white', 'text-emerald-400');
-                    statusText.innerText = "Mbajeni telefonin horizontalisht dhe larg metaleve.";
-                    statusText.classList.remove('text-emerald-400', 'font-bold');
-                }
+            if (Math.abs(Math.round(heading) - qiblaDirection) < 5) {
+                degreeText.classList.replace('text-emerald-400', 'text-white');
+                statusText.innerText = "JEI NË DREJTIMIN E DUHUR!";
+                statusText.classList.add('text-emerald-400', 'font-bold');
+            } else {
+                degreeText.classList.replace('text-white', 'text-emerald-400');
+                statusText.innerText = "Orientohuni drejt Kiblës.";
+                statusText.classList.remove('text-emerald-400', 'font-bold');
             }
         }
 
+        // --- MOBILE: ORIENTIMI ME SENSOR ---
+        function handleOrientation(event) {
+            let heading = 0;
+            if (event.webkitCompassHeading) {
+                heading = event.webkitCompassHeading;
+            } else if (event.alpha) {
+                heading = 360 - event.alpha;
+            }
+            if (heading !== 0) updateRotation(heading);
+        }
+
+        // --- DESKTOP: RROTULLIMI MANUAL ME MI (DRAG) ---
+        let isDragging = false;
+        function handleManualRotate(e) {
+            if (!isDragging) return;
+            const rect = compassDisc.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            const angle = Math.atan2(clientY - centerY, clientX - centerX);
+            let degree = angle * (180 / Math.PI) + 90;
+            if (degree < 0) degree += 360;
+            updateRotation(degree);
+        }
+
+        // Ngjarjet e Miut për Desktop
+        compassDisc.addEventListener('mousedown', () => isDragging = true);
+        window.addEventListener('mouseup', () => isDragging = false);
+        window.addEventListener('mousemove', handleManualRotate);
+
+        // --- AKTIVIZIMI ---
         startBtn.addEventListener('click', async () => {
-            // Kontrollojmë nëse pajisja kërkon leje (iOS)
-            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
                 try {
                     const permission = await DeviceOrientationEvent.requestPermission();
-                    if (permission === 'granted') {
-                        activateCompass();
-                    } else {
-                        statusText.innerText = "Leja për sensorin u refuzua.";
-                    }
-                } catch (err) {
-                    statusText.innerText = "Gabim gjatë kërkesës së lejes.";
-                }
+                    if (permission === 'granted') activateCompass();
+                    else statusText.innerText = "Leja u refuzua. Mund ta rrotulloni manualisht.";
+                } catch (err) { activateCompass(); }
             } else {
-                // Për Android
                 activateCompass();
             }
         });
@@ -176,14 +183,13 @@
         function activateCompass() {
             window.addEventListener('deviceorientation', handleOrientation, true);
             startBtn.style.display = 'none';
-            statusText.innerText = "Busulla u aktivizua. Kthehuni derisa shigjeta të jetë lart.";
+            statusText.innerText = "Busulla u aktivizua. Nëse jeni në PC, rrotullojeni me miun.";
         }
 
-        // Testo nëse pajisja ka sensorë
+        // Kontrolli fillestar
         window.addEventListener('load', () => {
-            if (!window.DeviceOrientationEvent) {
-                statusText.innerText = "Ky telefon nuk mbështet sensorin e busullës.";
-                startBtn.style.display = 'none';
+            if (!window.DeviceOrientationEvent && !('ontouchstart' in window)) {
+                statusText.innerText = "Përdorni miun (mouse) për të rrotulluar busullën në desktop.";
             }
         });
     </script>
