@@ -2,7 +2,7 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kibla - Ratkoc</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -15,6 +15,9 @@
             color: white; 
             font-family: 'Inter', sans-serif;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .glass { 
             background: rgba(255, 255, 255, 0.03); 
@@ -25,6 +28,7 @@
             border: 2px solid rgba(16, 185, 129, 0.2);
             box-shadow: 0 0 50px rgba(16, 185, 129, 0.1);
             position: relative;
+            touch-action: none;
         }
         #compass-disc {
             transition: transform 0.2s ease-out;
@@ -35,11 +39,36 @@
         .needle {
             filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.8));
         }
+        /* NAVIGIMI JUAJ ORIGJINAL I RREGULLUAR */
         .active-nav { color: #10b981; position: relative; }
         .active-nav::after {
             content: ''; position: absolute; top: -16px; width: 20px; height: 3px;
             background: #10b981; border-radius: 0 0 10px 10px;
         }
+        
+        /* Siguron që navigimi të jetë konsistent në Mobile dhe Desktop */
+        nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 20px 0;
+            z-index: 50;
+            display: flex;
+            justify-content: center;
+        }
+        .nav-inner {
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 20px;
+        }
+
         .direction-label {
             position: absolute;
             font-size: 10px;
@@ -48,14 +77,14 @@
         }
     </style>
 </head>
-<body class="flex flex-col items-center">
+<body>
 
     <header class="w-full p-8 text-center">
         <h1 class="text-2xl font-light tracking-[0.3em] uppercase">Kibla</h1>
         <p class="text-emerald-400 text-xs mt-2 uppercase italic font-semibold">Drejtimi: 143° nga Veriu</p>
     </header>
 
-    <main class="flex-1 flex flex-col items-center justify-center w-full px-10 relative">
+    <main class="flex-1 flex flex-col items-center justify-center w-full px-10 relative mb-32">
         
         <div id="degree-text" class="mb-8 text-5xl font-extralight tracking-tighter text-emerald-400">
             0°
@@ -81,7 +110,7 @@
 
         <div class="mt-12 text-center px-4">
             <p id="status-text" class="text-gray-400 text-[11px] font-light leading-relaxed max-w-[280px] uppercase tracking-widest">
-                Mbajeni telefonin horizontalisht ose rrotulloni busullën me mi (në PC).
+                Mbajeni telefonin horizontalisht ose rrotulloni me mi (në PC).
             </p>
             <button id="start-btn" class="mt-6 px-8 py-3 bg-emerald-500/10 border border-emerald-500/50 rounded-full text-[10px] text-emerald-400 uppercase tracking-[0.2em] font-bold hover:bg-emerald-500/20 transition-all active:scale-95 shadow-lg shadow-emerald-500/10">
                 Aktivizo Busullën
@@ -90,8 +119,8 @@
 
     </main>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-[#020617]/80 backdrop-blur-2xl border-t border-white/5 px-8 py-5 z-50">
-        <div class="flex justify-between items-center max-w-md mx-auto">
+    <nav>
+        <div class="nav-inner">
             <a href="index.html" class="flex flex-col items-center text-gray-500 transition-all duration-300">
                 <i class="fa-solid fa-clock-four text-xl"></i>
                 <span class="text-[10px] mt-1 font-medium tracking-wide">Vaktia</span>
@@ -118,7 +147,6 @@
         const statusText = document.getElementById('status-text');
         const qiblaDirection = 143; 
 
-        // Funksioni kryesor i rrotullimit (Përdoret nga të dyja metodat)
         function updateRotation(heading) {
             const rotation = qiblaDirection - heading;
             compassDisc.style.transform = `rotate(${rotation}deg)`;
@@ -130,68 +158,56 @@
                 statusText.classList.add('text-emerald-400', 'font-bold');
             } else {
                 degreeText.classList.replace('text-white', 'text-emerald-400');
-                statusText.innerText = "Orientohuni drejt Kiblës.";
+                statusText.innerText = "Mbajeni telefonin horizontalisht dhe larg metaleve.";
                 statusText.classList.remove('text-emerald-400', 'font-bold');
             }
         }
 
-        // --- MOBILE: ORIENTIMI ME SENSOR ---
-        function handleOrientation(event) {
-            let heading = 0;
-            if (event.webkitCompassHeading) {
-                heading = event.webkitCompassHeading;
-            } else if (event.alpha) {
-                heading = 360 - event.alpha;
+        // SENSORI PËR MOBILE
+        function activateCompass() {
+            const handler = (event) => {
+                let heading = event.webkitCompassHeading || (360 - event.alpha);
+                if (heading) updateRotation(heading);
+            };
+
+            window.addEventListener('deviceorientation', handler, true);
+            if (window.DeviceOrientationAbsoluteEvent) {
+                window.addEventListener('deviceorientationabsolute', handler, true);
             }
-            if (heading !== 0) updateRotation(heading);
+            startBtn.style.display = 'none';
         }
 
-        // --- DESKTOP: RROTULLIMI MANUAL ME MI (DRAG) ---
+        // RROTULLIMI MANUAL PËR DESKTOP (DRAG)
         let isDragging = false;
-        function handleManualRotate(e) {
+        function handleManual(e) {
             if (!isDragging) return;
             const rect = compassDisc.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            
-            const angle = Math.atan2(clientY - centerY, clientX - centerX);
-            let degree = angle * (180 / Math.PI) + 90;
-            if (degree < 0) degree += 360;
-            updateRotation(degree);
+            const angle = Math.atan2(clientY - cy, clientX - cx) * (180 / Math.PI);
+            updateRotation((angle + 450) % 360);
         }
 
-        // Ngjarjet e Miut për Desktop
         compassDisc.addEventListener('mousedown', () => isDragging = true);
         window.addEventListener('mouseup', () => isDragging = false);
-        window.addEventListener('mousemove', handleManualRotate);
+        window.addEventListener('mousemove', handleManual);
+        compassDisc.addEventListener('touchstart', () => isDragging = true);
+        window.addEventListener('touchend', () => isDragging = false);
+        window.addEventListener('touchmove', handleManual);
 
-        // --- AKTIVIZIMI ---
         startBtn.addEventListener('click', async () => {
             if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
                 try {
                     const permission = await DeviceOrientationEvent.requestPermission();
                     if (permission === 'granted') activateCompass();
-                    else statusText.innerText = "Leja u refuzua. Mund ta rrotulloni manualisht.";
-                } catch (err) { activateCompass(); }
+                } catch (err) { alert("Leja kërkohet për sensorin."); }
             } else {
                 activateCompass();
-            }
-        });
-
-        function activateCompass() {
-            window.addEventListener('deviceorientation', handleOrientation, true);
-            startBtn.style.display = 'none';
-            statusText.innerText = "Busulla u aktivizua. Nëse jeni në PC, rrotullojeni me miun.";
-        }
-
-        // Kontrolli fillestar
-        window.addEventListener('load', () => {
-            if (!window.DeviceOrientationEvent && !('ontouchstart' in window)) {
-                statusText.innerText = "Përdorni miun (mouse) për të rrotulluar busullën në desktop.";
             }
         });
     </script>
 </body>
 </html>
+
