@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Vaktia">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2850/2850383.png">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2613/2613019.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -249,13 +249,14 @@
     </nav>
 
     <script>
+        // Rregulluar vetëm emrat e ikonave që të përputhen me versionin Free të FontAwesome
         let vaktetRaw = [
-            { emri: 'Sabahu', koha: '05:32', ikona: 'fa-sun-haze', citati: "Namazi i Sabahit të fut në mbrojtjen e Allahut." },
-            { emri: 'Lindja', koha: '07:05', ikona: 'fa-sunrise', citati: "Kujto Allahun gjatë lindjes së diellit." },
-            { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun', citati: "Namazi i Drekës e largon lodhjen e shpirtit." },
-            { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud-sun', citati: "Kush fal Ikindinë, Allahu e ruan atë." },
-            { emri: 'Akshami', koha: '16:21', ikona: 'fa-sunset', citati: "Lutu në Aksham, dyert e qiellit janë të hapura." },
-            { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon-stars', citati: "Përfundoje ditën me qetësinë e Jacisë." }
+            { emri: 'Sabahu', koha: '05:32', ikona: 'fa-sun', citati: "Namazi i Sabahit të fut në mbrojtjen e Allahut." },
+            { emri: 'Lindja', koha: '07:05', ikona: 'fa-cloud-sun', citati: "Kujto Allahun gjatë lindjes së diellit." },
+            { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun-bright', citati: "Namazi i Drekës e largon lodhjen e shpirtit." },
+            { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud-sun-bright', citati: "Kush fal Ikindinë, Allahu e ruan atë." },
+            { emri: 'Akshami', koha: '16:21', ikona: 'fa-moon', citati: "Lutu në Aksham, dyert e qiellit janë të hapura." },
+            { emri: 'Jacia', koha: '17:54', ikona: 'fa-star-and-crescent', citati: "Përfundoje ditën me qetësinë e Jacisë." }
         ];
 
         let tasbihCount = parseInt(localStorage.getItem('tasbihCount')) || 0;
@@ -273,19 +274,18 @@
                 vaktetRaw[4].koha = t.Maghrib;
                 vaktetRaw[5].koha = t.Isha;
                 updateUI();
-                applyMoodTheme(); // Thirrja e funksionit të ri
+                applyMoodTheme(); 
             } catch (e) { console.log("Offline mode"); }
         }
 
-        // MOOD & THEME LOGIC (SHTUAR)
         function applyMoodTheme() {
             const hour = new Date().getHours();
             const body = document.body;
             
-            if (hour >= 5 && hour < 8) body.style.background = "#0f172a"; // Sabah - Blu e errët
-            else if (hour >= 8 && hour < 16) body.style.background = "#020617"; // Ditë - E zeza origjinale
-            else if (hour >= 16 && hour < 19) body.style.background = "#1e1b4b"; // Aksham - Vjollcë/Blu
-            else body.style.background = "#02040a"; // Natë - Më e errët
+            if (hour >= 5 && hour < 8) body.style.background = "#0f172a"; 
+            else if (hour >= 8 && hour < 16) body.style.background = "#020617"; 
+            else if (hour >= 16 && hour < 19) body.style.background = "#1e1b4b"; 
+            else body.style.background = "#02040a"; 
         }
 
         function toggleGuide() {
@@ -296,7 +296,7 @@
             tasbihCount++; 
             if(tasbihCount > 33) {
                 tasbihCount = 0;
-                if(navigator.vibrate) navigator.vibrate(100); // Dridhje e vogël në 33
+                if(navigator.vibrate) navigator.vibrate(100);
             }
             document.getElementById('tasbih-num').innerText = tasbihCount;
             localStorage.setItem('tasbihCount', tasbihCount);
@@ -332,7 +332,7 @@
                 if (currentTotalMin >= prayerTotalMin) currentIdx = i;
                 
                 let statusClass = (i === currentIdx) ? "current-active" : "";
-                if (currentTotalMin > prayerTotalMin && i !== currentIdx) statusClass = "passed-prayer"; // Vaktet që kaluan
+                if (currentTotalMin > prayerTotalMin && i !== currentIdx) statusClass = "passed-prayer"; 
                 
                 return `<div class="glass p-4 rounded-3xl flex flex-col items-center text-center border-white/5 transition-all duration-700 ${statusClass}">
                     <i class="fa-solid ${v.ikona} text-emerald-500/70 text-lg mb-1"></i>
@@ -356,7 +356,6 @@
             const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
             document.getElementById('prayer-countdown').innerText = `${h}:${m}:${s}`;
 
-            // Update bar-in e progresit
             const percent = ((now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds()) / 86400;
             document.getElementById('progress-bar').style.strokeDashoffset = 565.48 - (percent * 565.48);
         }
@@ -366,8 +365,9 @@
             updateTasksUI();
             document.getElementById('tasbih-num').innerText = tasbihCount;
             setInterval(updateUI, 1000);
-            setInterval(applyMoodTheme, 600000); // Kontrollo dritën çdo 10 min
+            setInterval(applyMoodTheme, 600000); 
         };
     </script>
 </body>
 </html>
+
