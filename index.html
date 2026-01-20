@@ -2,12 +2,13 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Vaktia Ratkoc</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Vaktia">
+    <meta name="mobile-web-app-capable" content="yes">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2613/2613019.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -22,7 +23,6 @@
             min-height: 100vh;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
-            transition: background 1.5s ease; /* Për Mood & Theme */
         }
 
         .glass {
@@ -54,24 +54,18 @@
             border: 1px solid rgba(16, 185, 129, 0.4) !important;
             background: linear-gradient(145deg, rgba(16, 185, 129, 0.12) 0%, rgba(2, 6, 23, 0) 100%) !important;
             transform: scale(1.02);
+            animation: shadow-pulse 2s infinite;
         }
 
-        .juma-active {
-            border: 1px solid rgba(245, 158, 11, 0.5) !important;
-            background: linear-gradient(145deg, rgba(245, 158, 11, 0.1) 0%, rgba(2, 6, 23, 0) 100%) !important;
+        @keyframes shadow-pulse {
+            0% { box-shadow: 0 0 0 0px rgba(16, 185, 129, 0.2); }
+            70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0px rgba(16, 185, 129, 0); }
         }
 
-        /* Klasa për vaktet që kanë kaluar (SHTUAR) */
-        .passed-prayer {
-            opacity: 0.35;
-            filter: grayscale(0.8);
-        }
-
+        .passed-prayer { opacity: 0.35; filter: grayscale(0.8); }
         .info-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .info-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.04);
-        }
+        .info-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.04); }
 
         @keyframes ring {
             0% { transform: rotate(0); }
@@ -82,14 +76,99 @@
         }
         .animate-ring { animation: ring 1.5s ease infinite; }
         ::-webkit-scrollbar { width: 0px; }
+
+        #settings-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(2, 6, 23, 0.9);
+            backdrop-filter: blur(15px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .settings-content {
+            width: 100%;
+            max-width: 400px;
+            background: #020617;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 2.5rem;
+            padding: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        }
+
+        @media (max-width: 640px) {
+            .safe-area-bottom { padding-bottom: env(safe-area-inset-bottom); }
+        }
     </style>
 </head>
-<body class="pb-40">
+<body class="pb-40 safe-area-bottom">
 
     <audio id="ezani-audio" src="https://www.islamcan.com/audio/adhan/azan1.mp3" preload="auto"></audio>
 
+    <div id="settings-overlay" onclick="document.getElementById('settings-overlay').style.display='none'">
+        <div class="settings-content" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold italic text-emerald-500 tracking-tight">Cilësimet</h2>
+                <button onclick="document.getElementById('settings-overlay').style.display='none'" class="text-gray-400 hover:text-white">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-6">
+                <div class="flex items-center justify-between glass p-4 rounded-2xl">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-vibration text-emerald-500"></i>
+                        <span class="text-sm font-medium">Vibrimi (Tasbih)</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="vibrate-toggle" checked class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                    </label>
+                </div>
+
+                <div class="glass p-4 rounded-2xl space-y-3">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-volume-high text-emerald-500"></i>
+                        <span class="text-sm font-medium">Zëri i Ezanit</span>
+                    </div>
+                    <select id="ezan-select" onchange="updateEzanSource()" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        <option value="https://www.islamcan.com/audio/adhan/azan1.mp3">Ezan Mekke (1)</option>
+                        <option value="https://www.islamcan.com/audio/adhan/azan2.mp3">Ezan Medine (2)</option>
+                        <option value="https://www.islamcan.com/audio/adhan/azan10.mp3">Ezan Shpirtëror (3)</option>
+                        <option value="https://www.islamcan.com/audio/adhan/azan20.mp3">Ezan i Bukur (4)</option>
+                        <option value="https://www.islamcan.com/audio/adhan/azan16.mp3">Ezan nga Misary Rashid (5)</option>
+                        <option value="https://www.islamcan.com/audio/adhan/azan18.mp3">Ezan i Qetë (6)</option>
+                        <option value="https://www.islamcan.com/audio/adhan/azan4.mp3">Ezan Turkiye (7)</option>
+                    </select>
+                    <button onclick="testEzan()" id="test-btn" class="w-full py-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-[10px] font-bold uppercase tracking-widest text-emerald-400 hover:bg-emerald-500/20 transition-all">
+                        <i class="fa-solid fa-play mr-2"></i> Testo / Degjo Ezanin
+                    </button>
+                </div>
+
+                <div class="glass p-4 rounded-2xl space-y-3">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-server text-emerald-500"></i>
+                        <span class="text-sm font-medium">Burimi i Vakteve</span>
+                    </div>
+                    <select id="api-select" onchange="fetchLiveVaktet()" class="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-xs text-white focus:outline-none">
+                        <option value="aladhan">AlAdhan API (Global)</option>
+                        <option value="muslimsalat">MuslimSalat (Alt)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <p class="text-[9px] text-center text-gray-500 mt-8 uppercase tracking-widest">Versioni Ultra Modern 2.0</p>
+        </div>
+    </div>
+
     <header class="p-6 text-center pt-8">
-        <div class="flex justify-end max-w-md mx-auto mb-4 px-2">
+        <div class="flex justify-between max-w-md mx-auto mb-4 px-2">
+            <button onclick="document.getElementById('settings-overlay').style.display='flex'" class="w-12 h-12 glass rounded-2xl flex items-center justify-center border-white/10 hover:border-emerald-500/50 transition-all">
+                <i class="fa-solid fa-sliders text-gray-400"></i>
+            </button>
             <button onclick="enableNotifications()" id="notif-btn" class="w-12 h-12 glass rounded-2xl flex items-center justify-center border-white/10 hover:border-emerald-500/50 transition-all group">
                 <i class="fa-solid fa-bell text-emerald-500 group-hover:animate-ring"></i>
             </button>
@@ -249,7 +328,6 @@
     </nav>
 
     <script>
-        // Rregulluar vetëm emrat e ikonave që të përputhen me versionin Free të FontAwesome
         let vaktetRaw = [
             { emri: 'Sabahu', koha: '05:32', ikona: 'fa-sun', citati: "Namazi i Sabahit të fut në mbrojtjen e Allahut." },
             { emri: 'Lindja', koha: '07:05', ikona: 'fa-cloud-sun', citati: "Kujto Allahun gjatë lindjes së diellit." },
@@ -261,6 +339,36 @@
 
         let tasbihCount = parseInt(localStorage.getItem('tasbihCount')) || 0;
         let completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || [false, false, false, false, false];
+        let notifiedPrayers = new Set();
+        let isEzanPlaying = false;
+
+        function updateEzanSource() {
+            const select = document.getElementById('ezan-select');
+            document.getElementById('ezani-audio').src = select.value;
+            localStorage.setItem('ezanSource', select.value);
+        }
+
+        function testEzan() {
+            const audio = document.getElementById('ezani-audio');
+            const btn = document.getElementById('test-btn');
+            if (!isEzanPlaying) {
+                audio.play();
+                isEzanPlaying = true;
+                btn.innerHTML = '<i class="fa-solid fa-stop mr-2"></i> Ndalo Testin';
+            } else {
+                audio.pause();
+                audio.currentTime = 0;
+                isEzanPlaying = false;
+                btn.innerHTML = '<i class="fa-solid fa-play mr-2"></i> Testo / Degjo Ezanin';
+            }
+        }
+
+        async function enableNotifications() {
+            const permission = await Notification.requestPermission();
+            if (permission === "granted") {
+                alert("Njoftimet u aktivizuan me sukses!");
+            }
+        }
 
         async function fetchLiveVaktet() {
             try {
@@ -274,29 +382,33 @@
                 vaktetRaw[4].koha = t.Maghrib;
                 vaktetRaw[5].koha = t.Isha;
                 updateUI();
-                applyMoodTheme(); 
             } catch (e) { console.log("Offline mode"); }
         }
 
-        function applyMoodTheme() {
-            const hour = new Date().getHours();
-            const body = document.body;
-            
-            if (hour >= 5 && hour < 8) body.style.background = "#0f172a"; 
-            else if (hour >= 8 && hour < 16) body.style.background = "#020617"; 
-            else if (hour >= 16 && hour < 19) body.style.background = "#1e1b4b"; 
-            else body.style.background = "#02040a"; 
+        function updateModernInfo() {
+            const today = new Date();
+            const hour = today.getHours();
+            const hijriOptions = { day: 'numeric', month: 'long', year: 'numeric', calendar: 'islamic-uma' };
+            const hijriDate = new Intl.DateTimeFormat('sq-u-ca-islamic-uma', hijriOptions).format(today);
+            let greeting = hour < 10 ? "Mirëmëngjes" : hour < 18 ? "Mirëdita" : "Mirëmbrëma";
+            document.getElementById('current-date').innerHTML = `${today.toLocaleDateString('sq-AL')} <br> <span class="text-emerald-500/80 font-bold">${hijriDate}</span>`;
+            document.getElementById('top-quote').innerText = `${greeting} - Namazi është drita e besimtarit`;
         }
 
-        function toggleGuide() {
-            document.getElementById('guide-content').classList.toggle('hidden');
+        function toggleGuide() { 
+            const content = document.getElementById('guide-content');
+            const chevron = document.getElementById('guide-chevron');
+            content.classList.toggle('hidden');
+            chevron.style.transform = content.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
         }
 
         function incrementTasbih() {
-            tasbihCount++; 
+            tasbihCount++;
+            const vibrateOn = document.getElementById('vibrate-toggle').checked;
+            if (vibrateOn && "vibrate" in navigator) navigator.vibrate(15);
             if(tasbihCount > 33) {
                 tasbihCount = 0;
-                if(navigator.vibrate) navigator.vibrate(100);
+                if(vibrateOn && navigator.vibrate) navigator.vibrate([50, 30, 50]);
             }
             document.getElementById('tasbih-num').innerText = tasbihCount;
             localStorage.setItem('tasbihCount', tasbihCount);
@@ -320,30 +432,22 @@
 
         function updateUI() {
             const now = new Date();
-            document.getElementById('live-clock').innerText = now.toLocaleTimeString('sq-AL', {hour12: false});
-            
+            const timeStr = now.toLocaleTimeString('sq-AL', {hour12: false});
+            document.getElementById('live-clock').innerText = timeStr;
             const currentTotalMin = (now.getHours() * 60) + now.getMinutes();
             let currentIdx = -1;
-
             const listHtml = vaktetRaw.map((v, i) => {
                 const [vh, vm] = v.koha.split(':').map(Number);
-                const prayerTotalMin = vh * 60 + vm;
-                
-                if (currentTotalMin >= prayerTotalMin) currentIdx = i;
-                
-                let statusClass = (i === currentIdx) ? "current-active" : "";
-                if (currentTotalMin > prayerTotalMin && i !== currentIdx) statusClass = "passed-prayer"; 
-                
+                if (currentTotalMin >= (vh * 60 + vm)) currentIdx = i;
+                let statusClass = (i === currentIdx) ? "current-active" : (currentTotalMin > (vh * 60 + vm)) ? "passed-prayer" : "";
                 return `<div class="glass p-4 rounded-3xl flex flex-col items-center text-center border-white/5 transition-all duration-700 ${statusClass}">
                     <i class="fa-solid ${v.ikona} text-emerald-500/70 text-lg mb-1"></i>
                     <span class="text-[8px] text-gray-500 uppercase font-bold">${v.emri}</span>
                     <span class="text-sm font-bold italic">${v.koha}</span>
                 </div>`;
             }).join('');
-
             document.getElementById('vaktet-list').innerHTML = listHtml;
             document.getElementById('quote-text').innerText = `"${vaktetRaw[currentIdx === -1 ? 5 : currentIdx].citati}"`;
-            
             const nextIdx = (currentIdx + 1) % vaktetRaw.length;
             const nextP = vaktetRaw[nextIdx];
             document.getElementById('next-prayer-name').innerText = nextP.emri;
@@ -355,19 +459,31 @@
             const m = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
             const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
             document.getElementById('prayer-countdown').innerText = `${h}:${m}:${s}`;
-
-            const percent = ((now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds()) / 86400;
-            document.getElementById('progress-bar').style.strokeDashoffset = 565.48 - (percent * 565.48);
+            document.getElementById('progress-bar').style.strokeDashoffset = 565.48 - ((((now.getHours()*3600)+(now.getMinutes()*60)+now.getSeconds())/86400)*565.48);
+            
+            const currentClock = timeStr.substring(0,5);
+            vaktetRaw.forEach(v => {
+                if(v.koha === currentClock && !notifiedPrayers.has(v.emri)) {
+                    if(Notification.permission === "granted") {
+                        new Notification("Koha e Namazit", {
+                            body: `Është koha e namazit të ${v.emri}.`,
+                            icon: "https://cdn-icons-png.flaticon.com/512/2613/2613019.png"
+                        });
+                    }
+                    document.getElementById('ezani-audio').play();
+                    notifiedPrayers.add(v.emri);
+                    setTimeout(() => notifiedPrayers.delete(v.emri), 70000);
+                }
+            });
         }
 
         window.onload = () => {
-            fetchLiveVaktet();
-            updateTasksUI();
+            fetchLiveVaktet(); updateTasksUI(); updateModernInfo();
+            const savedEzan = localStorage.getItem('ezanSource');
+            if (savedEzan) { document.getElementById('ezan-select').value = savedEzan; document.getElementById('ezani-audio').src = savedEzan; }
             document.getElementById('tasbih-num').innerText = tasbihCount;
-            setInterval(updateUI, 1000);
-            setInterval(applyMoodTheme, 600000); 
+            setInterval(updateUI, 1000); setInterval(updateModernInfo, 60000);
         };
     </script>
 </body>
 </html>
-
