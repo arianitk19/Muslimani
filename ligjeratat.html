@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Ligjëratat | Zenith Edition</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800;900&display=swap');
+        
+        :root {
+            --primary: #10b981;
+            --bg: #020617;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            background: var(--bg);
+            color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .menu-trigger {
+            position: fixed; top: 2.5rem; right: 1.5rem; z-index: 2000;
+            padding: 12px; background: var(--glass); border-radius: 1.2rem; border: 1px solid var(--border);
+            cursor: pointer; backdrop-filter: blur(10px);
+        }
+        .burger-line { width: 22px; height: 1.5px; background: var(--primary); margin: 5px 0; transition: 0.4s; border-radius: 10px; }
+        .open .line-1 { transform: translateY(6.5px) rotate(45deg); }
+        .open .line-2 { opacity: 0; }
+        .open .line-3 { transform: translateY(-6.5px) rotate(-45deg); }
+
+        #full-menu {
+            position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(50px);
+            z-index: 1999; display: flex; flex-direction: column; justify-content: center;
+            padding: 3rem; visibility: hidden; opacity: 0; transition: 0.5s;
+        }
+        #full-menu.active { visibility: visible; opacity: 1; }
+
+        .menu-link {
+            font-size: 2.5rem; font-weight: 700; margin: 1rem 0; display: flex; align-items: center;
+            gap: 1.5rem; color: rgba(255,255,255,0.4); transition: 0.4s; letter-spacing: -1px; text-decoration: none;
+        }
+        .menu-link i { font-size: 1.8rem; color: var(--primary); opacity: 0.5; }
+        .menu-link:hover, .menu-link.active-page { color: white; transform: translateX(10px); }
+
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 2rem; background: #000; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 3rem;
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .cat-btn { transition: all 0.3s ease; border: 1px solid var(--border); cursor: pointer; }
+        .cat-active { background: var(--primary) !important; color: black !important; border-color: transparent !important; }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fadeIn { animation: fadeIn 0.5s ease forwards; }
+    </style>
+</head>
+<body class="pb-20">
+
+    <div class="menu-trigger" onclick="toggleMenu()">
+        <div class="burger-line line-1"></div>
+        <div class="burger-line line-2"></div>
+        <div class="burger-line line-3"></div>
+    </div>
+
+    <nav id="full-menu">
+        <div class="mb-12"><p class="text-emerald-500 font-black tracking-[0.4em] text-xs uppercase opacity-50">Navigimi</p></div>
+        <a href="index.html" class="menu-link"><i class="fa-solid fa-house-chimney"></i> Vaktia</a>
+        <a href="lutje.html" class="menu-link"><i class="fa-solid fa-hand-holding-heart"></i> Lutjet</a>
+        <a href="kibla.html" class="menu-link"><i class="fa-solid fa-compass"></i> Kibla</a>
+        <a href="ligjeratat.html" class="menu-link active-page"><i class="fa-solid fa-microphone-lines"></i> Ligjërata</a>
+        <a href="info.html" class="menu-link"><i class="fa-solid fa-circle-info"></i> Info</a>
+    </nav>
+
+    <header class="pt-24 px-8 mb-10 text-center">
+        <div class="max-w-md mx-auto">
+            <h1 class="text-5xl font-black italic tracking-tighter mb-2">Ligjëratat<span class="text-emerald-500">.</span></h1>
+            <p class="text-[10px] text-emerald-500 uppercase tracking-[0.4em] font-bold opacity-70">Ushqim për shpirtin</p>
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto px-6 space-y-8">
+        <div class="glass-card flex items-center px-6 py-4">
+            <i class="fa-solid fa-magnifying-glass text-gray-600 mr-4"></i>
+            <input type="text" id="lectureSearch" oninput="searchLectures()" placeholder="Kërko temën ose hoxhën..."
+                   class="bg-transparent border-none outline-none text-sm w-full font-medium text-white">
+        </div>
+
+        <div class="flex gap-3 overflow-x-auto no-scrollbar pb-2" id="lectureFilters">
+            <button onclick="filterLectures('all', this)" class="cat-btn cat-active bg-white/5 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Të Gjitha</button>
+            <button onclick="filterLectures('imani', this)" class="cat-btn bg-white/5 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Imani</button>
+            <button onclick="filterLectures('keshilla', this)" class="cat-btn bg-white/5 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Këshilla</button>
+            <button onclick="filterLectures('shpresa', this)" class="cat-btn bg-white/5 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Shpresa</button>
+        </div>
+
+        <div id="lectures-list" class="space-y-8"></div>
+    </main>
+
+    <script>
+        const ligjeratat = [
+            // Listat e mëparshme
+            { hoxha: "Hoxhë Ahmed Kalaja", titulli: "Mos u dorëzo para sprovave", kategoria: "shpresa", youtubeId: "KPsSu8ZqUh4" },
+            { hoxha: "Hoxhë Elvis Naçi", titulli: "Lotët e pendimit", kategoria: "imani", youtubeId: "C7-N_ttTkU8" },
+            { hoxha: "Hoxhë Enis Rama", titulli: "Edukimi i fëmijëve", kategoria: "familja", youtubeId: "WXU0ermHf8A" },
+            { hoxha: "Hoxhë Fatmir Latifaj", titulli: "Rëndësia e prindërve", kategoria: "familja", youtubeId: "BSG9sBOTowg" },
+            { hoxha: "Hoxhë Ahmed Kalaja", titulli: "Qetësia shpirtërore", kategoria: "imani", youtubeId: "EvKJ_Ipgbgs" },
+            { hoxha: "Hoxhë Elvis Naçi", titulli: "Dashuria për Allahun", kategoria: "imani", youtubeId: "7r9LQy2DpU0" },
+            { hoxha: "Hoxhë Elvis Naçi", titulli: "Njeriu që nuk e gjen qetësinë", kategoria: "keshilla", youtubeId: "FgrPhJVEJgo" },
+            { hoxha: "Hoxhë Ahmed Kalaja", titulli: "Si të shpëtojmë nga mëkatet?", kategoria: "imani", youtubeId: "bY3v0ctcAp8" },
+            { hoxha: "Hoxhë Enis Rama", titulli: "Kujdesi ndaj vetes dhe familjes", kategoria: "familja", youtubeId: "ETK4qTqjPxo" },
+            { hoxha: "Hoxhë Fatmir Latifaj", titulli: "Vlera e kohës për besimtarin", kategoria: "keshilla", youtubeId: "IlJXIoJlKGE" },
+            { hoxha: "Hoxhë Ahmed Kalaja", titulli: "Sekreti i suksesit në këtë botë", kategoria: "keshilla", youtubeId: "RUHZ5AmvDVc" },
+            { hoxha: "Hoxhë Elvis Naçi", titulli: "Sprovat dhe durimi i besimtarit", kategoria: "shpresa", youtubeId: "yEZTY_44g-o" },
+
+            // Videot e reja të shtuara tani
+            { hoxha: "Hoxhë Ahmed Kalaja", titulli: "Pse po na mungon lumturia?", kategoria: "keshilla", youtubeId: "10OlyzMnHP4" },
+            { hoxha: "Hoxhë Elvis Naçi", titulli: "Sekreti i një jete të begatë", kategoria: "imani", youtubeId: "wJR_IuKbEYw" },
+            { hoxha: "Hoxhë Ahmed Kalaja", titulli: "Si ta mundësh stresin dhe ankthin?", kategoria: "shpresa", youtubeId: "n-BXvbr_zZ0" },
+            { hoxha: "Hoxhë Enis Rama", titulli: "Rëndësia e sinqeritetit (Ikhlasi)", kategoria: "imani", youtubeId: "i-zTw-75tE0" },
+            { hoxha: "Hoxhë Elvis Naçi", titulli: "Bëhu shkak për mirësi", kategoria: "keshilla", youtubeId: "N9iENIoeuKI" },
+            { hoxha: "Hoxhë Fatmir Latifaj", titulli: "Përgatitja për takimin me Zotin", kategoria: "imani", youtubeId: "CTIW0VIqFtQ" },
+            { hoxha: "Hoxhë Ahmed Kalaja", titulli: "Fuqia e lutjes (Duasë)", kategoria: "shpresa", youtubeId: "pOQLDq-br7M" }
+        ];
+
+        function toggleMenu() {
+            document.querySelector('.menu-trigger').classList.toggle('open');
+            document.getElementById('full-menu').classList.toggle('active');
+        }
+
+        function renderLectures(data) {
+            const list = document.getElementById('lectures-list');
+            list.innerHTML = data.map(l => `
+                <div class="glass-card p-5 animate-fadeIn">
+                    <div class="video-container mb-6 shadow-2xl">
+                        <iframe src="https://www.youtube.com/embed/${l.youtubeId}" allowfullscreen></iframe>
+                    </div>
+                    <div class="px-2">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-[8px] font-black uppercase text-emerald-500 bg-emerald-500/10 px-3 py-1 rounded-lg tracking-widest">${l.kategoria}</span>
+                        </div>
+                        <h3 class="text-lg font-black italic text-white mb-2 leading-tight tracking-tighter">${l.titulli}</h3>
+                        <p class="text-[11px] text-gray-400 font-medium"><i class="fa-solid fa-user-tie mr-2 text-emerald-500"></i>${l.hoxha}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterLectures(cat, btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('cat-active'));
+            btn.classList.add('cat-active');
+            const filtered = cat === 'all' ? ligjeratat : ligjeratat.filter(l => l.kategoria === cat);
+            renderLectures(filtered);
+        }
+
+        function searchLectures() {
+            const query = document.getElementById('lectureSearch').value.toLowerCase();
+            const filtered = ligjeratat.filter(l =>
+                l.hoxha.toLowerCase().includes(query) || l.titulli.toLowerCase().includes(query)
+            );
+            renderLectures(filtered);
+        }
+
+        window.onload = () => {
+            renderLectures(ligjeratat);
+            const savedTheme = localStorage.getItem('ratkoc_theme') || '#10b981';
+            document.documentElement.style.setProperty('--primary', savedTheme);
+        };
+    </script>
+</body>
+</html>
