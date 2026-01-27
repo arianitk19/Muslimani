@@ -2,212 +2,235 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kibla - Ratkoc</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Kibla | Zenith Edition</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800;900&display=swap');
         
-        body { 
-            background: radial-gradient(circle at center, #1e293b, #020617); 
-            min-height: 100vh; 
-            color: white; 
-            font-family: 'Inter', sans-serif;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .glass { 
-            background: rgba(255, 255, 255, 0.03); 
-            backdrop-filter: blur(20px); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-        }
-        .compass-ring {
-            border: 2px solid rgba(16, 185, 129, 0.2);
-            box-shadow: 0 0 50px rgba(16, 185, 129, 0.1);
-            position: relative;
-            touch-action: none;
-        }
-        #compass-disc {
-            transition: transform 0.2s ease-out;
-            transform-style: preserve-3d;
-            cursor: grab;
-        }
-        #compass-disc:active { cursor: grabbing; }
-        .needle {
-            filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.8));
-        }
-        /* NAVIGIMI JUAJ ORIGJINAL I RREGULLUAR */
-        .active-nav { color: #10b981; position: relative; }
-        .active-nav::after {
-            content: ''; position: absolute; top: -16px; width: 20px; height: 3px;
-            background: #10b981; border-radius: 0 0 10px 10px;
-        }
-        
-        /* Siguron që navigimi të jetë konsistent në Mobile dhe Desktop */
-        nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(2, 6, 23, 0.8);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 20px 0;
-            z-index: 50;
-            display: flex;
-            justify-content: center;
-        }
-        .nav-inner {
-            width: 100%;
-            max-width: 450px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 0 20px;
+        :root { 
+            --primary: #10b981; 
+            --bg: #020617; 
+            --glass: rgba(255, 255, 255, 0.03); 
+            --border: rgba(255, 255, 255, 0.08); 
         }
 
-        .direction-label {
+        body { 
+            background: var(--bg); 
+            color: white; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Menu Trigger Zenith */
+        .menu-trigger { 
+            position: fixed; top: 2.5rem; right: 1.5rem; z-index: 2000; 
+            padding: 12px; background: var(--glass); border-radius: 1.2rem; border: 1px solid var(--border); 
+        }
+        .burger-line { width: 22px; height: 1.5px; background: var(--primary); margin: 5px 0; transition: 0.4s; border-radius: 10px; }
+        .open .line-1 { transform: translateY(6.5px) rotate(45deg); }
+        .open .line-2 { opacity: 0; }
+        .open .line-3 { transform: translateY(-6.5px) rotate(-45deg); }
+
+        #full-menu { 
+            position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(50px); 
+            z-index: 1999; display: flex; flex-direction: column; justify-content: center; 
+            padding: 3rem; visibility: hidden; opacity: 0; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); 
+        }
+        #full-menu.active { visibility: visible; opacity: 1; }
+
+        .menu-link {
+            font-size: 2.5rem; font-weight: 700; margin: 1rem 0; display: flex; align-items: center; 
+            gap: 1.5rem; color: rgba(255,255,255,0.4); transition: 0.4s; letter-spacing: -1px;
+        }
+        .menu-link i { font-size: 1.8rem; color: var(--primary); opacity: 0.5; }
+        .menu-link:hover, .menu-link.active-page { color: white; transform: translateX(10px); }
+        .menu-link.active-page i { opacity: 1; filter: drop-shadow(0 0 8px var(--primary)); }
+
+        /* Compass Styling */
+        .glass-card-circle { 
+            background: var(--glass); 
+            backdrop-filter: blur(20px); 
+            border: 2px solid var(--border); 
+            border-radius: 50%; 
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.05);
+            position: relative;
+            width: 300px;
+            height: 300px;
+            transition: border-color 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .compass-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #compass-disc {
+            width: 100%; height: 100%;
+            position: relative;
+            transition: transform 0.1s linear;
+        }
+
+        .needle-qibla {
             position: absolute;
-            font-size: 10px;
-            font-weight: bold;
-            color: rgba(255,255,255,0.3);
+            top: 20px; left: 50%;
+            transform: translateX(-50%);
+            color: var(--primary);
+            filter: drop-shadow(0 0 15px var(--primary));
+        }
+
+        .aligned-glow {
+            box-shadow: 0 0 50px rgba(16, 185, 129, 0.2);
+            border-color: var(--primary) !important;
+        }
+
+        /* Modal styling */
+        .modal-overlay { 
+            display: flex; position: fixed; inset: 0; z-index: 3000; 
+            background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); 
+            align-items: center; justify-content: center; padding: 20px; 
+        }
+        .modal-content { 
+            background: linear-gradient(145deg, #051911 0%, #020617 100%); 
+            border: 1px solid var(--border); border-radius: 3rem; width: 100%; 
+            max-width: 380px; padding: 2.5rem; text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <header class="w-full p-8 text-center">
-        <h1 class="text-2xl font-light tracking-[0.3em] uppercase">Kibla</h1>
-        <p class="text-emerald-400 text-xs mt-2 uppercase italic font-semibold">Drejtimi: 143° nga Veriu</p>
+    <div class="menu-trigger" onclick="toggleMenu()">
+        <div class="burger-line line-1"></div>
+        <div class="burger-line line-2"></div>
+        <div class="burger-line line-3"></div>
+    </div>
+
+    <nav id="full-menu">
+        <div class="mb-12">
+            <p class="text-emerald-500 font-black tracking-[0.4em] text-xs uppercase opacity-50">Navigimi</p>
+        </div>
+        <a href="index.html" class="menu-link"><i class="fa-solid fa-house-chimney"></i> Vaktia</a>
+        <a href="lutje.html" class="menu-link"><i class="fa-solid fa-hand-holding-heart"></i> Lutjet</a>
+        <a href="kibla.html" class="menu-link active-page"><i class="fa-solid fa-compass"></i> Kibla</a>
+        <a href="ligjeratat.html" class="menu-link"><i class="fa-solid fa-microphone-lines"></i> Ligjërata</a>
+        <a href="info.html" class="menu-link"><i class="fa-solid fa-circle-info"></i> Info</a>
+    </nav>
+
+    <div id="permission-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <i class="fa-solid fa-location-crosshairs text-emerald-500 text-2xl"></i>
+            </div>
+            <h2 class="text-3xl font-black italic tracking-tighter mb-4">Orientimi</h2>
+            <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-8 leading-relaxed">
+                Lejoni qasjen në sensorët e lëvizjes për të gjetur drejtimin e saktë të Kiblës.
+            </p>
+            <button onclick="initSensor()" class="w-full py-4 bg-emerald-500 text-black rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20">Aktivizo</button>
+        </div>
+    </div>
+
+    <header class="pt-20 px-8">
+        <div class="max-w-md mx-auto">
+            <h1 class="text-5xl font-black italic tracking-tighter mb-2">Kibla<span class="text-emerald-500">.</span></h1>
+            <p id="instruction" class="text-[10px] uppercase tracking-[0.3em] text-emerald-500 font-bold opacity-70">Gjej drejtimin e saktë</p>
+        </div>
     </header>
 
-    <main class="flex-1 flex flex-col items-center justify-center w-full px-10 relative mb-32">
-        
-        <div id="degree-text" class="mb-8 text-5xl font-extralight tracking-tighter text-emerald-400">
-            0°
-        </div>
+    <main class="flex-1 flex flex-col items-center justify-center p-6 relative">
+        <div id="degree-val" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[12rem] font-black italic tracking-tighter opacity-[0.03] pointer-events-none select-none">0°</div>
 
-        <div class="relative w-72 h-72 rounded-full glass compass-ring flex items-center justify-center">
-            <div class="direction-label top-4">N</div>
-            <div class="direction-label bottom-4">S</div>
-            <div class="direction-label right-4">E</div>
-            <div class="direction-label left-4">W</div>
-
-            <div id="compass-disc" class="relative w-full h-full flex items-center justify-center">
-                <div class="needle w-1 h-56 bg-gradient-to-t from-transparent via-emerald-500 to-transparent absolute rounded-full"></div>
-                <div class="absolute -top-2">
-                    <i class="fa-solid fa-caret-up text-emerald-400 text-2xl"></i>
-                </div>
+        <div class="compass-wrap">
+            <div id="compass-disc" class="glass-card-circle">
+                <div class="absolute top-4 left-1/2 -translate-x-1/2 text-[12px] font-black opacity-30 tracking-tighter">N</div>
                 
-                <div class="glass w-20 h-20 rounded-full flex items-center justify-center z-10 border border-white/10 shadow-2xl">
-                    <i class="fa-solid fa-kaaba text-3xl text-white"></i>
+                <div class="needle-qibla">
+                    <i class="fa-solid fa-location-arrow text-5xl rotate-45"></i>
                 </div>
+            </div>
+
+            <div id="center-hub" class="absolute w-24 h-24 bg-slate-950/80 border border-white/10 rounded-full flex items-center justify-center backdrop-blur-xl shadow-2xl z-10">
+                <i class="fa-solid fa-kaaba text-3xl text-white"></i>
             </div>
         </div>
 
-        <div class="mt-12 text-center px-4">
-            <p id="status-text" class="text-gray-400 text-[11px] font-light leading-relaxed max-w-[280px] uppercase tracking-widest">
-                Mbajeni telefonin horizontalisht ose rrotulloni me mi (në PC).
-            </p>
-            <button id="start-btn" class="mt-6 px-8 py-3 bg-emerald-500/10 border border-emerald-500/50 rounded-full text-[10px] text-emerald-400 uppercase tracking-[0.2em] font-bold hover:bg-emerald-500/20 transition-all active:scale-95 shadow-lg shadow-emerald-500/10">
-                Aktivizo Busullën
-            </button>
-        </div>
-
+        <p class="mt-16 text-[9px] text-gray-600 font-bold uppercase tracking-[0.4em] text-center max-w-[240px] leading-loose opacity-50">
+            Mbajeni pajisjen horizontalisht dhe rrotullohuni ngadalë.
+        </p>
     </main>
 
-    <nav>
-        <div class="nav-inner">
-            <a href="index.html" class="flex flex-col items-center text-gray-500 transition-all duration-300">
-                <i class="fa-solid fa-clock-four text-xl"></i>
-                <span class="text-[10px] mt-1 font-medium tracking-wide">Vaktia</span>
-            </a>
-            <a href="lutje.html" class="flex flex-col items-center text-gray-500 transition-all duration-300">
-                <i class="fa-solid fa-hands-praying text-xl"></i>
-                <span class="text-[10px] mt-1 font-medium tracking-wide">Lutje</span>
-            </a>
-            <a href="kibla.html" class="flex flex-col items-center active-nav transition-all duration-300">
-                <i class="fa-solid fa-compass text-xl text-emerald-400"></i>
-                <span class="text-[10px] mt-1 font-medium tracking-wide">Kibla</span>
-            </a>
-            <a href="info.html" class="flex flex-col items-center text-gray-500 transition-all duration-300">
-                <i class="fa-solid fa-circle-info text-xl"></i>
-                <span class="text-[10px] mt-1 font-medium tracking-wide">Info</span>
-            </a>
-        </div>
-    </nav>
-
     <script>
-        const compassDisc = document.getElementById('compass-disc');
-        const degreeText = document.getElementById('degree-text');
-        const startBtn = document.getElementById('start-btn');
-        const statusText = document.getElementById('status-text');
-        const qiblaDirection = 143; 
+        const disc = document.getElementById('compass-disc');
+        const degVal = document.getElementById('degree-val');
+        const instr = document.getElementById('instruction');
+        const modal = document.getElementById('permission-modal');
+        const targetQibla = 143; // Ratkoc
 
-        function updateRotation(heading) {
-            const rotation = qiblaDirection - heading;
-            compassDisc.style.transform = `rotate(${rotation}deg)`;
-            degreeText.innerText = Math.round(heading) + "°";
-
-            if (Math.abs(Math.round(heading) - qiblaDirection) < 5) {
-                degreeText.classList.replace('text-emerald-400', 'text-white');
-                statusText.innerText = "JEI NË DREJTIMIN E DUHUR!";
-                statusText.classList.add('text-emerald-400', 'font-bold');
-            } else {
-                degreeText.classList.replace('text-white', 'text-emerald-400');
-                statusText.innerText = "Mbajeni telefonin horizontalisht dhe larg metaleve.";
-                statusText.classList.remove('text-emerald-400', 'font-bold');
-            }
+        function applyGlobalSettings() {
+            const savedTheme = localStorage.getItem('ratkoc_theme') || '#10b981';
+            document.documentElement.style.setProperty('--primary', savedTheme);
+            document.querySelectorAll('.text-emerald-500').forEach(el => el.style.color = savedTheme);
+            document.querySelectorAll('.bg-emerald-500').forEach(el => el.style.backgroundColor = savedTheme);
         }
 
-        // SENSORI PËR MOBILE
-        function activateCompass() {
-            const handler = (event) => {
-                let heading = event.webkitCompassHeading || (360 - event.alpha);
-                if (heading) updateRotation(heading);
-            };
-
-            window.addEventListener('deviceorientation', handler, true);
-            if (window.DeviceOrientationAbsoluteEvent) {
-                window.addEventListener('deviceorientationabsolute', handler, true);
-            }
-            startBtn.style.display = 'none';
+        function toggleMenu() {
+            document.querySelector('.menu-trigger').classList.toggle('open');
+            document.getElementById('full-menu').classList.toggle('active');
         }
 
-        // RROTULLIMI MANUAL PËR DESKTOP (DRAG)
-        let isDragging = false;
-        function handleManual(e) {
-            if (!isDragging) return;
-            const rect = compassDisc.getBoundingClientRect();
-            const cx = rect.left + rect.width / 2;
-            const cy = rect.top + rect.height / 2;
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            const angle = Math.atan2(clientY - cy, clientX - cx) * (180 / Math.PI);
-            updateRotation((angle + 450) % 360);
-        }
-
-        compassDisc.addEventListener('mousedown', () => isDragging = true);
-        window.addEventListener('mouseup', () => isDragging = false);
-        window.addEventListener('mousemove', handleManual);
-        compassDisc.addEventListener('touchstart', () => isDragging = true);
-        window.addEventListener('touchend', () => isDragging = false);
-        window.addEventListener('touchmove', handleManual);
-
-        startBtn.addEventListener('click', async () => {
+        async function initSensor() {
             if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
                 try {
                     const permission = await DeviceOrientationEvent.requestPermission();
-                    if (permission === 'granted') activateCompass();
-                } catch (err) { alert("Leja kërkohet për sensorin."); }
+                    if (permission === 'granted') startCompass();
+                } catch (e) { alert("Leja u refuzua."); }
             } else {
-                activateCompass();
+                startCompass();
             }
-        });
+            modal.style.display = 'none';
+        }
+
+        function startCompass() {
+            window.addEventListener('deviceorientation', (e) => {
+                let heading = e.webkitCompassHeading || (360 - e.alpha);
+                
+                if (heading) {
+                    const rotation = targetQibla - heading;
+                    disc.style.transform = `rotate(${rotation}deg)`;
+                    
+                    let roundedHeading = Math.round(heading);
+                    degVal.innerText = roundedHeading + "°";
+
+                    // Check Alignment
+                    const diff = Math.abs(roundedHeading - targetQibla);
+                    if (diff < 3) {
+                        degVal.style.opacity = "0.15";
+                        degVal.style.color = "var(--primary)";
+                        instr.innerText = "JE NË DREJTIMIN E SAKTË";
+                        instr.style.opacity = "1";
+                        document.querySelector('.glass-card-circle').classList.add('aligned-glow');
+                        if(navigator.vibrate) navigator.vibrate(30);
+                    } else {
+                        degVal.style.opacity = "0.03";
+                        degVal.style.color = "white";
+                        instr.innerText = "GJEJ DREJTIMIN E SAKTË";
+                        instr.style.opacity = "0.7";
+                        document.querySelector('.glass-card-circle').classList.remove('aligned-glow');
+                    }
+                }
+            }, true);
+        }
+
+        window.onload = applyGlobalSettings;
     </script>
 </body>
 </html>
-
