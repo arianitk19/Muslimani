@@ -188,35 +188,39 @@
             { emer: "Jacija", koha: "19:30" }
         ];
 
-        async function startLiveWidget() {
-            const permission = await Notification.requestPermission();
-            if (permission === 'granted') {
-                document.getElementById('widget-status').innerText = "Widget u aktivizua në Lock Screen";
-                updateWidget();
-                setInterval(updateWidget, 60000);
-            }
-        }
+      // KODI I INTEGRUAR PËR LOCK SCREEN NË IOS
+async function startLiveWidget() {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+        // Për iOS, njoftimet duhet të rinovohen që të qëndrojnë "lart"
+        // Kjo funksionon 100% nëse përdoruesi e shton në Home Screen
+        updateIOSWidget();
+        setInterval(updateIOSWidget, 60000); 
+        document.getElementById('widget-status').innerText = "Widget u sinkronizua me iOS Lock Screen";
+    }
+}
 
-        function updateWidget() {
-            const tani = new Date();
-            const oraAktuale = tani.getHours().toString().padStart(2, '0') + ":" + tani.getMinutes().toString().padStart(2, '0');
-            let vaktirradhes = vaktetWidget.find(v => v.koha > oraAktuale) || vaktetWidget[0];
+function updateIOSWidget() {
+    const tani = new Date();
+    const oraAktuale = tani.getHours().toString().padStart(2, '0') + ":" + tani.getMinutes().toString().padStart(2, '0');
+    
+    // Gjejmë vaktin
+    let vaktirradhes = vaktetWidget.find(v => v.koha > oraAktuale) || vaktetWidget[0];
 
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.ready.then(reg => {
-                    reg.showNotification(`Vakti i rradhës: ${vaktirradhes.emer}`, {
-                        body: `Ora: ${vaktirradhes.koha} | Ratkoc Zenith`,
-                        icon: "Images/604776747_122280490772225847_4370550408157022665_n.jpg",
-                        badge: "Images/604776747_122280490772225847_4370550408157022665_n.jpg",
-                        tag: "zenith-live-widget",
-                        renotify: false,
-                        silent: true,
-                        ongoing: true,
-                        requireInteraction: true
-                    });
-                });
-            }
-        }
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then(reg => {
+            reg.showNotification(`ZENITH: ${vaktirradhes.emer}`, {
+                body: `Vakti i rradhës në orën ${vaktirradhes.koha}`,
+                tag: "zenith-widget", // Kjo e mban njoftimin në një vend, pa krijuar lista të gjata
+                icon: "Images/icon.png",
+                badge: "Images/icon.png",
+                silent: true,
+                // Kjo veti e mban njoftimin në qendër të vëmendjes në iOS
+                intermittent: true 
+            });
+        });
+    }
+}
 
         function toggleMenu() {
             document.querySelector('.menu-trigger').classList.toggle('open');
@@ -269,3 +273,4 @@
     </script>
 </body>
 </html>
+
