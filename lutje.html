@@ -2,241 +2,262 @@
 <html lang="sq">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lutjet & Mëso Namazin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Lutjet | Vaktia Ratkoc Zenith</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800;900&display=swap');
         
+        :root { 
+            --primary: #10b981; 
+            --bg: #020617; 
+            --glass: rgba(255, 255, 255, 0.03); 
+            --border: rgba(255, 255, 255, 0.08); 
+        }
+
         body { 
-            background: #020617; 
+            background: var(--bg); 
             color: white; 
             font-family: 'Plus Jakarta Sans', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        .glass { 
-            background: rgba(255, 255, 255, 0.03); 
+        .glass-card { 
+            background: var(--glass); 
             backdrop-filter: blur(20px); 
-            border: 1px solid rgba(255, 255, 255, 0.08); 
+            border: 1px solid var(--border); 
+            border-radius: 2.5rem; 
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        #namazi-modal { 
-            display: none; 
-            position: fixed; 
-            inset: 0; 
-            z-index: 100; 
-            background: rgba(2, 6, 23, 0.85); 
-            backdrop-filter: blur(12px);
-            padding: 15px;
-            align-items: center;
-            justify-content: center;
+        /* Menu Trigger Zenith */
+        .menu-trigger { 
+            position: fixed; top: 2.5rem; right: 1.5rem; z-index: 2000; 
+            padding: 12px; background: var(--glass); border-radius: 1.2rem; border: 1px solid var(--border); 
+            cursor: pointer;
         }
+        .burger-line { width: 22px; height: 1.5px; background: var(--primary); margin: 5px 0; transition: 0.4s; border-radius: 10px; }
+        .open .line-1 { transform: translateY(6.5px) rotate(45deg); }
+        .open .line-2 { opacity: 0; }
+        .open .line-3 { transform: translateY(-6.5px) rotate(-45deg); }
 
-        .modal-content {
-            background: linear-gradient(180deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
-            width: 100%;
-            max-width: 450px;
-            max-height: 85vh;
-            border-radius: 3rem;
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            overflow-y: auto;
-            position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            animation: modalShow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        #full-menu { 
+            position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(50px); 
+            z-index: 1999; display: flex; flex-direction: column; justify-content: center; 
+            padding: 3rem; visibility: hidden; opacity: 0; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); 
         }
+        #full-menu.active { visibility: visible; opacity: 1; }
 
-        @keyframes modalShow {
-            from { opacity: 0; transform: scale(0.9) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+        .menu-link {
+            font-size: 2.5rem; font-weight: 700; margin: 1rem 0; display: flex; align-items: center; 
+            gap: 1.5rem; color: rgba(255,255,255,0.4); transition: 0.4s; letter-spacing: -1px;
         }
+        .menu-link i { font-size: 1.8rem; color: var(--primary); opacity: 0.5; }
+        .menu-link:hover, .menu-link.active-page { color: white; transform: translateX(10px); }
+        .menu-link.active-page i { opacity: 1; filter: drop-shadow(0 0 8px var(--primary)); }
 
-        .step-pill {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.1);
-            border-radius: 1.5rem;
-            padding: 20px;
-            margin-bottom: 12px;
+        .cat-btn { transition: all 0.3s; border: 1px solid var(--border); }
+        .cat-active { background: var(--primary) !important; color: #020617 !important; border-color: var(--primary); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); }
+
+        .fade-up { animation: fadeUp 0.6s ease-out forwards; opacity: 0; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+
+        .modal-overlay { display: none; position: fixed; inset: 0; z-index: 3000; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { 
+            background: linear-gradient(145deg, #051911 0%, #020617 100%); 
+            border: 1px solid var(--border); border-radius: 3rem; width: 100%; max-width: 400px; 
+            max-height: 80vh; overflow-y: auto; padding: 2.5rem; 
         }
-
-        .active-nav { color: #10b981; position: relative; }
-        .active-nav::after { 
-            content: ''; position: absolute; top: -16px; width: 20px; height: 3px; 
-            background: #10b981; border-radius: 0 0 10px 10px; 
-        }
-
-        .modal-content::-webkit-scrollbar { width: 0px; }
+        .arabic-font { font-family: "Traditional Arabic", serif; font-size: 2.4rem; line-height: 1.7; }
     </style>
 </head>
-<body class="pb-40">
+<body class="pb-12">
 
-    <div class="max-w-md mx-auto px-6 pt-12">
-        <div onclick="toggleModal(true)" class="relative group cursor-pointer">
-            <div class="absolute -inset-1 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-            <div class="relative glass p-6 rounded-[2.5rem] flex items-center justify-between">
-                <div class="flex items-center gap-5">
-                    <div class="w-14 h-14 bg-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-400">
-                        <i class="fa-solid fa-kaaba text-2xl"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-bold tracking-tight">Mëso Namazin</h3>
-                        <p class="text-[10px] text-emerald-500/60 uppercase tracking-[0.2em] font-semibold">Udhëzuesi i plotë</p>
-                    </div>
-                </div>
-                <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center">
-                    <i class="fa-solid fa-chevron-right text-gray-500 text-xs"></i>
-                </div>
-            </div>
-        </div>
+    <div class="menu-trigger" onclick="toggleMenu()">
+        <div class="burger-line line-1"></div>
+        <div class="burger-line line-2"></div>
+        <div class="burger-line line-3"></div>
     </div>
 
-    <header class="p-8"><div class="max-w-md mx-auto"><h1 class="text-3xl font-bold tracking-tighter">Lutjet</h1></div></header>
-
-    <div class="max-w-md mx-auto px-6 mb-8">
-        <div class="glass rounded-2xl flex items-center px-5 py-4 focus-within:ring-1 ring-emerald-500/50 transition-all">
-            <i class="fa-solid fa-search text-gray-600 mr-4"></i>
-            <input type="text" id="searchInput" oninput="fuzzySearch()" placeholder="Kërko (psh: 'mngj', 'buk', 'udh')..." class="bg-transparent border-none outline-none text-sm w-full text-gray-200">
+    <nav id="full-menu">
+        <div class="mb-12">
+            <p class="text-emerald-500 font-black tracking-[0.4em] text-xs uppercase opacity-50">Navigimi</p>
         </div>
-    </div>
-
-    <main id="lutjet-container" class="max-w-md mx-auto px-6 space-y-4"></main>
-
-    <div id="namazi-modal" class="flex">
-        <div class="modal-content p-8">
-            <div class="flex justify-between items-center mb-8">
-                <div>
-                    <h2 class="text-2xl font-bold italic">Mëso Namazin</h2>
-                    <div class="h-1 w-12 bg-emerald-500 rounded-full mt-1"></div>
-                </div>
-                <button onclick="toggleModal(false)" class="w-10 h-10 glass rounded-full flex items-center justify-center hover:bg-white/10">
-                    <i class="fa-solid fa-xmark text-gray-400"></i>
-                </button>
-            </div>
-
-            <div class="grid grid-cols-5 gap-2 mb-8">
-                <div class="text-center"><p class="text-[8px] text-gray-500 mb-1">SAB</p><div class="glass py-2 rounded-lg text-[10px] border-emerald-500/30">2+2</div></div>
-                <div class="text-center"><p class="text-[8px] text-gray-500 mb-1">DRE</p><div class="glass py-2 rounded-lg text-[10px]">10</div></div>
-                <div class="text-center"><p class="text-[8px] text-gray-500 mb-1">IKI</p><div class="glass py-2 rounded-lg text-[10px]">4</div></div>
-                <div class="text-center"><p class="text-[8px] text-gray-500 mb-1">AKSH</p><div class="glass py-2 rounded-lg text-[10px]">3+2</div></div>
-                <div class="text-center"><p class="text-[8px] text-gray-500 mb-1">JAC</p><div class="glass py-2 rounded-lg text-[10px]">13</div></div>
-            </div>
-
-            <div class="space-y-4">
-                <div class="step-pill">
-                    <div class="flex items-center gap-3 mb-2">
-                        <span class="w-6 h-6 rounded-full bg-emerald-500 text-[10px] flex items-center justify-center font-bold">1</span>
-                        <h4 class="font-bold text-emerald-400 text-sm italic">Hyrja në Namaz</h4>
-                    </div>
-                    <p class="text-xs text-gray-300 leading-relaxed font-light">Nijeti në zemër dhe Tekbiri Fillestar: <span class="text-white font-medium">"Allahu Ekber"</span>.</p>
-                </div>
-
-                <div class="step-pill">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="w-6 h-6 rounded-full bg-emerald-500 text-[10px] flex items-center justify-center font-bold">2</span>
-                        <h4 class="font-bold text-emerald-400 text-sm italic">Lutja pas Tekbirit</h4>
-                    </div>
-                    <div class="bg-black/20 p-4 rounded-2xl border border-white/5">
-                        <p class="text-[10px] text-emerald-500 font-bold uppercase mb-2">Subhaneke</p>
-                        <p class="text-xs italic text-gray-300 leading-relaxed">"Subhanekallahum-me ve bihamdike ve tebarekes-muke..."</p>
-                    </div>
-                </div>
-
-                <div class="step-pill">
-                    <div class="flex items-center gap-3 mb-3">
-                        <span class="w-6 h-6 rounded-full bg-emerald-500 text-[10px] flex items-center justify-center font-bold">3</span>
-                        <h4 class="font-bold text-emerald-400 text-sm italic">Suret që duhen</h4>
-                    </div>
-                    <div class="bg-black/20 p-4 rounded-2xl border border-white/5 mb-2">
-                        <p class="text-[10px] text-emerald-500 font-bold uppercase mb-1 italic">1. El-Fatiha (E obligueshme)</p>
-                        <p class="text-xs text-gray-400">"El-hamdu lil-lahi rabbil 'alemin. Er-rahmani-rrahim..."</p>
-                    </div>
-                    <div class="bg-black/20 p-4 rounded-2xl border border-white/5">
-                        <p class="text-[10px] text-emerald-500 font-bold uppercase mb-1 italic">2. Sure e shkurtër (p.sh Ihllasi)</p>
-                        <p class="text-xs text-gray-400">"Kul huvallahu ehad. Allahus-samed..."</p>
-                    </div>
-                </div>
-            </div>
-
-            <button onclick="toggleModal(false)" class="w-full mt-8 bg-emerald-500 hover:bg-emerald-400 text-white py-5 rounded-[2rem] font-bold text-sm transition-all shadow-lg shadow-emerald-500/20">
-                Përfundo Mësimin
-            </button>
-        </div>
-    </div>
-
-    <nav class="fixed bottom-0 left-0 right-0 bg-[#020617]/90 backdrop-blur-xl border-t border-white/5 px-8 py-5 z-50">
-        <div class="flex justify-between items-center max-w-md mx-auto">
-            <a href="index.html" class="flex flex-col items-center text-gray-500"><i class="fa-solid fa-clock-four text-xl"></i><span class="text-[10px] mt-1">Vaktia</span></a>
-            <a href="lutje.html" class="flex flex-col items-center active-nav"><i class="fa-solid fa-hands-praying text-xl text-emerald-400"></i><span class="text-[10px] mt-1">Lutje</span></a>
-            <a href="kibla.html" class="flex flex-col items-center text-gray-500"><i class="fa-solid fa-compass text-xl"></i><span class="text-[10px] mt-1">Kibla</span></a>
-            <a href="info.html" class="flex flex-col items-center text-gray-500"><i class="fa-solid fa-circle-info text-xl"></i><span class="text-[10px] mt-1">Info</span></a>
+        <a href="index.html" class="menu-link"><i class="fa-solid fa-house-chimney"></i> Vaktia</a>
+        <a href="lutje.html" class="menu-link active-page"><i class="fa-solid fa-hand-holding-heart"></i> Lutjet</a>
+        <a href="kibla.html" class="menu-link"><i class="fa-solid fa-compass"></i> Kibla</a>
+        <a href="ligjeratat.html" class="menu-link"><i class="fa-solid fa-microphone-lines"></i> Ligjërata</a>
+        <a href="info.html" class="menu-link"><i class="fa-solid fa-circle-info"></i> Info</a>
+        <div class="mt-auto pt-10 border-t border-white/5">
+            <p class="text-[10px] text-gray-500 tracking-widest uppercase italic">Ratkoci Digital &copy; 2026</p>
         </div>
     </nav>
 
-    <script>
-        const lutjetData = [
-            { k: "Mëngjes", a: "اللَّهُمَّ بِكَ أَصْبَحْنَا", s: "O Allah, me Ty e arritëm mëngjesin...", p: "1 herë" },
-            { k: "Mbrëmje", a: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ", s: "Arritëm mbrëmjen, i tërë sundimi i takon Allahut.", p: "1 herë" },
-            { k: "Mbrojtje", a: "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ", s: "Me emrin e Allahut, pranë emrit të të Cilit nuk dëmton asgjë...", p: "3 herë" },
-            { k: "Gjumi", a: "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا", s: "Me emrin Tënd, o Allah, vdes dhe jetoj.", p: "1 herë" },
-            { k: "Buka / Ushqimi", a: "بِسْمِ اللَّهِ", s: "Me emrin e Allahut (para ngrënies).", p: "1 herë" },
-            { k: "Pas Ushqimit", a: "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي", s: "Falënderimi i takon Allahut që më ushqeu me këtë...", p: "1 herë" },
-            { k: "Vështirësi / Shqetësim", a: "يَا حَيُّ يَا قَيُّومُ", s: "O i Gjallë, o i Përhershëm, me mëshirën Tënde kërkoj ndihmë.", p: "Çdo herë" },
-            { k: "Hyrja në Shtëpi", a: "بِسْمِ اللَّهِ وَلَجْنَا", s: "Me emrin e Allahut hyjmë dhe me emrin e Allahut dolëm.", p: "1 herë" },
-            { k: "Dalja nga Shtëpia", a: "بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ", s: "Me emrin e Allahut, u mbështeta tek Allahu.", p: "1 herë" },
-            { k: "Udhëtimi", a: "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا", s: "I pastër nga të metat është Ai që e nënshtroi këtë për ne...", p: "1 herë" },
-            { k: "Kërkim Falje (Istigfar)", a: "أَسْتَغْفِرُ اللَّهَ", s: "Kërkoj falje nga Allahu.", p: "100 herë" },
-            { k: "Prindërit", a: "رَّبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا", s: "Zoti im, mëshiroji ata të dy ashtu siç më rritën.", p: "Në çdo lutje" },
-            { k: "Hyrja në Xhami", a: "اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ", s: "O Allah, mi hap dyert e mëshirës Tënde.", p: "1 herë" },
-            { k: "Dalja nga Xhamia", a: "اللَّهُمَّ إِنِّI أَسْأَلُكَ مِنْ فَضْلِكَ", s: "O Allah, kërkoj prej mirësive Tua.", p: "1 herë" },
-            { k: "Pas Namazit", a: "اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ", s: "O Allah, Ti je Paqja dhe prej Teje vjen paqja.", p: "Pas çdo namazi" }
-        ];
+    <header class="pt-20 px-8 text-center">
+        <div class="max-w-md mx-auto mb-10">
+            <h1 class="text-5xl font-black italic tracking-tighter mb-2">Lutjet<span class="text-emerald-500">.</span></h1>
+            <div class="flex justify-center items-center gap-2">
+                <span class="h-[1px] w-8 bg-emerald-500/30"></span>
+                <p class="text-[9px] uppercase tracking-[0.4em] text-emerald-500 font-bold">Ratkoc Zenith v4.0</p>
+                <span class="h-[1px] w-8 bg-emerald-500/30"></span>
+            </div>
+        </div>
+    </header>
 
-        function renderLutjet(data = lutjetData) {
-            const container = document.getElementById('lutjet-container');
-            container.innerHTML = data.map(l => `
-                <div class="glass p-6 rounded-[2rem] lutje-card animate-in fade-in slide-in-from-bottom-2 duration-300">
-                    <span class="text-[9px] font-bold uppercase text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full">${l.k}</span>
-                    <p class="text-2xl font-serif text-right mt-4 mb-2 text-emerald-50" dir="rtl">${l.a}</p>
-                    <p class="text-sm text-gray-300 italic font-light">${l.s}</p>
-                    <div class="flex justify-between items-center mt-4 border-t border-white/5 pt-3 text-[10px] text-gray-500">
-                        <span>Përsëritet: ${l.p}</span>
-                        <button onclick="copyText('${l.s}')" class="hover:text-emerald-400 transition-colors p-2"><i class="fa-regular fa-copy"></i></button>
-                    </div>
+    <main class="max-w-md mx-auto px-6 space-y-8">
+        
+        <div onclick="toggleModal('festa-modal', true)" class="glass-card p-6 flex items-center justify-between cursor-pointer active:scale-95 group">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-all shadow-lg shadow-emerald-500/5">
+                    <i class="fa-solid fa-moon text-xl"></i>
                 </div>
-            `).join('');
+                <div>
+                    <h4 id="next-event-name" class="text-sm font-black italic tracking-tight uppercase">Ngjarja e Radhës</h4>
+                    <p id="countdown-timer" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Duke llogaritur...</p>
+                </div>
+            </div>
+            <div class="flex flex-col items-end">
+                <i class="fa-solid fa-chevron-right text-gray-700 text-xs mb-1"></i>
+                <span class="text-[8px] font-black text-emerald-500/40 uppercase tracking-widest">2026</span>
+            </div>
+        </div>
+
+        <div class="glass-card flex items-center px-6 py-5 border-white/5">
+            <i class="fa-solid fa-magnifying-glass text-emerald-500 mr-4 opacity-50"></i>
+            <input type="text" id="searchInput" oninput="liveSearch()" placeholder="Kërko me fjalë kyçe..." class="bg-transparent border-none outline-none text-sm w-full font-bold placeholder:text-gray-700">
+        </div>
+
+        <div class="flex gap-3 overflow-x-auto no-scrollbar pb-2" id="filters">
+            <button onclick="filterByCat('all')" class="cat-btn cat-active glass-card px-6 py-3 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Të Gjitha</button>
+            <button onclick="filterByCat('mëngjes')" class="cat-btn glass-card px-6 py-3 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Dhikri</button>
+            <button onclick="filterByCat('mbrojtje')" class="cat-btn glass-card px-6 py-3 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Mbrojtje</button>
+            <button onclick="filterByCat('sukses')" class="cat-btn glass-card px-6 py-3 text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Sukses</button>
+        </div>
+
+        <div id="lutjet-list" class="space-y-6 pb-12"></div>
+    </main>
+
+    <div id="festa-modal" class="modal-overlay" onclick="if(event.target == this) toggleModal('festa-modal', false)">
+        <div class="modal-content">
+            <div class="mb-8 border-b border-white/5 pb-4">
+                <p class="text-emerald-500 font-black tracking-[0.4em] text-[10px] uppercase opacity-50 mb-2">Kalendari Zenith</p>
+                <h2 class="text-3xl font-black italic tracking-tighter">Festat 2026</h2>
+            </div>
+            <div id="festa-container" class="space-y-4"></div>
+            <button onclick="toggleModal('festa-modal', false)" class="w-full mt-10 py-4 bg-emerald-500 text-black rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20">Mbyll Kalendarin</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector('.menu-trigger').classList.toggle('open');
+            document.getElementById('full-menu').classList.toggle('active');
         }
 
-        // Algoritmi Fuzzy Search - gjen inicialet dhe shkronjat e përafërta
-        function fuzzySearch() {
-            const query = document.getElementById('searchInput').value.toLowerCase().trim().replace(/\s/g, '');
-            
-            if (query === "") {
-                renderLutjet(lutjetData);
-                return;
+        const lutjet = [
+            { cat: "mëngjes", t: "Mëngjes & Mbrëmje", a: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ", l: "Asbahna ve asbahal mulku lillahi Rabbil-alemin", s: "E arritëm mëngjesin, i tërë sundimi i takon Allahut, Zotit të botëve." },
+            { cat: "mbrojtje", t: "Mbrojtje nga dëmi", a: "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ", l: "E'udhu bi kelimatillahi-tammati min sherri ma halek", s: "Kërkoj mbrojtje me fjalët e përsosura të Allahut nga sherri i asaj që ka krijuar." },
+            { cat: "sukses", t: "Lutja e Junusit", a: "لَا إِلَهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ", l: "La ilahe il-la Ente Subhaneke inni kuntu minedh-dhalimin", s: "S'ka të adhuruar tjetër përveç Teje! Ti je i pastër, unë i bëra padrejtësi vetes." },
+            { cat: "sukses", t: "Për Rizk & Mirësi", a: "اللَّهُمَّ اكْفِنِي بِحَلَالِكَ عَنْ حَرَامِكَ", l: "Allahummek-fini bi halalike an haramike", s: "O Allah, më mjafto me të lejuarën Tënde ndaj të ndaluarës." },
+            { cat: "mbrojtje", t: "Dalja nga shtëpia", a: "بِسْمِ اللَّهِ ، تَوَكَّلْتُ عَلَى اللَّهِ", l: "Bismillahi, tevekkeltu 'alallahi", s: "Me emrin e Allahut, u mbështeta tek Allahu." }
+        ];
+
+        const festat = [
+            { emri: "Ramazani 2026", data: "2026-02-18", desc: "Fillimi i muajit të agjërimit.", detaje: "E Mërkurë, 1 Ramazan 1447" },
+            { emri: "Fitër Bajrami", data: "2026-03-20", desc: "Festa pas muajit të bekuar.", detaje: "E Premte, 1 Sheval 1447" },
+            { emri: "Dita e Arafatit", data: "2026-05-26", desc: "Dita më e madhe e lutjeve.", detaje: "E Martë, 9 Dhul-Hixhxhe 1447" },
+            { emri: "Kurban Bajrami", data: "2026-05-27", desc: "Festa e sakrificës.", detaje: "E Mërkurë, 10 Dhul-Hixhxhe 1447" },
+            { emri: "Viti i Ri Hixhri", data: "2026-06-16", desc: "Fillimi i vitit 1448.", detaje: "E Martë, 1 Muharrem 1448" }
+        ];
+
+        function applyGlobalSettings() {
+            const savedSize = localStorage.getItem('ratkoc_fontSize') || '16';
+            const savedTheme = localStorage.getItem('ratkoc_theme') || '#10b981';
+            document.body.style.fontSize = savedSize + 'px';
+            document.documentElement.style.setProperty('--primary', savedTheme);
+        }
+
+        function renderLutjet(data) {
+            const list = document.getElementById('lutjet-list');
+            list.innerHTML = data.map((l, i) => `
+                <div class="glass-card p-8 fade-up" style="animation-delay: ${i*0.05}s">
+                    <div class="flex justify-between items-start mb-6">
+                        <span class="text-[8px] font-black uppercase text-emerald-500 tracking-[0.3em] bg-emerald-500/5 px-3 py-1 rounded-lg border border-emerald-500/10">${l.t}</span>
+                        <button onclick="copyLutja('${l.s}')" class="w-8 h-8 rounded-full flex items-center justify-center bg-white/5 text-gray-500 hover:text-emerald-500 transition-colors"><i class="fa-regular fa-copy text-xs"></i></button>
+                    </div>
+                    <p class="arabic-font text-right mb-6 text-white/90 leading-relaxed" dir="rtl">${l.a}</p>
+                    <p class="text-[10px] text-emerald-500 font-black italic mb-3 tracking-widest uppercase">${l.l}</p>
+                    <p class="text-sm text-gray-400 font-medium leading-relaxed italic border-l-2 border-emerald-500/20 pl-4">${l.s}</p>
+                </div>
+            `).join('');
+            applyGlobalSettings();
+        }
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const upcoming = festat.map(f => ({...f, time: new Date(f.data).getTime()}))
+                                   .filter(f => f.time > now)
+                                   .sort((a,b) => a.time - b.time)[0];
+            if(upcoming) {
+                const diff = upcoming.time - now;
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById('next-event-name').innerText = upcoming.emri;
+                document.getElementById('countdown-timer').innerText = `Edhe ${d} ditë e ${h} orë mbetur`;
             }
+        }
 
-            const filtered = lutjetData.filter(lutja => {
-                const target = (lutja.k + lutja.s).toLowerCase().replace(/\s/g, '');
-                let searchIdx = 0;
-                for (let i = 0; i < target.length && searchIdx < query.length; i++) {
-                    if (target[i] === query[searchIdx]) {
-                        searchIdx++;
-                    }
-                }
-                return searchIdx === query.length;
-            });
-
+        function filterByCat(cat) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('cat-active'));
+            if(event) event.currentTarget.classList.add('cat-active');
+            const filtered = cat === 'all' ? lutjet : lutjet.filter(l => l.cat === cat);
             renderLutjet(filtered);
         }
 
-        function toggleModal(show) { document.getElementById('namazi-modal').style.display = show ? 'flex' : 'none'; }
-        
-        function copyText(text) { 
-            navigator.clipboard.writeText(text);
-            // Opcionale: Njoftim i vogël që u kopjua
+        function liveSearch() {
+            const val = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = lutjet.filter(l => l.s.toLowerCase().includes(val) || l.t.toLowerCase().includes(val) || l.l.toLowerCase().includes(val));
+            renderLutjet(filtered);
         }
 
-        renderLutjet();
+        function toggleModal(id, show) {
+            const modal = document.getElementById(id);
+            modal.style.display = show ? 'flex' : 'none';
+            if(show) {
+                document.getElementById('festa-container').innerHTML = festat.map(f => `
+                    <div class="p-5 glass-card !rounded-2xl border-white/5 bg-white/5">
+                        <div class="flex justify-between items-center mb-1">
+                            <h5 class="font-black italic text-white text-sm tracking-tight">${f.emri}</h5>
+                            <span class="text-[9px] font-black text-emerald-500 uppercase tracking-widest">${f.data}</span>
+                        </div>
+                        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-tighter mb-1">${f.detaje}</p>
+                        <p class="text-[9px] text-gray-600 font-medium italic">${f.desc}</p>
+                    </div>
+                `).join('');
+                applyGlobalSettings();
+            }
+        }
+
+        function copyLutja(txt) {
+            navigator.clipboard.writeText(txt);
+            if(navigator.vibrate) navigator.vibrate(40);
+            alert('Lutja u kopjua!');
+        }
+
+        window.onload = () => {
+            renderLutjet(lutjet);
+            updateCountdown();
+            applyGlobalSettings();
+            setInterval(updateCountdown, 60000);
+        };
     </script>
 </body>
 </html>
