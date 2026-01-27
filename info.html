@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Info | Vaktia Ratkoc Zenith</title>
     
+    <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
@@ -98,35 +99,26 @@
         <img src="Images/604776747_122280490772225847_4370550408157022665_n.jpg" alt="Ratkoci" class="w-full h-full object-cover hero-mask scale-110 brightness-[0.4]">
         <div class="absolute bottom-20 left-8 md:left-20">
             <h1 class="text-6xl font-black italic tracking-tighter mb-2">Info<span class="text-emerald-500">.</span></h1>
-            <p class="text-[10px] uppercase tracking-[0.4em] text-emerald-500 font-bold opacity-70">Zenith Experience</p>
+            <p class="text-[10px] uppercase tracking-[0.4em] text-emerald-500 font-bold opacity-70">Zenith Pro App</p>
         </div>
     </header>
 
     <main class="max-w-xl mx-auto px-6 -mt-12 relative z-10 space-y-6">
         
-        <section class="glass-card p-8 border-emerald-500/30 bg-emerald-500/[0.02]">
+        <section class="glass-card p-8 border-blue-500/20 bg-blue-500/[0.03]">
             <div class="flex items-center gap-3 mb-6">
-                <i class="fa-solid fa-mobile-screen-button text-emerald-500 animate-pulse"></i>
-                <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Widget & Home Screen</h3>
+                <i class="fa-solid fa-layer-group text-blue-400 animate-pulse"></i>
+                <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Lock Screen Widget</h3>
             </div>
-            <p class="text-[11px] text-gray-400 leading-relaxed mb-6 italic">Për të pasur vaktet si **Widget** në ekranin tuaj, shtoni këtë faqe në Home Screen:</p>
-            <div class="space-y-4">
-                <div class="bg-white/5 p-4 rounded-3xl border border-white/5 flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-500 font-black">1</div>
-                    <p class="text-[10px] font-bold uppercase tracking-tight">Kliko butonin <i class="fa-solid fa-share-nodes mx-1"></i> ose <i class="fa-solid fa-ellipsis-vertical mx-1"></i> në browser</p>
-                </div>
-                <div class="bg-white/5 p-4 rounded-3xl border border-white/5 flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-500 font-black">2</div>
-                    <p class="text-[10px] font-bold uppercase tracking-tight text-white">Zgjidh "Add to Home Screen"</p>
-                </div>
-            </div>
-            <button id="installApp" class="w-full mt-6 py-4 bg-emerald-500 text-[#020617] rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/20 active:scale-95 transition-all">Instalo Zenith App</button>
+            <p class="text-[11px] text-gray-400 italic mb-6 leading-relaxed">Aktivizoni vaktin e rradhës në ekranin e kyçur të telefonit tuaj (Persistent Widget).</p>
+            <button onclick="startLiveWidget()" class="w-full py-4 bg-blue-600 text-white rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-500/20 active:scale-95 transition-all">Aktivizo Widget-in</button>
+            <p id="widget-status" class="text-[7px] text-center mt-4 text-gray-600 uppercase font-black tracking-widest italic"></p>
         </section>
 
         <section class="glass-card p-8">
             <div class="flex items-center gap-3 mb-8">
                 <i class="fa-solid fa-bell text-emerald-500"></i>
-                <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Njoftime Inteligjente</h3>
+                <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Njoftimet Inteligjente</h3>
             </div>
             <div class="grid grid-cols-3 gap-3">
                 <button onclick="updateNotifMode('none')" id="notif-none" class="notif-btn bg-white/5 border border-white/5 py-5 rounded-3xl flex flex-col items-center gap-2">
@@ -153,7 +145,7 @@
                 <button onclick="getUserLocation()" class="text-[9px] font-black text-emerald-500 uppercase tracking-widest bg-emerald-500/10 px-4 py-2 rounded-full">Rifresko</button>
             </div>
             <div id="user-geo-box">
-                <p id="user-city" class="text-2xl font-black italic tracking-tighter text-white mb-1">Gati...</p>
+                <p id="user-city" class="text-2xl font-black italic tracking-tighter text-white mb-1">Duke kërkuar...</p>
                 <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest italic"><span id="user-coords">Zbuloni koordinatat tuaja</span></p>
             </div>
         </section>
@@ -187,20 +179,44 @@
     </main>
 
     <script>
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            document.getElementById('installApp').style.display = 'block';
-        });
+        // LISTA E VAKTEVE PËR WIDGET
+        const vaktetWidget = [
+            { emer: "Sabahu", koha: "05:30" },
+            { emer: "Dreka", koha: "12:15" },
+            { emer: "Ikindia", koha: "15:45" },
+            { emer: "Akshami", koha: "17:50" },
+            { emer: "Jacija", koha: "19:30" }
+        ];
 
-        document.getElementById('installApp').addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
+        async function startLiveWidget() {
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+                document.getElementById('widget-status').innerText = "Widget u aktivizua në Lock Screen";
+                updateWidget();
+                setInterval(updateWidget, 60000);
             }
-        });
+        }
+
+        function updateWidget() {
+            const tani = new Date();
+            const oraAktuale = tani.getHours().toString().padStart(2, '0') + ":" + tani.getMinutes().toString().padStart(2, '0');
+            let vaktirradhes = vaktetWidget.find(v => v.koha > oraAktuale) || vaktetWidget[0];
+
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.ready.then(reg => {
+                    reg.showNotification(`Vakti i rradhës: ${vaktirradhes.emer}`, {
+                        body: `Ora: ${vaktirradhes.koha} | Ratkoc Zenith`,
+                        icon: "Images/604776747_122280490772225847_4370550408157022665_n.jpg",
+                        badge: "Images/604776747_122280490772225847_4370550408157022665_n.jpg",
+                        tag: "zenith-live-widget",
+                        renotify: false,
+                        silent: true,
+                        ongoing: true,
+                        requireInteraction: true
+                    });
+                });
+            }
+        }
 
         function toggleMenu() {
             document.querySelector('.menu-trigger').classList.toggle('open');
