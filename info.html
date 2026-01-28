@@ -228,6 +228,66 @@
                 <div id="location-badge" class="inline-block px-3 py-1 bg-emerald-500 text-[8px] font-black uppercase rounded-full text-bg hidden">Vendi i caktuar</div>
             </div>
         </section>
+
+
+
+
+
+
+
+
+
+<section class="glass-card p-6 mb-6 border-amber-500/20">
+    <div class="flex items-center gap-3 mb-4">
+        <i class="fa-solid fa-gears text-amber-500"></i>
+        <h3 class="text-[10px] font-black uppercase tracking-widest text-gray-400">Burimi i Vaktisë</h3>
+    </div>
+
+    <div class="relative">
+        <select id="api-method-select" onchange="ndryshoMetoden(this.value)" 
+                class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-xs font-bold text-white outline-none focus:border-amber-500 transition-all appearance-none">
+            <option value="3">Muslim World League (Kosovë)</option>
+            <option value="4">Umm al-Qura (Makkah)</option>
+            <option value="2">ISNA (Amerikë)</option>
+            <option value="5">Egyptian General Authority</option>
+            <option value="1">University of Islamic Sciences</option>
+        </select>
+        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+            <i class="fa-solid fa-chevron-down text-[10px] text-gray-500"></i>
+        </div>
+    </div>
+    <p class="text-[9px] text-gray-500 mt-3 italic">* Kur ndryshon këtë, oraret në Home Screen përditësohen automatikisht.</p>
+</section>
+
+<script>
+    // Kur hapet faqja Info, zgjidh opsionin që është ruajtur më parë
+    window.onload = () => {
+        const metodaEruajtur = localStorage.getItem('zenith_api_method') || "3";
+        document.getElementById('api-method-select').value = metodaEruajtur;
+    };
+
+    function ndryshoMetoden(vlera) {
+        localStorage.setItem('zenith_api_method', vlera);
+        if (navigator.vibrate) navigator.vibrate(30);
+        
+        // Opsionale: Një njoftim i vogël që u ruajt
+        console.log("Metoda u ndryshua në: " + vlera);
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
         
 <section class="glass-card p-8 border-amber-500/20 bg-amber-500/[0.02]">
     <div class="flex items-center justify-between mb-8">
@@ -462,6 +522,7 @@ setInterval(updateSunArc, 60000);
     </script>
 </body>
 </html>
+
 
 
 
