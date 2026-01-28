@@ -315,17 +315,30 @@
             document.documentElement.style.setProperty('--primary', savedTheme);
         }
 
-        async function fetchLiveVaktet() {
-            try {
-                const res = await fetch('https://api.aladhan.com/v1/timingsByAddress?address=Ratkoc,Kosovo&method=3');
-                const data = await res.json();
-                const t = data.data.timings;
-                vaktetRaw[0].koha = t.Fajr; vaktetRaw[1].koha = t.Sunrise;
-                vaktetRaw[2].koha = t.Dhuhr; vaktetRaw[3].koha = t.Asr;
-                vaktetRaw[4].koha = t.Maghrib; vaktetRaw[5].koha = t.Isha;
-                updateUI();
-            } catch (e) { console.warn("API Error"); }
-        }
+       async function fetchLiveVaktet() {
+    try {
+        // 1. Lexo metodën nga memoria (localStorage)
+        const metodaNgaInfo = localStorage.getItem('zenith_api_method') || 3;
+        
+        // 2. Thirr API-n me metodën e zgjedhur
+        const res = await fetch(`https://api.aladhan.com/v1/timingsByAddress?address=Ratkoc,Kosovo&method=${metodaNgaInfo}`);
+        const data = await res.json();
+        const t = data.data.timings;
+        
+        // 3. Përditëso vaktet në ekran
+        vaktetRaw[0].koha = t.Fajr;
+        vaktetRaw[1].koha = t.Sunrise;
+        vaktetRaw[2].koha = t.Dhuhr;
+        vaktetRaw[3].koha = t.Asr;
+        vaktetRaw[4].koha = t.Maghrib;
+        vaktetRaw[5].koha = t.Isha;
+        
+        updateUI();
+        console.log("Vaktet u ngarkuan me metodën nr: " + metodaNgaInfo);
+    } catch (e) { 
+        console.warn("API Error - Kontrolloni lidhjen"); 
+    }
+}
 
         window.onload = () => {
             fetchLiveVaktet();
@@ -401,6 +414,7 @@ setInterval(updateLockScreenWidget, 60000);
     </script>
 </body>
 </html>
+
 
 
 
