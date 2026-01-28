@@ -1,0 +1,15 @@
+{
+  "name": "Vaktia Ratkoc",
+  "short_name": "Zenith",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "Images/604776747_122280490772225847_4370550408157022665_n.jpg",
+      "sizes": "512x512",
+      "type": "image/jpg"
+    }
+  ]
+}
