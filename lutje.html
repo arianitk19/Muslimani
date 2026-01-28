@@ -4,7 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Lutjet | Vaktia Ratkoc Zenith</title>
-    
+    <link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="Images/604776747_122280490772225847_4370550408157022665_n.jpg">
+
+<script>
+  // Ky kod i vogël ndalon hapjen e Safari-t kur kalon nga faqja në faqe
+  if (("standalone" in window.navigator) && window.navigator.standalone) {
+    var noddy, remotes = false;
+    document.addEventListener('click', function(event) {
+      noddy = event.target;
+      while (noddy.nodeName !== "A" && noddy.nodeName !== "HTML") { noddy = noddy.parentNode; }
+      if ('href' in noddy && noddy.href.indexOf('http') !== -1 && (noddy.href.indexOf(window.location.host) !== -1 || remotes)) {
+        event.preventDefault();
+        window.location = noddy.href;
+      }
+    }, false);
+  }
+</script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -261,3 +279,4 @@
     </script>
 </body>
 </html>
+
