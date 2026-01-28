@@ -173,7 +173,26 @@
                 <div id="location-badge" class="inline-block px-3 py-1 bg-emerald-500 text-[8px] font-black uppercase rounded-full text-bg hidden">Vendi i caktuar</div>
             </div>
         </section>
+        
+<section class="glass-card p-8 border-amber-500/20 bg-amber-500/[0.02]">
+    <div class="flex items-center justify-between mb-8">
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-moon text-amber-400"></i>
+            <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Rrugëtimi drejt Ramazanit</h3>
+        </div>
+        <span id="days-to-ramadan" class="text-xs font-black text-amber-400">-- Ditë</span>
+    </div>
 
+    <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mb-4">
+        <div id="ramadan-progress" class="h-full bg-gradient-to-r from-amber-600 to-amber-300 transition-all duration-1000" style="width: 0%"></div>
+    </div>
+    
+    <div class="flex justify-between items-center">
+        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Shpirtërorja</p>
+        <p class="text-[9px] text-amber-500/50 font-black italic uppercase">Zenith 2026</p>
+    </div>
+</section>
+        
         <section class="glass-card p-8 md:p-12">
             <div class="flex items-center gap-3 mb-10">
                 <i class="fa-solid fa-sliders text-emerald-500"></i>
@@ -323,7 +342,41 @@
             refreshNotifUI();
             getUserLocation();
         });
+
+
+
+function updateRamadanCountdown() {
+    // Data e përafërt e Ramazanit 2026 (18 Shkurt 2026)
+    const ramadanDate = new Date('February 18, 2026 00:00:00').getTime();
+    const now = new Date().getTime();
+    const gap = ramadanDate - now;
+
+    const day = 1000 * 60 * 60 * 24;
+    const daysLeft = Math.floor(gap / day);
+
+    if (daysLeft > 0) {
+        document.getElementById('days-to-ramadan').innerText = daysLeft + " Ditë";
+        // Progresi i bazuar në vitin kalendarik
+        const progress = Math.max(0, Math.min(100, (1 - (daysLeft / 355)) * 100));
+        document.getElementById('ramadan-progress').style.width = progress + "%";
+    } else {
+        document.getElementById('days-to-ramadan').innerText = "Ramazan i Begatë!";
+        document.getElementById('ramadan-progress').style.width = "100%";
+    }
+}
+
+// Thirre funksionin te DOMContentLoaded
+window.addEventListener('DOMContentLoaded', () => {
+    updateRamadanCountdown();
+});
+
+
+
+
+
+        
     </script>
 </body>
 </html>
+
 
