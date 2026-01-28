@@ -89,10 +89,8 @@
         .notif-active { background: var(--primary) !important; color: #020617 !important; border-color: var(--primary); filter: grayscale(0); opacity: 1; }
 
         .hero-mask { mask-image: linear-gradient(to bottom, black 50%, transparent 100%); }
-        
-        /* New Button Glow Effect */
         .btn-glow { box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); transition: 0.4s; }
-        .btn-glow:active { transform: scale(0.96); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
+        .btn-glow:active { transform: scale(0.96); }
     </style>
 </head>
 <body class="pb-12">
@@ -172,9 +170,7 @@
                     <i class="fa-solid fa-map-pin text-[8px]"></i>
                     <span id="user-coords" class="text-[9px] font-bold uppercase tracking-widest">Zbuloni koordinatat</span>
                 </div>
-                <div id="location-badge" class="inline-block px-3 py-1 bg-emerald-500 text-[8px] font-black uppercase rounded-full text-bg hidden">
-                    Vendi i caktuar
-                </div>
+                <div id="location-badge" class="inline-block px-3 py-1 bg-emerald-500 text-[8px] font-black uppercase rounded-full text-bg hidden">Vendi i caktuar</div>
             </div>
         </section>
 
@@ -207,6 +203,13 @@
     </main>
 
     <script>
+        // REGJISTRIMI I DETYRUESHËM PËR NJOFTIME (Service Worker)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(reg => {
+                console.log('SW Registered');
+            });
+        }
+
         const vaktetWidget = [
             { emer: "Sabahu", koha: "05:30" },
             { emer: "Dreka", koha: "12:15" },
@@ -215,21 +218,22 @@
             { emer: "Jacija", koha: "19:30" }
         ];
 
-        // NOTIFICATION PERMISSION WITH DESIGN LOGIC
+        // BUTONI QE NXJERR LEJEN ZYRTARE TË SISTEMIT
         async function requestPermissionUI() {
+            // Kjo nxjerr dritaren "Allow Notifications" në iOS/Android
             const permission = await Notification.requestPermission();
+            
             if (permission === 'granted') {
-                // ELEGANT FEEDBACK NOTIFICATION
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.ready.then(reg => {
-                        reg.showNotification('ZENITH PRO', {
-                            body: 'Njoftimet e vaktisë u aktivizuan me sukses.',
-                            icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
-                            badge: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
-                            silent: false,
-                        });
+                navigator.serviceWorker.ready.then(reg => {
+                    reg.showNotification('ZENITH PRO', {
+                        body: 'Njoftimet u aktivizuan! Do të njoftoheni për çdo vakt.',
+                        icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
+                        badge: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
+                        vibrate: [200, 100, 200]
                     });
-                }
+                });
+            } else {
+                alert("Ju lutem lejoni njoftimet nga Settings të telefonit tuaj.");
             }
         }
 
@@ -238,7 +242,7 @@
             if (permission === 'granted') {
                 updateIOSWidget();
                 setInterval(updateIOSWidget, 60000); 
-                document.getElementById('widget-status').innerText = "Widget u sinkronizua me iOS Lock Screen";
+                document.getElementById('widget-status').innerText = "Widget u sinkronizua";
             }
         }
 
@@ -255,7 +259,7 @@
                         icon: "Images/604776747_122280490772225847_4370550408157022665_n.jpg",
                         badge: "Images/604776747_122280490772225847_4370550408157022665_n.jpg",
                         silent: true,
-                        intermittent: true 
+                        renotify: false
                     });
                 });
             }
@@ -269,7 +273,6 @@
         function updateNotifMode(mode) {
             localStorage.setItem('ratkoc_notif_mode', mode);
             refreshNotifUI();
-            if (mode !== 'none') Notification.requestPermission();
         }
 
         function refreshNotifUI() {
@@ -279,30 +282,23 @@
             if(activeBtn) activeBtn.classList.add('notif-active');
         }
 
-        // GEOLOCATION WITH CITY NAME FETCHING
         function getUserLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async pos => {
                     const lat = pos.coords.latitude;
                     const lon = pos.coords.longitude;
                     document.getElementById('user-coords').innerText = `${lat.toFixed(4)}° N, ${lon.toFixed(4)}° E`;
-                    
                     try {
-                        // Reverse Geocoding Falas
                         const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
                         const data = await res.json();
-                        const city = data.address.city || data.address.town || data.address.village || "Vendi juaj";
+                        const city = data.address.city || data.address.town || data.address.village || "Lokacioni Juaj";
                         document.getElementById('user-city').innerText = city;
-                        
-                        // Shfaq badge-in e lokacionit të gjetur
                         const badge = document.getElementById('location-badge');
                         badge.innerText = city;
                         badge.classList.remove('hidden');
                     } catch (e) {
                         document.getElementById('user-city').innerText = "Lokacioni u Aktivizua";
                     }
-                }, () => {
-                    document.getElementById('user-city').innerText = "Aksesi u refuzua";
                 });
             }
         }
@@ -320,14 +316,6 @@
             const label = document.getElementById('font-size-label');
             if(label) label.innerText = savedSize + 'px';
             document.querySelectorAll('.text-emerald-500').forEach(el => el.style.color = savedTheme);
-            
-            // Fix for dynamic background elements
-            const emeraldBgs = document.querySelectorAll('.bg-emerald-500');
-            emeraldBgs.forEach(el => {
-                if(!el.classList.contains('bg-white/5')) {
-                    el.style.backgroundColor = savedTheme;
-                }
-            });
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -338,3 +326,4 @@
     </script>
 </body>
 </html>
+
