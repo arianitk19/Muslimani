@@ -335,9 +335,73 @@
             document.getElementById('tasbih-num').innerText = tasbihCount;
             setInterval(updateUI, 1000);
         };
+
+
+async function updateLockScreenWidget() {
+    const vaktet = [
+        { emer: "Sabahu", koha: "05:30" },
+        { emer: "Dreka", koha: "12:15" },
+        { emer: "Ikindia", koha: "15:45" },
+        { emer: "Akshami", koha: "17:50" },
+        { emer: "Jacija", koha: "19:30" }
+    ];
+
+    const tani = new Date();
+    const oraTani = tani.getHours() * 3600 + tani.getMinutes() * 60 + tani.getSeconds();
+
+    let vaktirradhes = vaktet.find(v => {
+        const [vOra, vMin] = v.koha.split(':').map(Number);
+        return (vOra * 3600 + vMin * 60) > oraTani;
+    }) || vaktet[0];
+
+    const [vOra, vMin] = vaktirradhes.koha.split(':').map(Number);
+    let vSek = vOra * 3600 + vMin * 60;
+    if (vSek <= oraTani) vSek += 86400;
+
+    const mbeturMinuta = Math.floor((vSek - oraTani) / 60);
+
+    // Përcaktimi i titullit dhe rëndësisë (Ngjyra/Vibrimi)
+    let titulli = `Zenith: ${vaktirradhes.emer}`;
+    let mesazhi = `Edhe ${mbeturMinuta} minuta deri në vakt.`;
+    
+    if (mbeturMinuta <= 10) {
+        titulli = `⚠️ KOHA PO AFROHET: ${vaktirradhes.emer}`;
+        mesazhi = `Vakti fillon për ${mbeturMinuta} minuta! Përgatituni.`;
+    }
+
+    if ('serviceWorker' in navigator) {
+        const reg = await navigator.serviceWorker.ready;
+        reg.showNotification(titulli, {
+            body: mesazhi,
+            icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
+            tag: 'vaktia-live-widget', // Ky tag e mban njoftimin unik dhe e përditëson atë
+            renotify: mbeturMinuta <= 10, // Dridhet vetëm kur mbeten pak minuta
+            silent: mbeturMinuta > 10,  // Rri i qetë kur ka kohë mjaftueshëm
+            badge: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
+            data: { url: window.location.href }
+        });
+    }
+
+    // Përditëso numrin e vogël mbi ikonën e App-it (Badge)
+    if (navigator.setAppBadge) {
+        navigator.setAppBadge(mbeturMinuta);
+    }
+}
+
+// Ekzekutoje çdo 1 minutë për të përditësuar Lock Screen-in
+setInterval(updateLockScreenWidget, 60000);
+
+
+
+
+
+
+
+        
     </script>
 </body>
 </html>
+
 
 
 
