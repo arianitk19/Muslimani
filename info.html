@@ -5,28 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Info | Vaktia Ratkoc Zenith</title>
     <link rel="manifest" href="manifest.json">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="Images/604776747_122280490772225847_4370550408157022665_n.jpg">
-
-<script>
-  // Ky kod i vogël ndalon hapjen e Safari-t kur kalon nga faqja në faqe
-  if (("standalone" in window.navigator) && window.navigator.standalone) {
-    var noddy, remotes = false;
-    document.addEventListener('click', function(event) {
-      noddy = event.target;
-      while (noddy.nodeName !== "A" && noddy.nodeName !== "HTML") { noddy = noddy.parentNode; }
-      if ('href' in noddy && noddy.href.indexOf('http') !== -1 && (noddy.href.indexOf(window.location.host) !== -1 || remotes)) {
-        event.preventDefault();
-        window.location = noddy.href;
-      }
-    }, false);
-  }
-</script>
-    <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
+    <link rel="apple-touch-icon" href="Images/604776747_122280490772225847_4370550408157022665_n.jpg">
+
+    <script>
+      if (("standalone" in window.navigator) && window.navigator.standalone) {
+        var noddy, remotes = false;
+        document.addEventListener('click', function(event) {
+          noddy = event.target;
+          while (noddy.nodeName !== "A" && noddy.nodeName !== "HTML") { noddy = noddy.parentNode; }
+          if ('href' in noddy && noddy.href.indexOf('http') !== -1 && (noddy.href.indexOf(window.location.host) !== -1 || remotes)) {
+            event.preventDefault();
+            window.location = noddy.href;
+          }
+        }, false);
+      }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -93,6 +89,10 @@
         .notif-active { background: var(--primary) !important; color: #020617 !important; border-color: var(--primary); filter: grayscale(0); opacity: 1; }
 
         .hero-mask { mask-image: linear-gradient(to bottom, black 50%, transparent 100%); }
+        
+        /* New Button Glow Effect */
+        .btn-glow { box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); transition: 0.4s; }
+        .btn-glow:active { transform: scale(0.96); box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
     </style>
 </head>
 <body class="pb-12">
@@ -138,7 +138,7 @@
                 <i class="fa-solid fa-bell text-emerald-500"></i>
                 <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Njoftimet Inteligjente</h3>
             </div>
-            <div class="grid grid-cols-3 gap-3">
+            <div class="grid grid-cols-3 gap-3 mb-6">
                 <button onclick="updateNotifMode('none')" id="notif-none" class="notif-btn bg-white/5 border border-white/5 py-5 rounded-3xl flex flex-col items-center gap-2">
                     <i class="fa-solid fa-bell-slash text-sm"></i>
                     <span class="text-[8px] font-black uppercase">Fikur</span>
@@ -152,19 +152,29 @@
                     <span class="text-[8px] font-black uppercase">Ezan</span>
                 </button>
             </div>
+            
+            <button onclick="requestPermissionUI()" class="btn-glow w-full py-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-3xl font-black text-[9px] uppercase tracking-[0.3em]">
+                Lejo njoftimet për vaktet e namazeve
+            </button>
         </section>
 
         <section class="glass-card p-8 bg-gradient-to-br from-emerald-500/[0.05] to-transparent">
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-3">
                     <i class="fa-solid fa-location-dot text-emerald-500"></i>
-                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Gjurmimi</h3>
+                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Gjurmimi Aktual</h3>
                 </div>
                 <button onclick="getUserLocation()" class="text-[9px] font-black text-emerald-500 uppercase tracking-widest bg-emerald-500/10 px-4 py-2 rounded-full">Rifresko</button>
             </div>
-            <div id="user-geo-box">
-                <p id="user-city" class="text-2xl font-black italic tracking-tighter text-white mb-1">Duke kërkuar...</p>
-                <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest italic"><span id="user-coords">Zbuloni koordinatat tuaja</span></p>
+            <div id="user-geo-box" class="p-4 bg-white/[0.02] rounded-3xl border border-white/5">
+                <p id="user-city" class="text-2xl font-black italic tracking-tighter text-white mb-1">Duke lokalizuar...</p>
+                <div class="flex items-center gap-2 text-emerald-500 opacity-60 mb-2">
+                    <i class="fa-solid fa-map-pin text-[8px]"></i>
+                    <span id="user-coords" class="text-[9px] font-bold uppercase tracking-widest">Zbuloni koordinatat</span>
+                </div>
+                <div id="location-badge" class="inline-block px-3 py-1 bg-emerald-500 text-[8px] font-black uppercase rounded-full text-bg hidden">
+                    Vendi i caktuar
+                </div>
             </div>
         </section>
 
@@ -197,7 +207,6 @@
     </main>
 
     <script>
-        // LISTA E VAKTEVE PËR WIDGET
         const vaktetWidget = [
             { emer: "Sabahu", koha: "05:30" },
             { emer: "Dreka", koha: "12:15" },
@@ -206,39 +215,51 @@
             { emer: "Jacija", koha: "19:30" }
         ];
 
-      // KODI I INTEGRUAR PËR LOCK SCREEN NË IOS
-async function startLiveWidget() {
-    const permission = await Notification.requestPermission();
-    if (permission === 'granted') {
-        // Për iOS, njoftimet duhet të rinovohen që të qëndrojnë "lart"
-        // Kjo funksionon 100% nëse përdoruesi e shton në Home Screen
-        updateIOSWidget();
-        setInterval(updateIOSWidget, 60000); 
-        document.getElementById('widget-status').innerText = "Widget u sinkronizua me iOS Lock Screen";
-    }
-}
+        // NOTIFICATION PERMISSION WITH DESIGN LOGIC
+        async function requestPermissionUI() {
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+                // ELEGANT FEEDBACK NOTIFICATION
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.ready.then(reg => {
+                        reg.showNotification('ZENITH PRO', {
+                            body: 'Njoftimet e vaktisë u aktivizuan me sukses.',
+                            icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
+                            badge: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
+                            silent: false,
+                        });
+                    });
+                }
+            }
+        }
 
-function updateIOSWidget() {
-    const tani = new Date();
-    const oraAktuale = tani.getHours().toString().padStart(2, '0') + ":" + tani.getMinutes().toString().padStart(2, '0');
-    
-    // Gjejmë vaktin
-    let vaktirradhes = vaktetWidget.find(v => v.koha > oraAktuale) || vaktetWidget[0];
+        async function startLiveWidget() {
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+                updateIOSWidget();
+                setInterval(updateIOSWidget, 60000); 
+                document.getElementById('widget-status').innerText = "Widget u sinkronizua me iOS Lock Screen";
+            }
+        }
 
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.ready.then(reg => {
-            reg.showNotification(`ZENITH: ${vaktirradhes.emer}`, {
-                body: `Vakti i rradhës në orën ${vaktirradhes.koha}`,
-                tag: "zenith-widget", // Kjo e mban njoftimin në një vend, pa krijuar lista të gjata
-                icon: "Images/icon.png",
-                badge: "Images/icon.png",
-                silent: true,
-                // Kjo veti e mban njoftimin në qendër të vëmendjes në iOS
-                intermittent: true 
-            });
-        });
-    }
-}
+        function updateIOSWidget() {
+            const tani = new Date();
+            const oraAktuale = tani.getHours().toString().padStart(2, '0') + ":" + tani.getMinutes().toString().padStart(2, '0');
+            let vaktirradhes = vaktetWidget.find(v => v.koha > oraAktuale) || vaktetWidget[0];
+
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.ready.then(reg => {
+                    reg.showNotification(`ZENITH: ${vaktirradhes.emer}`, {
+                        body: `Vakti i rradhës në orën ${vaktirradhes.koha}`,
+                        tag: "zenith-widget",
+                        icon: "Images/604776747_122280490772225847_4370550408157022665_n.jpg",
+                        badge: "Images/604776747_122280490772225847_4370550408157022665_n.jpg",
+                        silent: true,
+                        intermittent: true 
+                    });
+                });
+            }
+        }
 
         function toggleMenu() {
             document.querySelector('.menu-trigger').classList.toggle('open');
@@ -258,11 +279,30 @@ function updateIOSWidget() {
             if(activeBtn) activeBtn.classList.add('notif-active');
         }
 
+        // GEOLOCATION WITH CITY NAME FETCHING
         function getUserLocation() {
             if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(pos => {
-                    document.getElementById('user-city').innerText = "Lokacioni u Aktivizua";
-                    document.getElementById('user-coords').innerText = `${pos.coords.latitude.toFixed(4)}° N, ${pos.coords.longitude.toFixed(4)}° E`;
+                navigator.geolocation.getCurrentPosition(async pos => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    document.getElementById('user-coords').innerText = `${lat.toFixed(4)}° N, ${lon.toFixed(4)}° E`;
+                    
+                    try {
+                        // Reverse Geocoding Falas
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                        const data = await res.json();
+                        const city = data.address.city || data.address.town || data.address.village || "Vendi juaj";
+                        document.getElementById('user-city').innerText = city;
+                        
+                        // Shfaq badge-in e lokacionit të gjetur
+                        const badge = document.getElementById('location-badge');
+                        badge.innerText = city;
+                        badge.classList.remove('hidden');
+                    } catch (e) {
+                        document.getElementById('user-city').innerText = "Lokacioni u Aktivizua";
+                    }
+                }, () => {
+                    document.getElementById('user-city').innerText = "Aksesi u refuzua";
                 });
             }
         }
@@ -280,7 +320,14 @@ function updateIOSWidget() {
             const label = document.getElementById('font-size-label');
             if(label) label.innerText = savedSize + 'px';
             document.querySelectorAll('.text-emerald-500').forEach(el => el.style.color = savedTheme);
-            document.querySelectorAll('.bg-emerald-500').forEach(el => el.style.backgroundColor = savedTheme);
+            
+            // Fix for dynamic background elements
+            const emeraldBgs = document.querySelectorAll('.bg-emerald-500');
+            emeraldBgs.forEach(el => {
+                if(!el.classList.contains('bg-white/5')) {
+                    el.style.backgroundColor = savedTheme;
+                }
+            });
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -291,5 +338,3 @@ function updateIOSWidget() {
     </script>
 </body>
 </html>
-
-
