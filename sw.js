@@ -18,4 +18,27 @@ self.addEventListener('push', (event) => {
             vibrate: [200, 100, 200]
         })
     );
+
 });
+
+
+
+
+
+
+self.addEventListener('notificationclick', function(event) {
+    event.notification.close();
+    event.waitUntil(
+        clients.openWindow('/')
+    );
+});
+
+
+
+
+
+
+
+
+
+
