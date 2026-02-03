@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Info | Vaktia Ratkoc Zenith</title>
+    <title>Info</title>
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -115,7 +115,7 @@
         <img src="Images/604776747_122280490772225847_4370550408157022665_n.jpg" alt="Ratkoci" class="w-full h-full object-cover hero-mask scale-110 brightness-[0.4]">
         <div class="absolute bottom-20 left-8 md:left-20">
             <h1 class="text-6xl font-black italic tracking-tighter mb-2">Info<span class="text-emerald-500">.</span></h1>
-            <p class="text-[10px] uppercase tracking-[0.4em] text-emerald-500 font-bold opacity-70">Zenith Pro App</p>
+            <p class="text-[10px] uppercase tracking-[0.4em] text-emerald-500 font-bold opacity-70"></p>
         </div>
     </header>
 
@@ -304,7 +304,7 @@
     
     <div class="flex justify-between items-center">
         <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Shpirtërorja</p>
-        <p class="text-[9px] text-amber-500/50 font-black italic uppercase">Zenith 2026</p>
+        <p class="text-[9px] text-amber-500/50 font-black italic uppercase">2026</p>
     </div>
 </section>
         
@@ -322,7 +322,7 @@
                     <input type="range" min="14" max="22" value="16" id="fontSlider" oninput="updateGlobalSetting('fontSize', this.value)" class="w-full">
                 </div>
                 <div>
-                    <span class="text-[11px] text-gray-400 uppercase font-black tracking-widest block mb-6 font-bold">Tema Zenith</span>
+                    <span class="text-[11px] text-gray-400 uppercase font-black tracking-widest block mb-6 font-bold">Tema Ngjyrave</span>
                     <div class="flex justify-between gap-4">
                         <button onclick="updateGlobalSetting('theme', '#10b981')" class="w-12 h-12 rounded-2xl bg-emerald-500 border-4 border-white/10 active:scale-90 transition-all"></button>
                         <button onclick="updateGlobalSetting('theme', '#3b82f6')" class="w-12 h-12 rounded-2xl bg-blue-500 border-4 border-white/10 active:scale-90 transition-all"></button>
@@ -359,7 +359,7 @@
             
             if (permission === 'granted') {
                 navigator.serviceWorker.ready.then(reg => {
-                    reg.showNotification('ZENITH PRO', {
+                    reg.showNotification('Perkujtuesi ditor', {
                         body: 'Njoftimet u aktivizuan! Do të njoftoheni për çdo vakt.',
                         icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
                         badge: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
@@ -522,6 +522,7 @@ setInterval(updateSunArc, 60000);
     </script>
 </body>
 </html>
+
 
 
 
