@@ -374,7 +374,7 @@ async function updateLockScreenWidget() {
     const mbeturMinuta = Math.floor((vSek - oraTani) / 60);
 
     // Përcaktimi i titullit dhe rëndësisë (Ngjyra/Vibrimi)
-    let titulli = `Zenith: ${vaktirradhes.emer}`;
+    let titulli = `: ${vaktirradhes.emer}`;
     let mesazhi = `Edhe ${mbeturMinuta} minuta deri në vakt.`;
     
     if (mbeturMinuta <= 10) {
@@ -414,6 +414,7 @@ setInterval(updateLockScreenWidget, 60000);
     </script>
 </body>
 </html>
+
 
 
 
