@@ -242,13 +242,14 @@
     <script>
 
 const vaktetRaw = [
-    { emri: 'Sabahu', koha: '05:30', ikona: 'fa-feather-pointed' }, // Freskia dhe lehtësia e agimit
-    { emri: 'Lindja', koha: '07:05', ikona: 'fa-clover' },          // Simbolizon rritjen dhe dritën e re
-    { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun' },             // Dielli në qendër
-    { emri: 'Ikindia', koha: '14:12', ikona: 'fa-wind' },          // Përfaqëson lëvizjen e ajrit pasdreke
-    { emri: 'Akshami', koha: '16:21', ikona: 'fa-leaf' },          // Qetësia e perëndimit (natyra në pushim)
-    { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon' }             // Hëna e plotë
+    { emri: 'Sabahu', koha: '05:30', ikona: 'fa-cloud-sun-rise' }, // Agimi (fillimi i dritës)
+    { emri: 'Lindja', koha: '07:05', ikona: 'fa-sun' },            // Lindja e plotë
+    { emri: 'Dreka', koha: '11:48', ikona: 'fa-certificate' },    // Dielli në zenit (ikonë e rregullt simetrike)
+    { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud-sun' },     // Pasditja
+    { emri: 'Akshami', koha: '16:21', ikona: 'fa-sun-down' },      // Perëndimi
+    { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon' }             // Nata
 ];
+        
 
     function toggleMenu() {
         document.querySelector('.menu-trigger').classList.toggle('open');
@@ -410,6 +411,7 @@ const vaktetRaw = [
     </script>
 </body>
 </html>
+
 
 
 
