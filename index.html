@@ -350,28 +350,47 @@
         };
 
 
+        
 async function updateLockScreenWidget() {
-    const vaktet = [
-        { emer: "Sabahu", koha: "05:30" },
-        { emer: "Dreka", koha: "12:15" },
-        { emer: "Ikindia", koha: "15:45" },
-        { emer: "Akshami", koha: "17:50" },
-        { emer: "Jacija", koha: "19:30" }
-    ];
+    // Përdorim direkt vaktetRaw që vjen nga API, jo ato statike
+    if (!vaktetRaw || vaktetRaw.length === 0) return;
 
     const tani = new Date();
     const oraTani = tani.getHours() * 3600 + tani.getMinutes() * 60 + tani.getSeconds();
 
-    let vaktirradhes = vaktet.find(v => {
+    // Gjejmë vaktin e radhës nga të dhënat LIVE
+    let vaktirradhes = vaktetRaw.find(v => {
         const [vOra, vMin] = v.koha.split(':').map(Number);
         return (vOra * 3600 + vMin * 60) > oraTani;
-    }) || vaktet[0];
+    }) || vaktetRaw[0];
 
     const [vOra, vMin] = vaktirradhes.koha.split(':').map(Number);
     let vSek = vOra * 3600 + vMin * 60;
+    
+    // Rregullimi nëse vakti i radhës është Sabahu i ditës tjetër
     if (vSek <= oraTani) vSek += 86400;
 
     const mbeturMinuta = Math.floor((vSek - oraTani) / 60);
+
+    // Pjesa e njoftimit (Notification) mbetet e njëjtë, por tani me të dhëna të sakta
+    if ('serviceWorker' in navigator) {
+        const reg = await navigator.serviceWorker.ready;
+        
+        // Dërgojmë njoftimin vetëm nëse mbeten psh. 10 minuta ose kur ndryshon minuti
+        reg.showNotification(`Vaktia: ${vaktirradhes.emri}`, {
+            body: `Edhe ${mbeturMinuta} minuta deri në kohën e namazit.`,
+            icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
+            tag: 'vaktia-live-widget', 
+            renotify: false,
+            silent: true,
+            badge: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg'
+        });
+    }
+
+    if (navigator.setAppBadge) {
+        navigator.setAppBadge(mbeturMinuta);
+    }
+}
 
     // Përcaktimi i titullit dhe rëndësisë (Ngjyra/Vibrimi)
     let titulli = `: ${vaktirradhes.emer}`;
@@ -414,6 +433,7 @@ setInterval(updateLockScreenWidget, 60000);
     </script>
 </body>
 </html>
+
 
 
 
