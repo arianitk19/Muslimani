@@ -37,21 +37,26 @@
 
 
 
-
-/* Ky kod i bën ikonat të duken si xham i ngjyrosur */
-.vakt-card i {
-    background: linear-gradient(180deg, #ffffff 0%, #64748b 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-size: 1.4rem; /* Pak më të mëdha për t'u dukur më mirë */
+/* Stili për ikonat që të duken profesionale */
+.vakt-icon-container i {
+    font-size: 1.3rem;
+    color: rgba(255, 255, 255, 0.6); /* Ngjyrë e bardhë e zbehtë kur s'janë aktive */
+    transition: all 0.4s ease;
 }
 
-.vakt-card.active i {
-    background: linear-gradient(180deg, #ffffff 0%, var(--primary) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 5px var(--primary));
+/* Kur vaktia është AKTIVE */
+.active .vakt-icon-container i {
+    color: #ffffff; /* E bardhë e pastër */
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+    transform: scale(1.1);
 }
+
+/* Ngjyra specifike për çdo ikonë kur karta është aktive */
+.active .fa-cloud-sun-rise { color: #818cf8 !important; } /* Blu e agimit */
+.active .fa-sun { color: #fbbf24 !important; }            /* E verdhë */
+.active .fa-certificate { color: #f59e0b !important; }    /* Portokalli e artë */
+.active .fa-sun-down { color: #f87171 !important; }       /* E kuqe e perëndimit */
+.active .fa-moon { color: #c084fc !important; }           /* Vjollcë e natës */
 
 
 
@@ -249,7 +254,7 @@ const vaktetRaw = [
     { emri: 'Akshami', koha: '16:21', ikona: 'fa-sun-down' },      // Perëndimi
     { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon' }             // Nata
 ];
-        
+       <i class="fa-solid ${v.ikona}"></i> 
 
     function toggleMenu() {
         document.querySelector('.menu-trigger').classList.toggle('open');
@@ -411,6 +416,7 @@ const vaktetRaw = [
     </script>
 </body>
 </html>
+
 
 
 
