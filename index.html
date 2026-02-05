@@ -214,218 +214,169 @@
     </main>
 
     <script>
-        // IKONAT E REJA DHE TË PËRMIRËSUARA
-        const vaktetRaw = [
-            { emri: 'Sabahu', koha: '05:30', ikona: 'fa-cloud-moon' },    // Sabahu (Errësirë/Agim)
-            { emri: 'Lindja', koha: '07:05', ikona: 'fa-sun-up' },       // Lindja e diellit
-            { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun' },          // Dreka
-            { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud-sun' },  // Ikindia
-            { emri: 'Akshami', koha: '16:21', ikona: 'fa-mountain-sun'}, // Akshami
-            { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon' }          // Jacia
-        ];
 
-        function toggleMenu() {
-            document.querySelector('.menu-trigger').classList.toggle('open');
-            document.getElementById('full-menu').classList.toggle('active');
+    const vaktetRaw = [
+        { emri: 'Sabahu', koha: '05:30', ikona: 'fa-cloud-moon' },
+        { emri: 'Lindja', koha: '07:05', ikona: 'fa-sun-up' },
+        { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun' },
+        { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud-sun' },
+        { emri: 'Akshami', koha: '16:21', ikona: 'fa-mountain-sun'},
+        { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon' }
+    ];
+
+    function toggleMenu() {
+        document.querySelector('.menu-trigger').classList.toggle('open');
+        document.getElementById('full-menu').classList.toggle('active');
+    }
+
+    const dhikret = ["SubhanAllah", "Elhamdulillah", "Allahu Akbar", "Estagfirullah", "La ilaha illallah"];
+    let dhikerIndex = 0;
+    let tasbihCount = parseInt(localStorage.getItem('tasbihCount')) || 0;
+    let completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || [false, false, false, false, false];
+
+    function incrementTasbih() {
+        tasbihCount++;
+        if (navigator.vibrate) navigator.vibrate(20);
+        if(tasbihCount > 33) {
+            tasbihCount = 1;
+            dhikerIndex = (dhikerIndex + 1) % dhikret.length;
+            document.getElementById('dhiker-label').innerText = dhikret[dhikerIndex];
         }
+        document.getElementById('tasbih-num').innerText = tasbihCount;
+        localStorage.setItem('tasbihCount', tasbihCount);
+    }
 
-        const dhikret = ["SubhanAllah", "Elhamdulillah", "Allahu Akbar", "Estagfirullah", "La ilaha illallah"];
-        let dhikerIndex = 0;
-        let tasbihCount = parseInt(localStorage.getItem('tasbihCount')) || 0;
-        let completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || [false, false, false, false, false];
+    function toggleTask(idx) {
+        completedTasks[idx] = !completedTasks[idx];
+        localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+        updateTasksUI();
+        if (completedTasks.filter(t => t).length === 5) showCelebration();
+    }
 
-        function incrementTasbih() {
-            tasbihCount++;
-            if (navigator.vibrate) navigator.vibrate(20);
-            if(tasbihCount > 33) {
-                tasbihCount = 1;
-                dhikerIndex = (dhikerIndex + 1) % dhikret.length;
-                document.getElementById('dhiker-label').innerText = dhikret[dhikerIndex];
+    function showCelebration() {
+        document.getElementById('celebration-modal').style.display = 'flex';
+    }
+
+    function closeCelebration() {
+        document.getElementById('celebration-modal').style.display = 'none';
+    }
+
+    function updateTasksUI() {
+        const btns = document.querySelectorAll('.task-btn');
+        completedTasks.forEach((s, i) => {
+            s ? btns[i].classList.add('done') : btns[i].classList.remove('done');
+        });
+        document.getElementById('task-count').innerText = `${completedTasks.filter(t => t).length}/5 Namaze`;
+    }
+
+    function updateUI() {
+        const now = new Date();
+        const currentTotalMin = (now.getHours() * 60) + now.getMinutes();
+        document.getElementById('live-clock').innerText = now.toLocaleTimeString('sq-AL', {hour12: false, hour: '2-digit', minute: '2-digit'});
+        
+        let currentIdx = -1;
+        const listHtml = vaktetRaw.map((v, i) => {
+            const [vh, vm] = v.koha.split(':').map(Number);
+            const vMin = vh * 60 + vm;
+            if (currentTotalMin >= vMin) currentIdx = i;
+            const isNow = (i === currentIdx);
+            const passed = (currentTotalMin > vMin) && !isNow;
+            
+            return `
+            <div class="glass-card vakt-card ${isNow ? 'active' : ''} ${passed ? 'opacity-30' : ''}">
+                <div class="vakt-icon-container">
+                    <i class="fa-solid ${v.ikona} ${isNow ? '' : 'text-gray-500'} text-lg"></i>
+                </div>
+                <span class="text-[9px] uppercase font-black tracking-[0.2em] text-gray-500 block mb-1">${v.emri}</span>
+                <span class="text-xl font-bold italic tracking-tight">${v.koha}</span>
+            </div>`;
+        }).join('');
+        
+        document.getElementById('vaktet-list').innerHTML = listHtml;
+        
+        const nextIdx = (currentIdx + 1) % vaktetRaw.length;
+        const nextP = vaktetRaw[nextIdx];
+        document.getElementById('next-prayer-name').innerText = nextP.emri;
+        
+        const [nh, nm] = nextP.koha.split(':').map(Number);
+        let target = new Date(); target.setHours(nh, nm, 0);
+        if (target < now) target.setDate(target.getDate() + 1);
+        
+        const diff = target - now;
+        const h = Math.floor(diff/3600000).toString().padStart(2,'0');
+        const m = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
+        const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
+        document.getElementById('prayer-countdown').innerText = `${h}:${m}:${s}`;
+        
+        const totalSec = (now.getHours()*3600) + (now.getMinutes()*60) + now.getSeconds();
+        document.getElementById('progress-bar').style.strokeDashoffset = 596.9 - ((totalSec / 86400) * 596.9);
+    }
+
+    async function fetchLiveVaktet() {
+        try {
+            const metodaNgaInfo = localStorage.getItem('zenith_api_method') || 3;
+            const res = await fetch(`https://api.aladhan.com/v1/timingsByAddress?address=Ratkoc,Kosovo&method=${metodaNgaInfo}`);
+            const data = await res.json();
+            const t = data.data.timings;
+            
+            vaktetRaw[0].koha = t.Fajr;
+            vaktetRaw[1].koha = t.Sunrise;
+            vaktetRaw[2].koha = t.Dhuhr;
+            vaktetRaw[3].koha = t.Asr;
+            vaktetRaw[4].koha = t.Maghrib;
+            vaktetRaw[5].koha = t.Isha;
+            
+            updateUI();
+            updateLockScreenWidget(); // Përditëso njoftimin sapo vijnë të dhënat
+        } catch (e) { 
+            console.warn("API Error"); 
+        }
+    }
+
+    async function updateLockScreenWidget() {
+        if (!vaktetRaw || vaktetRaw.length === 0) return;
+
+        const tani = new Date();
+        const oraTani = tani.getHours() * 3600 + tani.getMinutes() * 60 + tani.getSeconds();
+
+        let vaktirradhes = vaktetRaw.find(v => {
+            const [vOra, vMin] = v.koha.split(':').map(Number);
+            return (vOra * 3600 + vMin * 60) > oraTani;
+        }) || vaktetRaw[0];
+
+        const [vOra, vMin] = vaktirradhes.koha.split(':').map(Number);
+        let vSek = vOra * 3600 + vMin * 60;
+        if (vSek <= oraTani) vSek += 86400;
+
+        const mbeturMinuta = Math.floor((vSek - oraTani) / 60);
+
+        if ('serviceWorker' in navigator && 'Notification' in window) {
+            if (Notification.permission === "granted") {
+                const reg = await navigator.serviceWorker.ready;
+                reg.showNotification(`Vaktia: ${vaktirradhes.emri}`, {
+                    body: `Edhe ${mbeturMinuta} min deri në ${vaktirradhes.emri}`,
+                    icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
+                    tag: 'vaktia-live-widget',
+                    renotify: false,
+                    silent: true,
+                    badge: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg'
+                });
             }
-            document.getElementById('tasbih-num').innerText = tasbihCount;
-            localStorage.setItem('tasbihCount', tasbihCount);
         }
-
-        function toggleTask(idx) {
-            completedTasks[idx] = !completedTasks[idx];
-            localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
-            updateTasksUI();
-            if (completedTasks.filter(t => t).length === 5) showCelebration();
-        }
-
-        function showCelebration() {
-            document.getElementById('celebration-modal').style.display = 'flex';
-        }
-
-        function closeCelebration() {
-            document.getElementById('celebration-modal').style.display = 'none';
-        }
-
-        function updateTasksUI() {
-            const btns = document.querySelectorAll('.task-btn');
-            completedTasks.forEach((s, i) => {
-                s ? btns[i].classList.add('done') : btns[i].classList.remove('done');
-            });
-            document.getElementById('task-count').innerText = `${completedTasks.filter(t => t).length}/5 Namaze`;
-        }
-
-        function updateUI() {
-            const now = new Date();
-            const currentTotalMin = (now.getHours() * 60) + now.getMinutes();
-            document.getElementById('live-clock').innerText = now.toLocaleTimeString('sq-AL', {hour12: false, hour: '2-digit', minute: '2-digit'});
-            
-            let currentIdx = -1;
-            const listHtml = vaktetRaw.map((v, i) => {
-                const [vh, vm] = v.koha.split(':').map(Number);
-                const vMin = vh * 60 + vm;
-                if (currentTotalMin >= vMin) currentIdx = i;
-                const isNow = (i === currentIdx);
-                const passed = (currentTotalMin > vMin) && !isNow;
-                
-                return `
-                <div class="glass-card vakt-card ${isNow ? 'active' : ''} ${passed ? 'opacity-30' : ''}">
-                    <div class="vakt-icon-container">
-                        <i class="fa-solid ${v.ikona} ${isNow ? '' : 'text-gray-500'} text-lg"></i>
-                    </div>
-                    <span class="text-[9px] uppercase font-black tracking-[0.2em] text-gray-500 block mb-1">${v.emri}</span>
-                    <span class="text-xl font-bold italic tracking-tight">${v.koha}</span>
-                </div>`;
-            }).join('');
-            
-            document.getElementById('vaktet-list').innerHTML = listHtml;
-            
-            const nextIdx = (currentIdx + 1) % vaktetRaw.length;
-            const nextP = vaktetRaw[nextIdx];
-            document.getElementById('next-prayer-name').innerText = nextP.emri;
-            
-            const [nh, nm] = nextP.koha.split(':').map(Number);
-            let target = new Date(); target.setHours(nh, nm, 0);
-            if (target < now) target.setDate(target.getDate() + 1);
-            
-            const diff = target - now;
-            const h = Math.floor(diff/3600000).toString().padStart(2,'0');
-            const m = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
-            const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
-            document.getElementById('prayer-countdown').innerText = `${h}:${m}:${s}`;
-            
-            const totalSec = (now.getHours()*3600) + (now.getMinutes()*60) + now.getSeconds();
-            document.getElementById('progress-bar').style.strokeDashoffset = 596.9 - ((totalSec / 86400) * 596.9);
-            
-            const savedTheme = localStorage.getItem('ratkoc_theme') || '#10b981';
-            document.documentElement.style.setProperty('--primary', savedTheme);
-        }
-
-       async function fetchLiveVaktet() {
-    try {
-        // 1. Lexo metodën nga memoria (localStorage)
-        const metodaNgaInfo = localStorage.getItem('zenith_api_method') || 3;
-        
-        // 2. Thirr API-n me metodën e zgjedhur
-        const res = await fetch(`https://api.aladhan.com/v1/timingsByAddress?address=Ratkoc,Kosovo&method=${metodaNgaInfo}`);
-        const data = await res.json();
-        const t = data.data.timings;
-        
-        // 3. Përditëso vaktet në ekran
-        vaktetRaw[0].koha = t.Fajr;
-        vaktetRaw[1].koha = t.Sunrise;
-        vaktetRaw[2].koha = t.Dhuhr;
-        vaktetRaw[3].koha = t.Asr;
-        vaktetRaw[4].koha = t.Maghrib;
-        vaktetRaw[5].koha = t.Isha;
-        
-        updateUI();
-        console.log("Vaktet u ngarkuan me metodën nr: " + metodaNgaInfo);
-    } catch (e) { 
-        console.warn("API Error - Kontrolloni lidhjen"); 
-    }
-}
-
-        window.onload = () => {
-            fetchLiveVaktet();
-            updateTasksUI();
-            const options = { day: 'numeric', month: 'long', year: 'numeric', calendar: 'islamic-uma' };
-            document.getElementById('hijri-date-top').innerText = new Intl.DateTimeFormat('sq-u-ca-islamic-uma', options).format(new Date());
-            document.getElementById('tasbih-num').innerText = tasbihCount;
-            setInterval(updateUI, 1000);
-        };
-
-
-        
-async function updateLockScreenWidget() {
-    // Përdorim direkt vaktetRaw që vjen nga API, jo ato statike
-    if (!vaktetRaw || vaktetRaw.length === 0) return;
-
-    const tani = new Date();
-    const oraTani = tani.getHours() * 3600 + tani.getMinutes() * 60 + tani.getSeconds();
-
-    // Gjejmë vaktin e radhës nga të dhënat LIVE
-    let vaktirradhes = vaktetRaw.find(v => {
-        const [vOra, vMin] = v.koha.split(':').map(Number);
-        return (vOra * 3600 + vMin * 60) > oraTani;
-    }) || vaktetRaw[0];
-
-    const [vOra, vMin] = vaktirradhes.koha.split(':').map(Number);
-    let vSek = vOra * 3600 + vMin * 60;
-    
-    // Rregullimi nëse vakti i radhës është Sabahu i ditës tjetër
-    if (vSek <= oraTani) vSek += 86400;
-
-    const mbeturMinuta = Math.floor((vSek - oraTani) / 60);
-
-    // Pjesa e njoftimit (Notification) mbetet e njëjtë, por tani me të dhëna të sakta
-    if ('serviceWorker' in navigator) {
-        const reg = await navigator.serviceWorker.ready;
-        
-        // Dërgojmë njoftimin vetëm nëse mbeten psh. 10 minuta ose kur ndryshon minuti
-        reg.showNotification(`Vaktia: ${vaktirradhes.emri}`, {
-            body: `Edhe ${mbeturMinuta} minuta deri në kohën e namazit.`,
-            icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
-            tag: 'vaktia-live-widget', 
-            renotify: false,
-            silent: true,
-            badge: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg'
-        });
     }
 
-    if (navigator.setAppBadge) {
-        navigator.setAppBadge(mbeturMinuta);
-    }
-}
-
-    // Përcaktimi i titullit dhe rëndësisë (Ngjyra/Vibrimi)
-    let titulli = `: ${vaktirradhes.emer}`;
-    let mesazhi = `Edhe ${mbeturMinuta} minuta deri në vakt.`;
-    
-    if (mbeturMinuta <= 10) {
-        titulli = `⚠️ KOHA PO AFROHET: ${vaktirradhes.emer}`;
-        mesazhi = `Vakti fillon për ${mbeturMinuta} minuta! Përgatituni.`;
-    }
-
-    if ('serviceWorker' in navigator) {
-        const reg = await navigator.serviceWorker.ready;
-        reg.showNotification(titulli, {
-            body: mesazhi,
-            icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
-            tag: 'vaktia-live-widget', // Ky tag e mban njoftimin unik dhe e përditëson atë
-            renotify: mbeturMinuta <= 10, // Dridhet vetëm kur mbeten pak minuta
-            silent: mbeturMinuta > 10,  // Rri i qetë kur ka kohë mjaftueshëm
-            badge: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
-            data: { url: window.location.href }
-        });
-    }
-
-    // Përditëso numrin e vogël mbi ikonën e App-it (Badge)
-    if (navigator.setAppBadge) {
-        navigator.setAppBadge(mbeturMinuta);
-    }
-}
-
-// Ekzekutoje çdo 1 minutë për të përditësuar Lock Screen-in
-setInterval(updateLockScreenWidget, 60000);
-
-
-
-
+    window.onload = () => {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+        fetchLiveVaktet();
+        updateTasksUI();
+        const options = { day: 'numeric', month: 'long', year: 'numeric', calendar: 'islamic-uma' };
+        document.getElementById('hijri-date-top').innerText = new Intl.DateTimeFormat('sq-u-ca-islamic-uma', options).format(new Date());
+        document.getElementById('tasbih-num').innerText = tasbihCount;
+        setInterval(updateUI, 1000);
+        setInterval(updateLockScreenWidget, 60000);
+    };
 
 
 
@@ -433,6 +384,7 @@ setInterval(updateLockScreenWidget, 60000);
     </script>
 </body>
 </html>
+
 
 
 
