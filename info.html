@@ -3,25 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Info</title>
+    <title>Info - Zenith</title>
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="Images/604776747_122280490772225847_4370550408157022665_n.jpg">
-
-    <script>
-      if (("standalone" in window.navigator) && window.navigator.standalone) {
-        var noddy, remotes = false;
-        document.addEventListener('click', function(event) {
-          noddy = event.target;
-          while (noddy.nodeName !== "A" && noddy.nodeName !== "HTML") { noddy = noddy.parentNode; }
-          if ('href' in noddy && noddy.href.indexOf('http') !== -1 && (noddy.href.indexOf(window.location.host) !== -1 || remotes)) {
-            event.preventDefault();
-            window.location = noddy.href;
-          }
-        }, false);
-      }
-    </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -45,55 +31,75 @@
             overflow-x: hidden;
         }
 
-        .menu-trigger { 
-            position: fixed; top: 2.5rem; right: 1.5rem; z-index: 2000; 
-            padding: 12px; background: var(--glass); border-radius: 1.2rem; border: 1px solid var(--border); 
-            cursor: pointer;
+        /* --- DIZAJNI I RI I NJOFTIMIT (DYNAMIC ISLAND) --- */
+        .zenith-notification {
+            position: fixed;
+            top: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 420px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(25px) saturate(160%);
+            -webkit-backdrop-filter: blur(25px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2.2rem;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            z-index: 9999;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .burger-line { width: 22px; height: 1.5px; background: var(--primary); margin: 5px 0; transition: 0.4s; border-radius: 10px; }
+
+        .zenith-notification.show { top: 25px; }
+
+        .notif-icon-box {
+            width: 48px; height: 48px; border-radius: 1.2rem;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 1.3rem; flex-shrink: 0;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+        }
+
+        .notif-content h4 { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; }
+        .notif-content p { font-size: 14px; font-weight: 700; color: white; margin-top: 1px; }
+
+        /* --- STILI EKZISTUES --- */
+        .menu-trigger { position: fixed; top: 2.5rem; right: 1.5rem; z-index: 2000; padding: 12px; background: var(--glass); border-radius: 1.2rem; border: 1px solid var(--border); }
+        .burger-line { width: 22px; height: 1.5px; background: var(--primary); margin: 5px 0; transition: 0.4s; }
         .open .line-1 { transform: translateY(6.5px) rotate(45deg); }
         .open .line-2 { opacity: 0; }
         .open .line-3 { transform: translateY(-6.5px) rotate(-45deg); }
 
-        #full-menu { 
-            position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(50px); 
-            z-index: 1999; display: flex; flex-direction: column; justify-content: center; 
-            padding: 3rem; visibility: hidden; opacity: 0; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); 
-        }
+        #full-menu { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(50px); z-index: 1999; display: flex; flex-direction: column; justify-content: center; padding: 3rem; visibility: hidden; opacity: 0; transition: 0.5s; }
         #full-menu.active { visibility: visible; opacity: 1; }
 
-        .menu-link {
-            font-size: 2.5rem; font-weight: 700; margin: 1rem 0; display: flex; align-items: center; 
-            gap: 1.5rem; color: rgba(255,255,255,0.4); transition: 0.4s; letter-spacing: -1px; text-decoration: none;
-        }
-        .menu-link i { font-size: 1.8rem; color: var(--primary); opacity: 0.5; }
-        .menu-link:hover, .menu-link.active-page { color: white; transform: translateX(10px); }
-        .menu-link.active-page i { opacity: 1; filter: drop-shadow(0 0 8px var(--primary)); }
+        .menu-link { font-size: 2.5rem; font-weight: 700; margin: 1rem 0; display: flex; align-items: center; gap: 1.5rem; color: rgba(255,255,255,0.4); text-decoration: none; }
+        .menu-link.active-page { color: white; }
 
-        .glass-card { 
-            background: var(--glass); 
-            backdrop-filter: blur(20px); 
-            border: 1px solid var(--border); 
-            border-radius: 2.5rem; 
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
-        }
+        .glass-card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 2.5rem; }
+        
+        input[type="range"] { -webkit-appearance: none; background: rgba(255,255,255,0.05); border-radius: 10px; height: 6px; width: 100%; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: var(--primary); border-radius: 50%; border: 2px solid #fff; }
 
-        input[type="range"] { -webkit-appearance: none; background: rgba(255,255,255,0.05); border-radius: 10px; height: 6px; }
-        input[type="range"]::-webkit-slider-thumb { 
-            -webkit-appearance: none; width: 22px; height: 22px; 
-            background: var(--primary); border-radius: 50%; cursor: pointer;
-            box-shadow: 0 0 15px var(--primary); border: 2px solid #fff;
-        }
-
-        .notif-btn { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); filter: grayscale(1); opacity: 0.5; }
-        .notif-active { background: var(--primary) !important; color: #020617 !important; border-color: var(--primary); filter: grayscale(0); opacity: 1; }
-
-        .hero-mask { mask-image: linear-gradient(to bottom, black 50%, transparent 100%); }
-        .btn-glow { box-shadow: 0 0 20px rgba(16, 185, 129, 0.2); transition: 0.4s; }
-        .btn-glow:active { transform: scale(0.96); }
+        .notif-btn { filter: grayscale(1); opacity: 0.5; transition: 0.3s; }
+        .notif-active { filter: grayscale(0); opacity: 1; background: var(--primary) !important; color: #020617 !important; }
     </style>
 </head>
 <body class="pb-12">
+
+    <audio id="notif-sound" src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3" preload="auto"></audio>
+    
+    <div id="notif-overlay" class="zenith-notification">
+        <div class="notif-icon-box" id="notif-icon-bg">
+            <i class="fa-solid fa-mosque" id="notif-icon"></i>
+        </div>
+        <div class="notif-content">
+            <h4 id="notif-type">Koha e Namazit</h4>
+            <p id="notif-message">Përgatituni për namaz</p>
+        </div>
+    </div>
 
     <div class="menu-trigger" onclick="toggleMenu()">
         <div class="burger-line line-1"></div>
@@ -106,298 +112,123 @@
         <a href="index.html" class="menu-link"><i class="fa-solid fa-house-chimney"></i> Vaktia</a>
         <a href="lutje.html" class="menu-link"><i class="fa-solid fa-hand-holding-heart"></i> Lutjet</a>
         <a href="kibla.html" class="menu-link"><i class="fa-solid fa-compass"></i> Kibla</a>
-        <a href="ligjeratat.html" class="menu-link"><i class="fa-solid fa-microphone-lines"></i> Ligjërata</a>
         <a href="info.html" class="menu-link active-page"><i class="fa-solid fa-circle-info"></i> Info</a>
         <div class="mt-auto pt-10 border-t border-white/5"><p class="text-[10px] text-gray-500 tracking-widest uppercase italic">Ratkoci Digital &copy; 2026</p></div>
     </nav>
 
-    <header class="relative h-96 w-full overflow-hidden">
-        <img src="Images/604776747_122280490772225847_4370550408157022665_n.jpg" alt="Ratkoci" class="w-full h-full object-cover hero-mask scale-110 brightness-[0.4]">
-        <div class="absolute bottom-20 left-8 md:left-20">
-            <h1 class="text-6xl font-black italic tracking-tighter mb-2">Info<span class="text-emerald-500">.</span></h1>
-            <p class="text-[10px] uppercase tracking-[0.4em] text-emerald-500 font-bold opacity-70"></p>
+    <header class="relative h-72 w-full overflow-hidden">
+        <img src="Images/604776747_122280490772225847_4370550408157022665_n.jpg" class="w-full h-full object-cover brightness-[0.3]">
+        <div class="absolute bottom-12 left-8">
+            <h1 class="text-5xl font-black italic tracking-tighter">Info<span class="text-emerald-500">.</span></h1>
         </div>
     </header>
 
-    <main class="max-w-xl mx-auto px-6 -mt-12 relative z-10 space-y-6"> 
+    <main class="max-w-xl mx-auto px-6 -mt-8 relative z-10 space-y-6"> 
 
-
-
-
-<section class="glass-card p-8 bg-gradient-to-b from-white/[0.05] to-transparent overflow-hidden relative">
-    <div class="absolute top-0 right-0 p-6 opacity-10">
-        <i class="fa-solid fa-sun-plant-wilt text-6xl"></i>
-    </div>
-    
-    <div class="flex flex-col gap-6">
-        <div>
-            <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-1">Cikli i Ditës</h3>
-            <p class="text-xs text-gray-500 font-bold uppercase italic">Ratkoc, Kosovë</p>
-        </div>
-
-        <div class="relative h-20 w-full border-b border-dashed border-white/10">
-            <div id="sun-arc" class="absolute inset-0 border-t-2 border-emerald-500/30 rounded-t-full -bottom-20 transition-all duration-1000"></div>
-            <div id="sun-pointer" class="absolute w-3 h-3 bg-white rounded-full shadow-[0_0_15px_#fff] -ml-1.5" style="left: 50%; bottom: -6px;"></div>
-        </div>
-
-        <div class="flex justify-between items-end">
-            <div>
-                <span class="block text-[8px] text-gray-600 font-black uppercase">Lindja</span>
-                <span class="text-xs font-bold tracking-tighter italic">06:45</span>
-            </div>
-            <div class="text-right">
-                <span class="block text-[8px] text-gray-600 font-black uppercase">Perëndimi</span>
-                <span class="text-xs font-bold tracking-tighter italic">16:50</span>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="grid grid-cols-2 gap-4">
-    <div class="glass-card p-6 flex flex-col gap-2 border-white/5">
-        <i class="fa-solid fa-bolt-lightning text-amber-500 text-xs"></i>
-        <span class="text-[8px] font-black text-gray-500 uppercase">Latenca</span>
-        <span class="text-sm font-black italic">14ms</span>
-    </div>
-    <div class="glass-card p-6 flex flex-col gap-2 border-white/5">
-        <i class="fa-solid fa-microchip text-blue-500 text-xs"></i>
-        <span class="text-[8px] font-black text-gray-500 uppercase">Memoria</span>
-        <span class="text-sm font-black italic">Low Load</span>
-    </div>
-</section>
-
-
-
-
-
-
-
-
-
-        
-        
-        <section class="glass-card p-8 border-blue-500/20 bg-blue-500/[0.03]">
+        <section class="glass-card p-8 border-amber-500/20 bg-amber-500/[0.03]">
             <div class="flex items-center gap-3 mb-6">
-                <i class="fa-solid fa-layer-group text-blue-400 animate-pulse"></i>
-                <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Lock Screen Widget</h3>
+                <i class="fa-solid fa-clock-rotate-left text-amber-500"></i>
+                <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Saktësia e Takvimit</h3>
             </div>
-            <p class="text-[11px] text-gray-400 italic mb-6 leading-relaxed">Aktivizoni vaktin e rradhës në ekranin e kyçur të telefonit tuaj (Persistent Widget).</p>
-            <button onclick="startLiveWidget()" class="w-full py-4 bg-blue-600 text-white rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-500/20 active:scale-95 transition-all">Aktivizo Widget-in</button>
-            <p id="widget-status" class="text-[7px] text-center mt-4 text-gray-600 uppercase font-black tracking-widest italic"></p>
+            <p class="text-[11px] text-gray-400 italic mb-6 leading-relaxed">Nëse vaktet kanë dallim me xhaminë, rregulloji këtu (max +/- 10 min).</p>
+            <div class="flex items-center gap-6">
+                <input type="range" min="-10" max="10" value="0" id="calibrationSlider" oninput="updateCalibration(this.value)">
+                <span id="calib-val" class="text-xl font-black italic min-w-[60px] text-amber-500">0 min</span>
+            </div>
         </section>
 
         <section class="glass-card p-8">
             <div class="flex items-center gap-3 mb-8">
                 <i class="fa-solid fa-bell text-emerald-500"></i>
-                <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Njoftimet Inteligjente</h3>
+                <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Njoftimet</h3>
             </div>
             <div class="grid grid-cols-3 gap-3 mb-6">
-                <button onclick="updateNotifMode('none')" id="notif-none" class="notif-btn bg-white/5 border border-white/5 py-5 rounded-3xl flex flex-col items-center gap-2">
-                    <i class="fa-solid fa-bell-slash text-sm"></i>
+                <button onclick="updateNotifMode('none')" id="notif-none" class="notif-btn bg-white/5 py-5 rounded-3xl flex flex-col items-center gap-2">
+                    <i class="fa-solid fa-bell-slash"></i>
                     <span class="text-[8px] font-black uppercase">Fikur</span>
                 </button>
-                <button onclick="updateNotifMode('silent')" id="notif-silent" class="notif-btn bg-white/5 border border-white/5 py-5 rounded-3xl flex flex-col items-center gap-2">
-                    <i class="fa-solid fa-bell text-sm"></i>
+                <button onclick="updateNotifMode('silent')" id="notif-silent" class="notif-btn bg-white/5 py-5 rounded-3xl flex flex-col items-center gap-2">
+                    <i class="fa-solid fa-bell"></i>
                     <span class="text-[8px] font-black uppercase">Vibrim</span>
                 </button>
-                <button onclick="updateNotifMode('adhan')" id="notif-adhan" class="notif-btn bg-white/5 border border-white/5 py-5 rounded-3xl flex flex-col items-center gap-2">
-                    <i class="fa-solid fa-volume-high text-sm"></i>
+                <button onclick="updateNotifMode('adhan')" id="notif-adhan" class="notif-btn bg-white/5 py-5 rounded-3xl flex flex-col items-center gap-2">
+                    <i class="fa-solid fa-volume-high"></i>
                     <span class="text-[8px] font-black uppercase">Ezan</span>
                 </button>
             </div>
-            
-            <button onclick="requestPermissionUI()" class="btn-glow w-full py-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-3xl font-black text-[9px] uppercase tracking-[0.3em]">
-                Lejo njoftimet për vaktet e namazeve
-            </button>
+            <button onclick="testNotification()" class="w-full py-4 border border-white/10 rounded-3xl text-[9px] font-black uppercase tracking-widest opacity-50 hover:opacity-100 transition-all">Testo Dizajnin e Ri</button>
         </section>
 
-        <section class="glass-card p-8 bg-gradient-to-br from-emerald-500/[0.05] to-transparent">
-            <div class="flex items-center justify-between mb-6">
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid fa-location-dot text-emerald-500"></i>
-                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Gjurmimi Aktual</h3>
-                </div>
-                <button onclick="getUserLocation()" class="text-[9px] font-black text-emerald-500 uppercase tracking-widest bg-emerald-500/10 px-4 py-2 rounded-full">Rifresko</button>
-            </div>
-            <div id="user-geo-box" class="p-4 bg-white/[0.02] rounded-3xl border border-white/5">
-                <p id="user-city" class="text-2xl font-black italic tracking-tighter text-white mb-1">Duke lokalizuar...</p>
-                <div class="flex items-center gap-2 text-emerald-500 opacity-60 mb-2">
-                    <i class="fa-solid fa-map-pin text-[8px]"></i>
-                    <span id="user-coords" class="text-[9px] font-bold uppercase tracking-widest">Zbuloni koordinatat</span>
-                </div>
-                <div id="location-badge" class="inline-block px-3 py-1 bg-emerald-500 text-[8px] font-black uppercase rounded-full text-bg hidden">Vendi i caktuar</div>
-            </div>
-        </section>
-
-
-
-
-
-
-
-
-
-<section class="glass-card p-6 mb-6 border-amber-500/20">
-    <div class="flex items-center gap-3 mb-4">
-        <i class="fa-solid fa-gears text-amber-500"></i>
-        <h3 class="text-[10px] font-black uppercase tracking-widest text-gray-400">Burimi i Vaktisë</h3>
-    </div>
-
-    <div class="relative">
-        <select id="api-method-select" onchange="ndryshoMetoden(this.value)" 
-                class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 text-xs font-bold text-white outline-none focus:border-amber-500 transition-all appearance-none">
-            <option value="3">Muslim World League (Kosovë)</option>
-            <option value="4">Umm al-Qura (Makkah)</option>
-            <option value="2">ISNA (Amerikë)</option>
-            <option value="5">Egyptian General Authority</option>
-            <option value="1">University of Islamic Sciences</option>
-        </select>
-        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-            <i class="fa-solid fa-chevron-down text-[10px] text-gray-500"></i>
-        </div>
-    </div>
-    <p class="text-[9px] text-gray-500 mt-3 italic">* Kur ndryshon këtë, oraret në Home Screen përditësohen automatikisht.</p>
-</section>
-
-<script>
-    // Kur hapet faqja Info, zgjidh opsionin që është ruajtur më parë
-    window.onload = () => {
-        const metodaEruajtur = localStorage.getItem('zenith_api_method') || "3";
-        document.getElementById('api-method-select').value = metodaEruajtur;
-    };
-
-    function ndryshoMetoden(vlera) {
-        localStorage.setItem('zenith_api_method', vlera);
-        if (navigator.vibrate) navigator.vibrate(30);
-        
-        // Opsionale: Një njoftim i vogël që u ruajt
-        console.log("Metoda u ndryshua në: " + vlera);
-    }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-        
-<section class="glass-card p-8 border-amber-500/20 bg-amber-500/[0.02]">
-    <div class="flex items-center justify-between mb-8">
-        <div class="flex items-center gap-3">
-            <i class="fa-solid fa-moon text-amber-400"></i>
-            <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Rrugëtimi drejt Ramazanit</h3>
-        </div>
-        <span id="days-to-ramadan" class="text-xs font-black text-amber-400">-- Ditë</span>
-    </div>
-
-    <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mb-4">
-        <div id="ramadan-progress" class="h-full bg-gradient-to-r from-amber-600 to-amber-300 transition-all duration-1000" style="width: 0%"></div>
-    </div>
-    
-    <div class="flex justify-between items-center">
-        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">Shpirtërorja</p>
-        <p class="text-[9px] text-amber-500/50 font-black italic uppercase">2026</p>
-    </div>
-</section>
-        
-        <section class="glass-card p-8 md:p-12">
+        <section class="glass-card p-8">
             <div class="flex items-center gap-3 mb-10">
-                <i class="fa-solid fa-sliders text-emerald-500"></i>
-                <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Personalizimi</h3>
+                <i class="fa-solid fa-palette text-emerald-500"></i>
+                <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Tema</h3>
             </div>
-            <div class="space-y-12">
-                <div>
-                    <div class="flex justify-between items-center mb-5">
-                        <span class="text-[11px] text-gray-400 uppercase font-black tracking-widest font-bold">Madhësia Fontit</span>
-                        <span id="font-size-label" class="text-sm font-black text-emerald-500">16px</span>
-                    </div>
-                    <input type="range" min="14" max="22" value="16" id="fontSlider" oninput="updateGlobalSetting('fontSize', this.value)" class="w-full">
-                </div>
-                <div>
-                    <span class="text-[11px] text-gray-400 uppercase font-black tracking-widest block mb-6 font-bold">Tema Ngjyrave</span>
-                    <div class="flex justify-between gap-4">
-                        <button onclick="updateGlobalSetting('theme', '#10b981')" class="w-12 h-12 rounded-2xl bg-emerald-500 border-4 border-white/10 active:scale-90 transition-all"></button>
-                        <button onclick="updateGlobalSetting('theme', '#3b82f6')" class="w-12 h-12 rounded-2xl bg-blue-500 border-4 border-white/10 active:scale-90 transition-all"></button>
-                        <button onclick="updateGlobalSetting('theme', '#f59e0b')" class="w-12 h-12 rounded-2xl bg-amber-500 border-4 border-white/10 active:scale-90 transition-all"></button>
-                        <button onclick="updateGlobalSetting('theme', '#f43f5e')" class="w-12 h-12 rounded-2xl bg-rose-500 border-4 border-white/10 active:scale-90 transition-all"></button>
-                    </div>
-                </div>
+            <div class="flex justify-between gap-4">
+                <button onclick="updateGlobalSetting('theme', '#10b981')" class="w-12 h-12 rounded-2xl bg-emerald-500 border-4 border-white/10"></button>
+                <button onclick="updateGlobalSetting('theme', '#3b82f6')" class="w-12 h-12 rounded-2xl bg-blue-500 border-4 border-white/10"></button>
+                <button onclick="updateGlobalSetting('theme', '#f59e0b')" class="w-12 h-12 rounded-2xl bg-amber-500 border-4 border-white/10"></button>
+                <button onclick="updateGlobalSetting('theme', '#f43f5e')" class="w-12 h-12 rounded-2xl bg-rose-500 border-4 border-white/10"></button>
             </div>
         </section>
 
-        <footer class="text-center py-12 opacity-30"><p class="text-[9px] font-black uppercase tracking-[0.5em]">Ratkoci Digital • 2026</p></footer>
+        <footer class="text-center py-12 opacity-20"><p class="text-[9px] font-black uppercase tracking-[0.5em]">Ratkoci Digital • 2026</p></footer>
     </main>
 
     <script>
-        // REGJISTRIMI I DETYRUESHËM PËR NJOFTIME (Service Worker)
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').then(reg => {
-                console.log('SW Registered');
-            });
+        // --- LOGJIKA E NJOFTIMEVE DHE KALIBRIMIT ---
+
+        function updateCalibration(val) {
+            const value = parseInt(val);
+            localStorage.setItem('zenith_offset', value);
+            document.getElementById('calib-val').innerText = (value > 0 ? "+" : "") + value + " min";
+            if(navigator.vibrate) navigator.vibrate(10);
         }
 
-        const vaktetWidget = [
-            { emer: "Sabahu", koha: "05:30" },
-            { emer: "Dreka", koha: "12:15" },
-            { emer: "Ikindia", koha: "15:45" },
-            { emer: "Akshami", koha: "17:50" },
-            { emer: "Jacija", koha: "19:30" }
-        ];
+        function showZenithNotification(vakti) {
+            const overlay = document.getElementById('notif-overlay');
+            const msg = document.getElementById('notif-message');
+            const typeLabel = document.getElementById('notif-type');
+            const iconBg = document.getElementById('notif-icon-bg');
+            const icon = document.getElementById('notif-icon');
+            const sound = document.getElementById('notif-sound');
 
-        // BUTONI QE NXJERR LEJEN ZYRTARE TË SISTEMIT
-        async function requestPermissionUI() {
-            // Kjo nxjerr dritaren "Allow Notifications" në iOS/Android
-            const permission = await Notification.requestPermission();
-            
-            if (permission === 'granted') {
-                navigator.serviceWorker.ready.then(reg => {
-                    reg.showNotification('Perkujtuesi ditor', {
-                        body: 'Njoftimet u aktivizuan! Do të njoftoheni për çdo vakt.',
-                        icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
-                        badge: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
-                        vibrate: [200, 100, 200]
-                    });
-                });
-            } else {
-                alert("Ju lutem lejoni njoftimet nga Settings të telefonit tuaj.");
+            const themes = {
+                'Sabahu':  { color: '#818cf8', icon: 'fa-cloud-moon' },
+                'Dreka':   { color: '#fbbf24', icon: 'fa-sun' },
+                'Ikindia': { color: '#f59e0b', icon: 'fa-mountain-sun' },
+                'Akshami': { color: '#fb7185', icon: 'fa-moon-stars' },
+                'Jacija':  { color: '#6366f1', icon: 'fa-star-and-crescent' }
+            };
+
+            const theme = themes[vakti] || { color: '#10b981', icon: 'fa-mosque' };
+
+            // Apliko stilin
+            typeLabel.style.color = theme.color;
+            msg.innerText = `Ka hyrë vakti i ${vakti}-it`;
+            iconBg.style.background = `linear-gradient(135deg, ${theme.color}, #000)`;
+            icon.className = `fa-solid ${theme.icon}`;
+            overlay.style.borderLeft = `4px solid ${theme.color}`;
+
+            // Luaj tingullin
+            const mode = localStorage.getItem('ratkoc_notif_mode') || 'none';
+            if(mode !== 'none' && sound) {
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log("Audio limited by browser"));
             }
+
+            // Animacioni
+            overlay.classList.add('show');
+            if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
+
+            setTimeout(() => overlay.classList.remove('show'), 6000);
         }
 
-        async function startLiveWidget() {
-            const permission = await Notification.requestPermission();
-            if (permission === 'granted') {
-                updateIOSWidget();
-                setInterval(updateIOSWidget, 60000); 
-                document.getElementById('widget-status').innerText = "Widget u sinkronizua";
-            }
+        function testNotification() {
+            showZenithNotification('Akshami');
         }
 
-        function updateIOSWidget() {
-            const tani = new Date();
-            const oraAktuale = tani.getHours().toString().padStart(2, '0') + ":" + tani.getMinutes().toString().padStart(2, '0');
-            let vaktirradhes = vaktetWidget.find(v => v.koha > oraAktuale) || vaktetWidget[0];
-
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.ready.then(reg => {
-                    reg.showNotification(`Perkujtuesi ditor: ${vaktirradhes.emer}`, {
-                        body: `Vakti i rradhës në orën ${vaktirradhes.koha}`,
-                        tag: "zenith-widget",
-                        icon: "Images/604776747_122280490772225847_4370550408157022665_n.jpg",
-                        badge: "Images/604776747_122280490772225847_4370550408157022665_n.jpg",
-                        silent: true,
-                        renotify: false
-                    });
-                });
-            }
-        }
+        // --- FUNKSIONET EKZISTUESE TË PËRSHTATURA ---
 
         function toggleMenu() {
             document.querySelector('.menu-trigger').classList.toggle('open');
@@ -416,109 +247,26 @@
             if(activeBtn) activeBtn.classList.add('notif-active');
         }
 
-        function getUserLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(async pos => {
-                    const lat = pos.coords.latitude;
-                    const lon = pos.coords.longitude;
-                    document.getElementById('user-coords').innerText = `${lat.toFixed(4)}° N, ${lon.toFixed(4)}° E`;
-                    try {
-                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
-                        const data = await res.json();
-                        const city = data.address.city || data.address.town || data.address.village || "Lokacioni Juaj";
-                        document.getElementById('user-city').innerText = city;
-                        const badge = document.getElementById('location-badge');
-                        badge.innerText = city;
-                        badge.classList.remove('hidden');
-                    } catch (e) {
-                        document.getElementById('user-city').innerText = "Lokacioni u Aktivizua";
-                    }
-                });
-            }
-        }
-
         function updateGlobalSetting(key, value) {
             localStorage.setItem('ratkoc_' + key, value);
             applyGlobalSettings();
         }
 
         function applyGlobalSettings() {
-            const savedSize = localStorage.getItem('ratkoc_fontSize') || '16';
             const savedTheme = localStorage.getItem('ratkoc_theme') || '#10b981';
-            document.body.style.fontSize = savedSize + 'px';
             document.documentElement.style.setProperty('--primary', savedTheme);
-            const label = document.getElementById('font-size-label');
-            if(label) label.innerText = savedSize + 'px';
             document.querySelectorAll('.text-emerald-500').forEach(el => el.style.color = savedTheme);
+            
+            // Ngarko kalibrimin e ruajtur
+            const savedOffset = localStorage.getItem('zenith_offset') || '0';
+            document.getElementById('calibrationSlider').value = savedOffset;
+            document.getElementById('calib-val').innerText = (parseInt(savedOffset) > 0 ? "+" : "") + savedOffset + " min";
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             applyGlobalSettings();
             refreshNotifUI();
-            getUserLocation();
         });
-
-
-
-function updateRamadanCountdown() {
-    // Data e përafërt e Ramazanit 2026 (18 Shkurt 2026)
-    const ramadanDate = new Date('February 18, 2026 00:00:00').getTime();
-    const now = new Date().getTime();
-    const gap = ramadanDate - now;
-
-    const day = 1000 * 60 * 60 * 24;
-    const daysLeft = Math.floor(gap / day);
-
-    if (daysLeft > 0) {
-        document.getElementById('days-to-ramadan').innerText = daysLeft + " Ditë";
-        // Progresi i bazuar në vitin kalendarik
-        const progress = Math.max(0, Math.min(100, (1 - (daysLeft / 355)) * 100));
-        document.getElementById('ramadan-progress').style.width = progress + "%";
-    } else {
-        document.getElementById('days-to-ramadan').innerText = "Ramazan i Begatë!";
-        document.getElementById('ramadan-progress').style.width = "100%";
-    }
-}
-
-// Thirre funksionin te DOMContentLoaded
-window.addEventListener('DOMContentLoaded', () => {
-    updateRamadanCountdown();
-});
-
-
-
-
-
-
-
-function updateSunArc() {
-    const tani = new Date();
-    const ora = tani.getHours();
-    const minutat = tani.getMinutes();
-    const totalMinuta = (ora * 60) + minutat;
-    
-    // Supozojmë ditën nga 06:00 deri 18:00 për efekt vizual
-    let percent = ((totalMinuta - 360) / 720) * 100;
-    if(percent < 0) percent = 0;
-    if(percent > 100) percent = 100;
-    
-    const pointer = document.getElementById('sun-pointer');
-    if(pointer) pointer.style.left = percent + "%";
-}
-setInterval(updateSunArc, 60000);
-
-
-
-
-
-
-
-
-        
-
-
-
-        
     </script>
 </body>
 </html>
