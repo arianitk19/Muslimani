@@ -261,6 +261,31 @@
                 "Përmendeni Allahun që Ai t'ju përmend juve."
             </p>
         </div>
+
+<div id="sure-modal" class="fixed inset-0 z-[6000] hidden items-center justify-center p-6 backdrop-blur-3xl bg-[#020617]/90">
+    <div class="glass-card w-full max-w-sm p-8 relative border-emerald-500/20 shadow-2xl shadow-emerald-500/5">
+        
+        <div class="text-center mb-6">
+            <div id="sure-icon-bg" class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-500/30">
+                <i id="sure-main-icon" class="fa-solid fa-book-quran text-3xl text-emerald-500"></i>
+            </div>
+            <h3 id="sure-title" class="text-3xl font-black italic tracking-tighter">Sureja...</h3>
+            <p id="sure-rendesia" class="text-[10px] text-emerald-500/70 uppercase tracking-[0.2em] mt-2 font-bold px-4"></p>
+        </div>
+
+        <div class="relative bg-black/20 rounded-2xl p-6 border border-white/5">
+            <i class="fa-solid fa-quote-left absolute top-4 left-4 opacity-10 text-4xl"></i>
+            <div id="sure-content" class="text-gray-200 text-sm leading-relaxed text-center italic font-medium max-h-48 overflow-y-auto custom-scrollbar">
+                </div>
+        </div>
+
+        <button onclick="closeSure()" class="mt-8 w-full py-4 bg-emerald-500 text-black font-black rounded-2xl uppercase tracking-widest text-[11px] hover:scale-[1.02] active:scale-95 transition-all">
+            Elhamdulillah, u lexua
+        </button>
+    </div>
+
+</div>
+
     </main>
 
     <script>
@@ -436,7 +461,46 @@ window.onfocus = () => fetchLiveVaktet();
             setInterval(updateUI, 1000);
             setInterval(updateLockScreenWidget, 60000);
         };
+
+
+const sureatDitore = {
+    12: { 
+        titulli: "Sureja El-Ihlas", 
+        teksti: "Bismil-lahir-rahmanir-rahim. Thuaj: Ai, Allahu është Një! Allahu është Ai, të Cilit çdo krijesë I drejtohet për çdo nevojë. As nuk ka lindur kush, as nuk është i lindur. Dhe Atij askush nuk i është i barabartë.", 
+        rendesia: "Për orën 12:00 (Mesditë): Vlen sa një e treta e Kuranit dhe forcon besimin në njëshmërinë e Zotit gjatë vrullit të ditës.",
+        ikona: "fa-sun" 
+    },
+    17: { 
+        titulli: "Sureja El-Felek & En-Nas", 
+        teksti: "Bismil-lahir-rahmanir-rahim. Thuaj: I mbështetem Zotit të agimit... Thuaj: I mbështetem Zotit të njerëzve, Sundimtarit të njerëzve, Të Adhuruarit të njerëzve, nga ligësia e cytësit që fshihet...", 
+        rendesia: "Për orën 17:00 (Pasdite): Mbrojtje nga syri i keq, zilija dhe të këqijat që mund të vijnë me perëndimin e diellit.",
+        ikona: "fa-shield-halved" 
+    },
+    20: { 
+        titulli: "Sureja El-Mulk", 
+        teksti: "Bismil-lahir-rahmanir-rahim. I Madhëruar është Ai, në dorën e të Cilit është i tërë pushteti dhe Ai është i Fuqishëm mbi çdo send... Ai që krijoi vdekjen dhe jetën për t'ju provuar se kush prej jush është më vepërmirë...", 
+        rendesia: "Për orën 20:00 (Para gjumit): Profeti (a.s) ka thënë se kjo sure e mbron personin nga dënimi i varrit nëse lexohet çdo natë.",
+        ikona: "fa-moon" 
+    }
+};
+
+
+function openSure(ora) {
+    const sure = sureatDitore[ora];
+    if (!sure) return;
+
+    document.getElementById('sure-title').innerText = sure.titulli;
+    document.getElementById('sure-rendesia').innerText = sure.rendesia;
+    document.getElementById('sure-content').innerText = sure.teksti;
+    
+    // Ndrysho ikonën sipas kohës
+    const iconElement = document.getElementById('sure-main-icon');
+    iconElement.className = `fa-solid ${sure.ikona} text-3xl text-emerald-500`;
+
+    document.getElementById('sure-modal').style.display = 'flex';
+    if (navigator.vibrate) navigator.vibrate(100); // Dridhje e lehtë kur hapet
+}
+
     </script>
 </body>
 </html>
-
