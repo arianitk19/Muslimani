@@ -286,6 +286,21 @@
         function updateNotifMode(mode) {
             localStorage.setItem('ratkoc_notif_mode', mode);
             refreshNotifUI();
+
+            function updateNotifMode(mode) {
+    localStorage.setItem('ratkoc_notif_mode', mode);
+    
+    // Nëse përdoruesi zgjedh diçka tjetër përveç "Fikur", kërko leje nga telefoni
+    if (mode !== 'none') {
+        Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+                console.log("Përdoruesi lejoi njoftimet!");
+            }
+        });
+    }
+    refreshNotifUI();
+}
+            
         }
 
         function refreshNotifUI() {
@@ -301,6 +316,18 @@
             getUserLocation();
             updateRamadanCountdown();
         });
+
+
+
+// Kjo e lidh info.html me sw.js
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+    .then(() => console.log("Service Worker u lidh me sukses!"))
+    .catch(err => console.log("Gabim gjatë lidhjes:", err));
+}
+        
+        
     </script>
 </body>
 </html>
+
