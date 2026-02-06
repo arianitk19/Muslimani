@@ -263,67 +263,49 @@
             </p>
         </div>
 
+<div class="group relative overflow-hidden glass-card rounded-[2rem] p-5 mb-3 border border-white/5 hover:border-gold/30 transition-all duration-500">
+    
+    <div class="absolute -left-10 -top-10 w-32 h-32 bg-gold/10 blur-[50px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
 
+    <div class="flex items-center justify-between relative z-10">
+        <div class="flex items-center gap-6">
+            <div class="text-3xl text-gold/80 group-hover:text-gold transition-colors duration-300">
+                <i class="fa-light fa-sun-horizon"></i>
+            </div>
+            
+            <div>
+                <h3 class="text-xs uppercase tracking-[0.3em] text-white/40 mb-1">Sabahu</h3>
+                <p class="text-xl font-light tracking-tight text-white/90 group-hover:text-white transition-colors">Agimi</p>
+            </div>
+        </div>
 
-<div class="glass-card flex items-center justify-between p-5 rounded-[2.5rem] mb-4 border border-white/5 shadow-xl transition-all hover:scale-[1.02]">
-    <div class="flex items-center gap-5">
-        <div class="w-14 h-14 rounded-2xl flex items-center justify-center bg-gradient-to-br ${vakt.color} shadow-lg shadow-black/20">
-            <i class="fa-light ${vakt.ikona} text-2xl text-white/90"></i>
+        <div class="text-right">
+            <span class="text-2xl font-extralight tracking-tighter text-gold">05:12</span>
+            <div class="h-1 w-1 bg-gold rounded-full ml-auto mt-1 shadow-[0_0_8px_#d4af37]"></div>
         </div>
-        <div>
-            <h3 class="text-lg font-medium tracking-tight">${vakt.emri}</h3>
-            <p class="text-[10px] uppercase tracking-[0.2em] text-gold/60 font-semibold">Vakti Aktual</p>
-        </div>
-    </div>
-    <div class="text-2xl font-light tracking-tighter text-white/90">
-        ${vakt.koha}
     </div>
 </div>
-    
-
         
     </main>
 
     <script>
 
-const vaktetRaw = [
-    { 
-        emri: 'Sabahu', 
-        koha: '05:30', 
-        ikona: 'fa-horizon', 
-        color: 'from-blue-900 to-indigo-800' // Agimi i ftohtë
-    },
-    { 
-        emri: 'Lindja', 
-        koha: '07:05', 
-        ikona: 'fa-sunrise', 
-        color: 'from-orange-400 to-yellow-200' // Ngrohtësia e parë
-    },
-    { 
-        emri: 'Dreka', 
-        koha: '11:48', 
-        ikona: 'fa-sun', 
-        color: 'from-yellow-400 to-amber-500' // Energji e plotë
-    },
-    { 
-        emri: 'Ikindia', 
-        koha: '14:12', 
-        ikona: 'fa-sun-cloud', 
-        color: 'from-amber-500 to-orange-600' // Artë dhe qetësi
-    },
-    { 
-        emri: 'Akshami', 
-        koha: '16:21', 
-        ikona: 'fa-sunset', 
-        color: 'from-orange-600 to-red-900' // Dramatike
-    },
-    { 
-        emri: 'Jacia', 
-        koha: '17:54', 
-        ikona: 'fa-moon-stars', 
-        color: 'from-slate-900 to-black' // Eleganca e natës
-    }
-];
+// Struktura e re e të dhënave me fokus te thjeshtësia
+const vaktetKonfigurimi = {
+    Sabahu:   { ikona: 'fa-sun-horizon',  gradienti: 'from-blue-900/40' },
+    Lindja:   { ikona: 'fa-up-from-line', gradienti: 'from-orange-500/40' },
+    Dreka:    { ikona: 'fa-brightness',   gradienti: 'from-yellow-500/40' },
+    Ikindia:  { ikona: 'fa-sun-cloud',    gradienti: 'from-amber-600/40' },
+    Akshami:  { ikona: 'fa-sunset',       gradienti: 'from-red-700/40' },
+    Jacia:    { ikona: 'fa-moon',         gradienti: 'from-indigo-950/40' }
+};
+
+// Funksioni që përcakton namazin aktual për t'i dhënë theksin "Gold"
+function getVaktiAktual(timings) {
+    const tani = new Date().getTime();
+    // Logjika këtu do të krahasojë orën aktuale me timings nga API
+    // dhe do të kthejë emrin e namazit aktual.
+}
       
 
     function toggleMenu() {
@@ -486,6 +468,7 @@ const vaktetRaw = [
     </script>
 </body>
 </html>
+
 
 
 
