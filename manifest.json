@@ -1,6 +1,6 @@
 {
-  "name": "Vaktia Ratkoc",
-  "short_name": "Zenith",
+  "name": "Perkujtuesi Ditor",
+  "short_name": "Perkujtuesi Ditor",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#020617",
@@ -13,3 +13,4 @@
     }
   ]
 }
+
