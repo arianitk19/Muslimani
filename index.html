@@ -365,21 +365,41 @@ function toggleMenu() {
             document.getElementById('progress-bar').style.strokeDashoffset = 596.9 - ((totalSec / 86400) * 596.9);
         }
 
-        async function fetchLiveVaktet() {
-            try {
-                const res = await fetch(`https://api.aladhan.com/v1/timingsByAddress?address=Ratkoc,Kosovo&method=3`);
-                const data = await res.json();
-                const t = data.data.timings;
-                vaktetRaw[0].koha = t.Fajr;
-                vaktetRaw[1].koha = t.Sunrise;
-                vaktetRaw[2].koha = t.Dhuhr;
-                vaktetRaw[3].koha = t.Asr;
-                vaktetRaw[4].koha = t.Maghrib;
-                vaktetRaw[5].koha = t.Isha;
-                updateUI();
-                updateLockScreenWidget();
-            } catch (e) { console.warn("API Error"); }
-        }
+       async function fetchLiveVaktet() {
+    try {
+        // 1. Merr metodën dhe kalibrimin nga memorja
+        const metodat = localStorage.getItem('zenith_api_method') || '13';
+        const offset = parseInt(localStorage.getItem('zenith_offset')) || 0;
+
+        // 2. Thirr API-në me metodën e zgjedhur
+        const res = await fetch(`https://api.aladhan.com/v1/timingsByAddress?address=Ratkoc,Kosovo&method=${metodat}`);
+        const data = await res.json();
+        const t = data.data.timings;
+
+        // Funksion i vogël brenda për të shtuar/hiqur minutat (Kalibrimi)
+        const applyOffset = (timeStr) => {
+            if (offset === 0) return timeStr;
+            let [h, m] = timeStr.split(':').map(Number);
+            let d = new Date();
+            d.setHours(h);
+            d.setMinutes(m + offset);
+            return d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
+        };
+
+        // 3. Mbush vaktet me kohën e re të kalibruar
+        vaktetRaw[0].koha = applyOffset(t.Fajr);
+        vaktetRaw[1].koha = applyOffset(t.Sunrise);
+        vaktetRaw[2].koha = applyOffset(t.Dhuhr);
+        vaktetRaw[3].koha = applyOffset(t.Asr);
+        vaktetRaw[4].koha = applyOffset(t.Maghrib);
+        vaktetRaw[5].koha = applyOffset(t.Isha);
+
+        updateUI();
+        updateLockScreenWidget();
+    } catch (e) { 
+        console.warn("API Error: Nuk u morën dot të dhënat"); 
+    }
+}
 
         async function updateLockScreenWidget() {
             const tani = new Date();
@@ -403,6 +423,10 @@ function toggleMenu() {
         }
 
         window.onload = () => {
+
+// Shtoje këtë rresht brenda window.onload ekzistues
+window.onfocus = () => fetchLiveVaktet();
+            
             if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
             fetchLiveVaktet();
             updateTasksUI();
@@ -415,3 +439,4 @@ function toggleMenu() {
     </script>
 </body>
 </html>
+
