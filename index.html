@@ -37,36 +37,50 @@
 
 
 
-/* I bëjmë ikonat të duken si Gradient Glass */
+/* Stili bazë për të gjitha ikonat */
 .vakt-icon-container i {
     font-size: 1.5rem;
-    background: linear-gradient(135deg, #ffffff 30%, var(--primary) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-    transition: all 0.5s ease;
+    color: rgba(255,255,255,0.2); /* Ngjyra kur nuk janë aktive */
 }
 
-/* Kur karta është aktive, ikona "ndizet" */
-.active .vakt-icon-container i {
-    background: linear-gradient(135deg, #fff 0%, #fff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 10px rgba(255,255,255,0.8));
-    transform: scale(1.2) rotate(-5deg);
+/* Stilimi specifik kur vaktia është AKTIVE */
+
+/* SABAHU - Agimi (pak kaltërosh) */
+.active .fa-cloud { 
+    color: #a5b4fc !important; 
+    filter: drop-shadow(0 0 10px #818cf8);
 }
 
-/* Rregullimi i rrethit të ikonës */
-.vakt-icon-container {
-    border: 1px solid rgba(255,255,255,0.05);
-    background: rgba(255,255,255,0.02) !important;
+/* LINDJA - (e verdhë e hapur) */
+.active .fa-sun-plant-wilt { 
+    color: #fcd34d !important; 
+    filter: drop-shadow(0 0 10px #fbbf24);
 }
 
-.active .vakt-icon-container {
-    background: var(--primary) !important; /* Ngjyra jote Emerald */
-    border: none;
+/* DREKA - (e verdhë e fortë/shkëlqyese) */
+.active .fa-sun { 
+    color: #fbbf24 !important; 
+    filter: drop-shadow(0 0 20px #f59e0b);
+    transform: scale(1.2);
 }
 
+/* Ikindia - (portokalli e butë) */
+.active .fa-cloud-sun { 
+    color: #fdba74 !important; 
+    filter: drop-shadow(0 0 10px #fb923c);
+}
+
+/* AKSHAMI - (e kuqe/portokalli e errët) */
+.active .fa-mountain-sun { 
+    color: #f87171 !important; 
+    filter: drop-shadow(0 0 10px #ef4444);
+}
+
+/* JACIA - (vjollcë/hënë) */
+.active .fa-moon { 
+    color: #c084fc !important; 
+    filter: drop-shadow(0 0 15px #a855f7);
+}
 
 
 
@@ -253,11 +267,11 @@
     <script>
 
 const vaktetRaw = [
-    { emri: 'Sabahu', koha: '05:30', ikona: 'fa-heading' },        // Simbolizon vijën e horizontit dhe dritën e parë
-    { emri: 'Lindja', koha: '07:05', ikona: 'fa-cloud-sun-rise' }, // Lindja e qartë e diellit
-    { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun' },            // Dielli i plotë dhe i fuqishëm
-    { emri: 'Ikindia', koha: '14:12', ikona: 'fa-umbrella-beach' },// Një hije/kënd që simbolizon pasditen (ose fa-cloud-sun)
-    { emri: 'Akshami', koha: '16:21', ikona: 'fa-mountain-sun' },  // Dielli fshehur pas malit
+    { emri: 'Sabahu', koha: '05:30', ikona: 'fa-cloud' },          // Retë e para të agimit
+    { emri: 'Lindja', koha: '07:05', ikona: 'fa-sun-plant-wilt' }, // Dielli që lind mbi tokë
+    { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun' },             // Dielli i plotë
+    { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud-sun' },     // Dielli që nis të mbulohet
+    { emri: 'Akshami', koha: '16:21', ikona: 'fa-mountain-sun' },  // Perëndimi pas maleve
     { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon' }             // Hëna
 ];
       
@@ -422,6 +436,7 @@ const vaktetRaw = [
     </script>
 </body>
 </html>
+
 
 
 
