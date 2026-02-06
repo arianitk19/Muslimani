@@ -283,25 +283,33 @@
             document.getElementById('full-menu').classList.toggle('active');
         }
 
-        function updateNotifMode(mode) {
-            localStorage.setItem('ratkoc_notif_mode', mode);
-            refreshNotifUI();
-
-            function updateNotifMode(mode) {
+      async function updateNotifMode(mode) {
+    // 1. Ruaj zgjedhjen në memorien e telefonit
     localStorage.setItem('ratkoc_notif_mode', mode);
     
-    // Nëse përdoruesi zgjedh diçka tjetër përveç "Fikur", kërko leje nga telefoni
+    // 2. Nëse zgjidhet "Vibrim" ose "Ezan", kërko lejen zyrtare të sistemit
     if (mode !== 'none') {
-        Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-                console.log("Përdoruesi lejoi njoftimet!");
+        const permission = await Notification.requestPermission();
+        
+        if (permission === 'granted') {
+            console.log("Njoftimet u lejuan!");
+            // Kjo pjesë bën lidhjen direkte me sw.js për një njoftim prove
+            if ('serviceWorker' in navigator) {
+                const reg = await navigator.serviceWorker.ready;
+                reg.showNotification("Zenith", {
+                    body: "Njoftimet u aktivizuan me sukses.",
+                    icon: "Images/604776747_122280490772225847_4370550408157022665_n.jpg",
+                    vibrate: [200, 100, 200]
+                });
             }
-        });
+        } else {
+            alert("Ju lutem jepni leje (Allow) që njoftimet të funksionojnë në telefonin tuaj.");
+        }
     }
+    
+    // 3. Rifresko ngjyrat e butonave në ekran
     refreshNotifUI();
 }
-            
-        }
 
         function refreshNotifUI() {
             const mode = localStorage.getItem('ratkoc_notif_mode') || 'none';
@@ -330,4 +338,5 @@ if ('serviceWorker' in navigator) {
     </script>
 </body>
 </html>
+
 
