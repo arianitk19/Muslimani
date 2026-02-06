@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Vaktia Ratkoc</title>
+    <title>Perkujtuesi Ditor</title>
     <link rel="manifest" href="manifest.json">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -112,7 +112,7 @@
         <a href="ligjeratat.html" class="menu-link"><i class="fa-solid fa-microphone-lines"></i> Ligjërata</a>
         <a href="info.html" class="menu-link"><i class="fa-solid fa-circle-info"></i> Info</a>
         <div class="mt-auto pt-10 border-t border-white/5">
-            <p class="text-[10px] text-gray-500 tracking-widest uppercase italic">Ratkoci Digital &copy; 2026</p>
+            <p class="text-[10px] text-gray-500 tracking-widest uppercase italic">Perkujtuesi Ditor &copy; 2026</p>
         </div>
     </nav>
 
@@ -311,7 +311,7 @@
                 if (Notification.permission === "granted") {
                     const reg = await navigator.serviceWorker.ready;
                     reg.showNotification(`Vaktia: ${vaktirradhes.emri}`, {
-                        body: `Koha e namazit në Ratkoc: ${vaktirradhes.koha}`,
+                        body: `Koha e namazit : ${vaktirradhes.koha}`,
                         icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
                         tag: 'vaktia-live',
                         silent: true
@@ -333,3 +333,4 @@
     </script>
 </body>
 </html>
+
