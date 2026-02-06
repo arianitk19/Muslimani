@@ -33,71 +33,47 @@
 
         /* --- DIZAJNI I RI I NJOFTIMIT (DYNAMIC ISLAND) --- */
         .zenith-notification {
-            position: fixed;
-            top: -120px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 92%;
-            max-width: 420px;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(25px) saturate(160%);
-            -webkit-backdrop-filter: blur(25px) saturate(160%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 2.2rem;
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-            z-index: 9999;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
+            width: 92%; max-width: 420px; background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(25px) saturate(160%); -webkit-backdrop-filter: blur(25px) saturate(160%);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 2.2rem;
+            padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1.2rem;
+            z-index: 9999; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
             transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
         }
-
         .zenith-notification.show { top: 25px; }
-
-        .notif-icon-box {
-            width: 48px; height: 48px; border-radius: 1.2rem;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 1.3rem; flex-shrink: 0;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
-        }
-
+        .notif-icon-box { width: 48px; height: 48px; border-radius: 1.2rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.3rem; flex-shrink: 0; }
         .notif-content h4 { font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; }
-        .notif-content p { font-size: 14px; font-weight: 700; color: white; margin-top: 1px; }
+        .notif-content p { font-size: 14px; font-weight: 700; color: white; }
 
-        /* --- STILI EKZISTUES --- */
+        /* --- STILIZIMET E MENU-SË DHE ELEMENTEVE --- */
         .menu-trigger { position: fixed; top: 2.5rem; right: 1.5rem; z-index: 2000; padding: 12px; background: var(--glass); border-radius: 1.2rem; border: 1px solid var(--border); }
         .burger-line { width: 22px; height: 1.5px; background: var(--primary); margin: 5px 0; transition: 0.4s; }
         .open .line-1 { transform: translateY(6.5px) rotate(45deg); }
         .open .line-2 { opacity: 0; }
         .open .line-3 { transform: translateY(-6.5px) rotate(-45deg); }
-
         #full-menu { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(50px); z-index: 1999; display: flex; flex-direction: column; justify-content: center; padding: 3rem; visibility: hidden; opacity: 0; transition: 0.5s; }
         #full-menu.active { visibility: visible; opacity: 1; }
-
-        .menu-link { font-size: 2.5rem; font-weight: 700; margin: 1rem 0; display: flex; align-items: center; gap: 1.5rem; color: rgba(255,255,255,0.4); text-decoration: none; }
+        .menu-link { font-size: 2.5rem; font-weight: 700; margin: 1rem 0; display: flex; align-items: center; gap: 1.5rem; color: rgba(255,255,255,0.4); text-decoration: none; transition: 0.4s; }
         .menu-link.active-page { color: white; }
-
         .glass-card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 2.5rem; }
-        
         input[type="range"] { -webkit-appearance: none; background: rgba(255,255,255,0.05); border-radius: 10px; height: 6px; width: 100%; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: var(--primary); border-radius: 50%; border: 2px solid #fff; }
-
-        .notif-btn { filter: grayscale(1); opacity: 0.5; transition: 0.3s; }
-        .notif-active { filter: grayscale(0); opacity: 1; background: var(--primary) !important; color: #020617 !important; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; background: var(--primary); border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 15px var(--primary); }
+        .notif-btn { transition: 0.3s; filter: grayscale(1); opacity: 0.5; }
+        .notif-active { background: var(--primary) !important; color: #020617 !important; filter: grayscale(0); opacity: 1; }
+        .hero-mask { mask-image: linear-gradient(to bottom, black 50%, transparent 100%); }
     </style>
 </head>
 <body class="pb-12">
 
     <audio id="notif-sound" src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3" preload="auto"></audio>
-    
     <div id="notif-overlay" class="zenith-notification">
         <div class="notif-icon-box" id="notif-icon-bg">
             <i class="fa-solid fa-mosque" id="notif-icon"></i>
         </div>
         <div class="notif-content">
             <h4 id="notif-type">Koha e Namazit</h4>
-            <p id="notif-message">Përgatituni për namaz</p>
+            <p id="notif-message">Zgjidhni vaktin...</p>
         </div>
     </div>
 
@@ -112,28 +88,42 @@
         <a href="index.html" class="menu-link"><i class="fa-solid fa-house-chimney"></i> Vaktia</a>
         <a href="lutje.html" class="menu-link"><i class="fa-solid fa-hand-holding-heart"></i> Lutjet</a>
         <a href="kibla.html" class="menu-link"><i class="fa-solid fa-compass"></i> Kibla</a>
+        <a href="ligjeratat.html" class="menu-link"><i class="fa-solid fa-microphone-lines"></i> Ligjërata</a>
         <a href="info.html" class="menu-link active-page"><i class="fa-solid fa-circle-info"></i> Info</a>
         <div class="mt-auto pt-10 border-t border-white/5"><p class="text-[10px] text-gray-500 tracking-widest uppercase italic">Ratkoci Digital &copy; 2026</p></div>
     </nav>
 
-    <header class="relative h-72 w-full overflow-hidden">
-        <img src="Images/604776747_122280490772225847_4370550408157022665_n.jpg" class="w-full h-full object-cover brightness-[0.3]">
-        <div class="absolute bottom-12 left-8">
-            <h1 class="text-5xl font-black italic tracking-tighter">Info<span class="text-emerald-500">.</span></h1>
+    <header class="relative h-96 w-full overflow-hidden">
+        <img src="Images/604776747_122280490772225847_4370550408157022665_n.jpg" class="w-full h-full object-cover hero-mask scale-110 brightness-[0.4]">
+        <div class="absolute bottom-20 left-8 md:left-20">
+            <h1 class="text-6xl font-black italic tracking-tighter mb-2">Info<span class="text-emerald-500">.</span></h1>
         </div>
     </header>
 
-    <main class="max-w-xl mx-auto px-6 -mt-8 relative z-10 space-y-6"> 
+    <main class="max-w-xl mx-auto px-6 -mt-12 relative z-10 space-y-6"> 
 
         <section class="glass-card p-8 border-amber-500/20 bg-amber-500/[0.03]">
             <div class="flex items-center gap-3 mb-6">
                 <i class="fa-solid fa-clock-rotate-left text-amber-500"></i>
                 <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Saktësia e Takvimit</h3>
             </div>
-            <p class="text-[11px] text-gray-400 italic mb-6 leading-relaxed">Nëse vaktet kanë dallim me xhaminë, rregulloji këtu (max +/- 10 min).</p>
+            <p class="text-[11px] text-gray-400 italic mb-6">Rregullo vaktet nëse nuk përputhen me xhaminë (max +/- 10 min).</p>
             <div class="flex items-center gap-6">
                 <input type="range" min="-10" max="10" value="0" id="calibrationSlider" oninput="updateCalibration(this.value)">
                 <span id="calib-val" class="text-xl font-black italic min-w-[60px] text-amber-500">0 min</span>
+            </div>
+        </section>
+
+        <section class="glass-card p-8 border-amber-500/20 bg-amber-500/[0.02]">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-moon text-amber-400"></i>
+                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Rrugëtimi drejt Ramazanit</h3>
+                </div>
+                <span id="days-to-ramadan" class="text-xs font-black text-amber-400">-- Ditë</span>
+            </div>
+            <div class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden mb-4">
+                <div id="ramadan-progress" class="h-full bg-gradient-to-r from-amber-600 to-amber-300 transition-all duration-1000" style="width: 0%"></div>
             </div>
         </section>
 
@@ -156,79 +146,137 @@
                     <span class="text-[8px] font-black uppercase">Ezan</span>
                 </button>
             </div>
-            <button onclick="testNotification()" class="w-full py-4 border border-white/10 rounded-3xl text-[9px] font-black uppercase tracking-widest opacity-50 hover:opacity-100 transition-all">Testo Dizajnin e Ri</button>
+            <button onclick="showZenithNotification('Akshami')" class="w-full py-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded-3xl font-black text-[9px] uppercase tracking-[0.3em]">Testo Njoftimin Elegant</button>
+        </section>
+
+        <section class="glass-card p-8 bg-gradient-to-br from-emerald-500/[0.05] to-transparent">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-location-dot text-emerald-500"></i>
+                    <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Gjurmimi Aktual</h3>
+                </div>
+                <button onclick="getUserLocation()" class="text-[9px] font-black text-emerald-500 uppercase px-4 py-2 rounded-full bg-emerald-500/10">Rifresko</button>
+            </div>
+            <div id="user-geo-box" class="p-4 bg-white/[0.02] rounded-3xl border border-white/5">
+                <p id="user-city" class="text-2xl font-black italic tracking-tighter mb-1">Duke lokalizuar...</p>
+                <p id="user-coords" class="text-[9px] font-bold text-emerald-500/60 uppercase tracking-widest">Zbuloni koordinatat</p>
+            </div>
         </section>
 
         <section class="glass-card p-8">
             <div class="flex items-center gap-3 mb-10">
-                <i class="fa-solid fa-palette text-emerald-500"></i>
-                <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Tema</h3>
+                <i class="fa-solid fa-sliders text-emerald-500"></i>
+                <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Personalizimi</h3>
             </div>
-            <div class="flex justify-between gap-4">
-                <button onclick="updateGlobalSetting('theme', '#10b981')" class="w-12 h-12 rounded-2xl bg-emerald-500 border-4 border-white/10"></button>
-                <button onclick="updateGlobalSetting('theme', '#3b82f6')" class="w-12 h-12 rounded-2xl bg-blue-500 border-4 border-white/10"></button>
-                <button onclick="updateGlobalSetting('theme', '#f59e0b')" class="w-12 h-12 rounded-2xl bg-amber-500 border-4 border-white/10"></button>
-                <button onclick="updateGlobalSetting('theme', '#f43f5e')" class="w-12 h-12 rounded-2xl bg-rose-500 border-4 border-white/10"></button>
+            <div class="space-y-12">
+                <div>
+                    <div class="flex justify-between items-center mb-5">
+                        <span class="text-[11px] text-gray-400 uppercase font-black tracking-widest">Madhësia Fontit</span>
+                        <span id="font-size-label" class="text-sm font-black text-emerald-500">16px</span>
+                    </div>
+                    <input type="range" min="14" max="22" value="16" id="fontSlider" oninput="updateGlobalSetting('fontSize', this.value)">
+                </div>
+                <div>
+                    <span class="text-[11px] text-gray-400 uppercase font-black tracking-widest block mb-6">Tema Ngjyrave</span>
+                    <div class="flex justify-between gap-4">
+                        <button onclick="updateGlobalSetting('theme', '#10b981')" class="w-12 h-12 rounded-2xl bg-emerald-500 border-4 border-white/10"></button>
+                        <button onclick="updateGlobalSetting('theme', '#3b82f6')" class="w-12 h-12 rounded-2xl bg-blue-500 border-4 border-white/10"></button>
+                        <button onclick="updateGlobalSetting('theme', '#f59e0b')" class="w-12 h-12 rounded-2xl bg-amber-500 border-4 border-white/10"></button>
+                        <button onclick="updateGlobalSetting('theme', '#f43f5e')" class="w-12 h-12 rounded-2xl bg-rose-500 border-4 border-white/10"></button>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <footer class="text-center py-12 opacity-20"><p class="text-[9px] font-black uppercase tracking-[0.5em]">Ratkoci Digital • 2026</p></footer>
+        <footer class="text-center py-12 opacity-30"><p class="text-[9px] font-black uppercase tracking-[0.5em]">Ratkoci Digital • 2026</p></footer>
     </main>
 
     <script>
-        // --- LOGJIKA E NJOFTIMEVE DHE KALIBRIMIT ---
+        // --- FUNKSIONET E SINKRONIZIMIT GLOBAL (TEMA DHE FONTI) ---
+        function updateGlobalSetting(key, value) {
+            localStorage.setItem('ratkoc_' + key, value);
+            applyGlobalSettings();
+        }
 
+        function applyGlobalSettings() {
+            const savedSize = localStorage.getItem('ratkoc_fontSize') || '16';
+            const savedTheme = localStorage.getItem('ratkoc_theme') || '#10b981';
+            const savedOffset = localStorage.getItem('zenith_offset') || '0';
+
+            document.body.style.fontSize = savedSize + 'px';
+            document.documentElement.style.setProperty('--primary', savedTheme);
+            
+            const label = document.getElementById('font-size-label');
+            if(label) label.innerText = savedSize + 'px';
+            
+            document.querySelectorAll('.text-emerald-500').forEach(el => el.style.color = savedTheme);
+
+            // Ngarko kalibrimin
+            document.getElementById('calibrationSlider').value = savedOffset;
+            document.getElementById('calib-val').innerText = (parseInt(savedOffset) > 0 ? "+" : "") + savedOffset + " min";
+        }
+
+        // --- SISTEMI I RI I NJOFTIMEVE ---
         function updateCalibration(val) {
-            const value = parseInt(val);
-            localStorage.setItem('zenith_offset', value);
-            document.getElementById('calib-val').innerText = (value > 0 ? "+" : "") + value + " min";
+            localStorage.setItem('zenith_offset', val);
+            document.getElementById('calib-val').innerText = (parseInt(val) > 0 ? "+" : "") + val + " min";
             if(navigator.vibrate) navigator.vibrate(10);
         }
 
         function showZenithNotification(vakti) {
             const overlay = document.getElementById('notif-overlay');
-            const msg = document.getElementById('notif-message');
-            const typeLabel = document.getElementById('notif-type');
-            const iconBg = document.getElementById('notif-icon-bg');
-            const icon = document.getElementById('notif-icon');
             const sound = document.getElementById('notif-sound');
+            const mode = localStorage.getItem('ratkoc_notif_mode') || 'none';
 
+            // Temat vizuale
             const themes = {
-                'Sabahu':  { color: '#818cf8', icon: 'fa-cloud-moon' },
-                'Dreka':   { color: '#fbbf24', icon: 'fa-sun' },
-                'Ikindia': { color: '#f59e0b', icon: 'fa-mountain-sun' },
-                'Akshami': { color: '#fb7185', icon: 'fa-moon-stars' },
-                'Jacija':  { color: '#6366f1', icon: 'fa-star-and-crescent' }
+                'Sabahu': { color: '#818cf8', icon: 'fa-cloud-moon' },
+                'Dreka': { color: '#fbbf24', icon: 'fa-sun' },
+                'Akshami': { color: '#fb7185', icon: 'fa-moon-stars' }
             };
-
             const theme = themes[vakti] || { color: '#10b981', icon: 'fa-mosque' };
 
-            // Apliko stilin
-            typeLabel.style.color = theme.color;
-            msg.innerText = `Ka hyrë vakti i ${vakti}-it`;
-            iconBg.style.background = `linear-gradient(135deg, ${theme.color}, #000)`;
-            icon.className = `fa-solid ${theme.icon}`;
-            overlay.style.borderLeft = `4px solid ${theme.color}`;
+            document.getElementById('notif-type').style.color = theme.color;
+            document.getElementById('notif-message').innerText = `Ka hyrë vakti i ${vakti}-it`;
+            document.getElementById('notif-icon-bg').style.background = `linear-gradient(135deg, ${theme.color}, #000)`;
+            document.getElementById('notif-icon').className = `fa-solid ${theme.icon}`;
 
-            // Luaj tingullin
-            const mode = localStorage.getItem('ratkoc_notif_mode') || 'none';
             if(mode !== 'none' && sound) {
                 sound.currentTime = 0;
-                sound.play().catch(e => console.log("Audio limited by browser"));
+                sound.play().catch(() => {});
             }
 
-            // Animacioni
             overlay.classList.add('show');
             if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
-
             setTimeout(() => overlay.classList.remove('show'), 6000);
         }
 
-        function testNotification() {
-            showZenithNotification('Akshami');
+        // --- GJURMIMI, RAMAZANI DHE MENU ---
+        function getUserLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async pos => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    document.getElementById('user-coords').innerText = `${lat.toFixed(4)}° N, ${lon.toFixed(4)}° E`;
+                    try {
+                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                        const data = await res.json();
+                        const city = data.address.city || data.address.town || data.address.village || "Lokacioni Juaj";
+                        document.getElementById('user-city').innerText = city;
+                    } catch (e) { document.getElementById('user-city').innerText = "Lokacioni u Aktivizua"; }
+                });
+            }
         }
 
-        // --- FUNKSIONET EKZISTUESE TË PËRSHTATURA ---
+        function updateRamadanCountdown() {
+            const ramadanDate = new Date('February 18, 2026').getTime();
+            const now = new Date().getTime();
+            const daysLeft = Math.floor((ramadanDate - now) / (1000 * 60 * 60 * 24));
+            if (daysLeft > 0) {
+                document.getElementById('days-to-ramadan').innerText = daysLeft + " Ditë";
+                document.getElementById('ramadan-progress').style.width = Math.max(0, (1 - (daysLeft / 355)) * 100) + "%";
+            }
+        }
 
         function toggleMenu() {
             document.querySelector('.menu-trigger').classList.toggle('open');
@@ -243,36 +291,16 @@
         function refreshNotifUI() {
             const mode = localStorage.getItem('ratkoc_notif_mode') || 'none';
             document.querySelectorAll('.notif-btn').forEach(b => b.classList.remove('notif-active'));
-            const activeBtn = document.getElementById('notif-' + mode);
-            if(activeBtn) activeBtn.classList.add('notif-active');
-        }
-
-        function updateGlobalSetting(key, value) {
-            localStorage.setItem('ratkoc_' + key, value);
-            applyGlobalSettings();
-        }
-
-        function applyGlobalSettings() {
-            const savedTheme = localStorage.getItem('ratkoc_theme') || '#10b981';
-            document.documentElement.style.setProperty('--primary', savedTheme);
-            document.querySelectorAll('.text-emerald-500').forEach(el => el.style.color = savedTheme);
-            
-            // Ngarko kalibrimin e ruajtur
-            const savedOffset = localStorage.getItem('zenith_offset') || '0';
-            document.getElementById('calibrationSlider').value = savedOffset;
-            document.getElementById('calib-val').innerText = (parseInt(savedOffset) > 0 ? "+" : "") + savedOffset + " min";
+            const btn = document.getElementById('notif-' + mode);
+            if(btn) btn.classList.add('notif-active');
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             applyGlobalSettings();
             refreshNotifUI();
+            getUserLocation();
+            updateRamadanCountdown();
         });
     </script>
 </body>
 </html>
-
-
-
-
-
-
