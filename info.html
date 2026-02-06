@@ -114,6 +114,26 @@
             </div>
         </section>
 
+        <section class="glass-card p-8 border-emerald-500/20 bg-emerald-500/[0.02]">
+    <div class="flex items-center gap-3 mb-6">
+        <i class="fa-solid fa-server text-emerald-500"></i>
+        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Burimi i të Dhënave</h3>
+    </div>
+    <div class="relative">
+        <select id="apiMethod" onchange="changeAPIMethod(this.value)" class="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 appearance-none font-bold text-sm focus:outline-none focus:border-emerald-500/50 transition-all cursor-pointer">
+            <option value="3" class="bg-[#020617]">Muslim World League (MWL)</option>
+            <option value="13" class="bg-[#020617]">Diyanet (Turqi)</option>
+            <option value="2" class="bg-[#020617]">ISNA (Amerikë)</option>
+            <option value="5" class="bg-[#020617]">Egyptian General Authority</option>
+            <option value="4" class="bg-[#020617]">Umm al-Qura (Makkah)</option>
+        </select>
+        <div class="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
+            <i class="fa-solid fa-chevron-down text-[10px]"></i>
+        </div>
+    </div>
+    <p class="text-[9px] text-gray-500 mt-4 italic">Zgjidhni 'Diyanet' për saktësi maksimale në Ballkan.</p>
+</section>
+
         <section class="glass-card p-8 border-amber-500/20 bg-amber-500/[0.02]">
             <div class="flex items-center justify-between mb-8">
                 <div class="flex items-center gap-3">
@@ -333,11 +353,46 @@ if ('serviceWorker' in navigator) {
     .then(() => console.log("Service Worker u lidh me sukses!"))
     .catch(err => console.log("Gabim gjatë lidhjes:", err));
 }
+
+
+
+
+
+// Funksioni që ruan metodën e re
+function changeAPIMethod(methodId) {
+    localStorage.setItem('zenith_api_method', methodId);
+    
+    // Trego një njoftim të vogël që u ndryshua
+    showZenithNotification('Sistemi'); 
+    
+    // Pas 1 sekonde, lajmëro përdoruesin që duhet të shkojë te faqja kryesore
+    setTimeout(() => {
+        alert("Burimi u ndryshua! Vaktet në faqen kryesore do të përditësohen sipas kësaj metode.");
+    }, 500);
+}
+
+// Shto këtë rresht brenda funksionit applyGlobalSettings() që e ke në kod
+// Kjo bën që kur hapet faqja, dropdown-i të jetë te ajo që ka zgjedhur përdoruesi më parë
+function syncAPIDropdown() {
+    const savedMethod = localStorage.getItem('zenith_api_method') || '13'; // 13 është Diyanet si default
+    const dropdown = document.getElementById('apiMethod');
+    if(dropdown) dropdown.value = savedMethod;
+}
+
+// Thirr funksionin te DOMContentLoaded
+window.addEventListener('DOMContentLoaded', () => {
+    // ... kodet e tjera që ke ...
+    syncAPIDropdown();
+});
+
+
+
         
         
     </script>
 </body>
 </html>
+
 
 
 
