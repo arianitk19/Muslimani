@@ -682,18 +682,22 @@ function openLibrary(kategoria) {
     const rendesia = document.getElementById('sure-rendesia');
     const icon = document.getElementById('sure-main-icon');
 
+    // Pastrojmë përmbajtjen paraprake
+    content.innerHTML = "";
+    content.innerText = "";
+
     if (kategoria === 'emrat') {
         title.innerText = "99 Emrat e Allahut";
         rendesia.innerText = "Mësimi i tyre është shkak për Xhenet";
         icon.className = "fa-solid fa-star-and-crescent text-3xl text-amber-500";
         content.innerHTML = `
-            <div class="grid grid-cols-2 gap-2 text-[11px] text-left">
-                <div class="bg-white/5 p-2 rounded-lg border border-white/5">1. Er-Rahman</div>
-                <div class="bg-white/5 p-2 rounded-lg border border-white/5">2. Er-Rahim</div>
-                <div class="bg-white/5 p-2 rounded-lg border border-white/5">3. El-Melik</div>
-                <div class="bg-white/5 p-2 rounded-lg border border-white/5">4. El-Kuddus</div>
-                <div class="bg-white/5 p-2 rounded-lg border border-white/5">5. Es-Selam</div>
-                <div class="bg-white/10 p-2 rounded-lg border border-emerald-500/20 text-center col-span-2">Dhe 94 tjerë...</div>
+            <div class="grid grid-cols-2 gap-2 text-[11px]">
+                <div class="bg-white/5 p-2 rounded-lg border border-white/5 text-center">1. Er-Rahman</div>
+                <div class="bg-white/5 p-2 rounded-lg border border-white/5 text-center">2. Er-Rahim</div>
+                <div class="bg-white/5 p-2 rounded-lg border border-white/5 text-center">3. El-Melik</div>
+                <div class="bg-white/5 p-2 rounded-lg border border-white/5 text-center">4. El-Kuddus</div>
+                <div class="bg-white/5 p-2 rounded-lg border border-white/5 text-center">5. Es-Selam</div>
+                <div class="bg-white/10 p-2 rounded-lg border border-emerald-500/20 text-center col-span-2 italic">Dhe të tjerët...</div>
             </div>
         `;
     } else if (kategoria === 'duate') {
@@ -705,12 +709,12 @@ function openLibrary(kategoria) {
         title.innerText = "Suret e Zgjedhura";
         rendesia.innerText = "Për lexim ditor";
         icon.className = "fa-solid fa-book-quran text-3xl text-emerald-500";
-        content.innerText = "Këtu mund të listoni suret si Jasin, El-Mulk, etj.";
+        content.innerText = "Këtu mund të listoni suret si Jasin, El-Mulk, dhe sureat e shkurtra për namaz.";
     } else if (kategoria === 'hadithe') {
         title.innerText = "Hadithi i Ditës";
         rendesia.innerText = "Udhëzim profetik";
         icon.className = "fa-solid fa-quote-left text-3xl text-purple-500";
-        content.innerText = "Veprat vlerësohen sipas qëllimit (Nijetit).";
+        content.innerText = "Veprat vlerësohen sipas qëllimit (Nijetit). Çdo njeri do të shpërblehet sipas asaj që ka pasur për qëllim.";
     }
 
     modal.style.display = 'flex';
@@ -721,6 +725,7 @@ function openLibrary(kategoria) {
 
 </body>
 </html>
+
 
 
 
