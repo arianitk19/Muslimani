@@ -232,7 +232,7 @@
     </div>
 
     <div class="absolute bottom-10">
-        <p class="text-[9px] text-gray-600 tracking-[0.5em] uppercase italic">Bismillah - 2026</p>
+        <p class="text-[9px] text-gray-600 tracking-[0.5em] uppercase italic">Bismilah</p>
     </div>
 </div>
 
@@ -363,6 +363,50 @@
             </div>
         </div>
 
+        
+
+<div class="glass-card p-6">
+    <div class="flex justify-between items-center mb-5">
+        <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Libraria Islame</h4>
+        <i class="fa-solid fa-book-open text-emerald-500 text-xs opacity-50"></i>
+    </div>
+    
+    <div class="grid grid-cols-2 gap-3">
+        <div onclick="openLibrary('suret')" class="bg-white/5 border border-white/5 rounded-2xl p-4 transition-all active:scale-95 cursor-pointer hover:bg-emerald-500/10 group">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3 group-hover:bg-emerald-500 group-hover:text-black transition-colors">
+                <i class="fa-solid fa-book-quran"></i>
+            </div>
+            <h5 class="text-sm font-bold italic">Suret</h5>
+            <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1">Lexim & Dëgjim</p>
+        </div>
+
+        <div onclick="openLibrary('duate')" class="bg-white/5 border border-white/5 rounded-2xl p-4 transition-all active:scale-95 cursor-pointer hover:bg-blue-500/10 group">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center mb-3 group-hover:bg-blue-500 group-hover:text-black transition-colors">
+                <i class="fa-solid fa-hands-praying"></i>
+            </div>
+            <h5 class="text-sm font-bold italic">Duatë</h5>
+            <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1">Mburoja ditore</p>
+        </div>
+
+        <div onclick="openLibrary('emrat')" class="bg-white/5 border border-white/5 rounded-2xl p-4 transition-all active:scale-95 cursor-pointer hover:bg-amber-500/10 group">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center mb-3 group-hover:bg-amber-500 group-hover:text-black transition-colors">
+                <i class="fa-solid fa-star-and-crescent"></i>
+            </div>
+            <h5 class="text-sm font-bold italic">99 Emrat</h5>
+            <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1">Dija e Allahut</p>
+        </div>
+
+        <div onclick="openLibrary('hadithe')" class="bg-white/5 border border-white/5 rounded-2xl p-4 transition-all active:scale-95 cursor-pointer hover:bg-purple-500/10 group">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center mb-3 group-hover:bg-purple-500 group-hover:text-black transition-colors">
+                <i class="fa-solid fa-quote-left"></i>
+            </div>
+            <h5 class="text-sm font-bold italic">Hadithe</h5>
+            <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1">Thënie Profetike</p>
+        </div>
+    </div>
+</div>
+
+        
         <div class="glass-card p-8">
             <h4 class="text-[10px] uppercase tracking-[0.4em] text-gray-500 font-bold mb-6">Analitika Ditore</h4>
             <div class="flex items-end gap-3 h-16 mb-6 px-2">
@@ -629,10 +673,55 @@
         17: { titulli: "Sureja El-Felek & En-Nas", teksti: "I mbështetem Zotit të agimit...", rendesia: "Mbrojtje nga zilija.", ikona: "fa-shield-halved" },
         20: { titulli: "Sureja El-Mulk", teksti: "I Madhëruar është Ai...", rendesia: "Mbrojtje nga dënimi i varrit.", ikona: "fa-moon" }
     };
+
+
+function openLibrary(kategoria) {
+    const modal = document.getElementById('sure-modal');
+    const title = document.getElementById('sure-title');
+    const content = document.getElementById('sure-content');
+    const rendesia = document.getElementById('sure-rendesia');
+    const icon = document.getElementById('sure-main-icon');
+
+    if (kategoria === 'emrat') {
+        title.innerText = "99 Emrat e Allahut";
+        rendesia.innerText = "Mësimi i tyre është shkak për Xhenet";
+        icon.className = "fa-solid fa-star-and-crescent text-3xl text-amber-500";
+        content.innerHTML = `
+            <div class="grid grid-cols-2 gap-2 text-[12px]">
+                <div class="bg-white/5 p-2 rounded-lg">1. Er-Rahman</div>
+                <div class="bg-white/5 p-2 rounded-lg">2. Er-Rahim</div>
+                <div class="bg-white/5 p-2 rounded-lg">3. El-Melik</div>
+                <div class="bg-white/5 p-2 rounded-lg">4. El-Kuddus</div>
+                <div class="bg-white/5 p-2 rounded-lg">5. Es-Selam</div>
+                <div class="bg-white/5 p-2 rounded-lg">...dhe të tjerët.</div>
+            </div>
+        `;
+    } else if (kategoria === 'duate') {
+        title.innerText = "Lutja e Mëngjesit";
+        rendesia.innerText = "Mbrojtje nga çdo e keqe";
+        icon.className = "fa-solid fa-hands-praying text-3xl text-blue-500";
+        content.innerText = "Bismil-lahil-ledhi la jedur-ru me'as-mihi shej'un fil-erdi we la fis-semai we Huwes-Semi'ul-'Alim.";
+    } else if (kategoria === 'suret') {
+        title.innerText = "Suret e Zgjedhura";
+        rendesia.innerText = "Për lexim ditor";
+        icon.className = "fa-solid fa-book-quran text-3xl text-emerald-500";
+        content.innerText = "Këtu mund të listoni suret si Jasin, El-Mulk, etj.";
+    } else if (kategoria === 'hadithe') {
+        title.innerText = "Hadithi i Ditës";
+        rendesia.innerText = "Udhëzim profetik";
+        icon.className = "fa-solid fa-quote-left text-3xl text-purple-500";
+        content.innerText = "Veprat vlerësohen sipas qëllimit (Nijetit).";
+    }
+
+    modal.style.display = 'flex';
+    if (navigator.vibrate) navigator.vibrate(50);
+}
+        
 </script>
 
 </body>
 </html>
+
 
 
 
