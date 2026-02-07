@@ -309,275 +309,236 @@
     </main>
 
     <script>
+    // --- KONFIGURIMI DHE VARIABLAT GLOBALE ---
+    const vaktetRaw = [
+        { emri: 'Sabahu', koha: '05:30', ikona: 'fa-cloud-sun', gradient: 'linear-gradient(135deg, #1e3c72, #2a5298)' },
+        { emri: 'Lindja', koha: '07:05', ikona: 'fa-sun', gradient: 'linear-gradient(135deg, #ff9966, #ff5e62)' },
+        { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun', gradient: 'linear-gradient(135deg, #4facfe, #00f2fe)' },
+        { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud-sun', gradient: 'linear-gradient(135deg, #f093fb, #f5576c)' },
+        { emri: 'Akshami', koha: '16:21', ikona: 'fa-mountain-sun', gradient: 'linear-gradient(135deg, #434343, #000000)' },
+        { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon', gradient: 'linear-gradient(135deg, #0f2027, #2c5364)' }
+    ];
 
-    // Korigjuar ikonat që të funksionojnë (Versioni FREE)
-        const vaktetRaw = [
-            { emri: 'Sabahu', koha: '05:30', ikona: 'fa-cloud-sun' },
-            { emri: 'Lindja', koha: '07:05', ikona: 'fa-sun' },
-            { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun-bright' }, // FontAwesome do e zevendesoje automatikisht me fa-sun
-            { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud' },
-            { emri: 'Akshami', koha: '16:21', ikona: 'fa-mountain-sun' },
-            { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon' }
-        ];
-        
-       // Zëvendëso funksionin toggleMenu aktual me këtë
-function toggleMenu() {
-    document.querySelector('.menu-trigger').classList.toggle('open');
-    document.getElementById('full-menu').classList.toggle('active');
-    
-    // Kjo pjesë bllokon lëvizjen e faqes kur menuja është e hapur
-    if(document.getElementById('full-menu').classList.contains('active')) {
-        document.body.style.overflow = 'hidden';
-    } else {
-        document.body.style.overflow = 'auto';
-    }
-}
+    let lastNotifiedVakt = "";
+    const dhikret = ["SubhanAllah", "Elhamdulillah", "Allahu Akbar", "Estagfirullah", "La ilaha illallah"];
+    let dhikerIndex = 0;
+    let tasbihCount = parseInt(localStorage.getItem('tasbihCount')) || 0;
+    let completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || [false, false, false, false, false];
 
-        const dhikret = ["SubhanAllah", "Elhamdulillah", "Allahu Akbar", "Estagfirullah", "La ilaha illallah"];
-        let dhikerIndex = 0;
-        let tasbihCount = parseInt(localStorage.getItem('tasbihCount')) || 0;
-        let completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || [false, false, false, false, false];
+    // --- FUNKSIONI KRYESOR I PËRDITËSIMIT (ÇDO SEKONDË) ---
+    function updateUI() {
+        const now = new Date();
+        const currentTotalMin = (now.getHours() * 60) + now.getMinutes();
+        const kohaTaniStr = now.toLocaleTimeString('sq-AL', { hour12: false, hour: '2-digit', minute: '2-digit' });
 
-        function incrementTasbih() {
-            tasbihCount++;
-            if (navigator.vibrate) navigator.vibrate(20);
-            if(tasbihCount > 33) {
-                tasbihCount = 1;
-                dhikerIndex = (dhikerIndex + 1) % dhikret.length;
-                document.getElementById('dhiker-label').innerText = dhikret[dhikerIndex];
+        // Përditëso orën live
+        document.getElementById('live-clock').innerText = kohaTaniStr;
+
+        // 1. Logjika e Njoftimeve
+        vaktetRaw.forEach(v => {
+            if (kohaTaniStr === v.koha && lastNotifiedVakt !== v.emri) {
+                lastNotifiedVakt = v.emri;
+                sendImpulsiveNotification(v.emri);
+                activateFocusMode(v.emri);
             }
-            document.getElementById('tasbih-num').innerText = tasbihCount;
-            localStorage.setItem('tasbihCount', tasbihCount);
+        });
+
+        // Reset njoftimin kur kalon minuta
+        if (lastNotifiedVakt !== "" && vaktetRaw.every(v => kohaTaniStr !== v.koha)) {
+            lastNotifiedVakt = "";
         }
 
-        function toggleTask(idx) {
-            completedTasks[idx] = !completedTasks[idx];
-            localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
-            updateTasksUI();
-            if (completedTasks.filter(t => t).length === 5) showCelebration();
-        }
+        // 2. Gjenerimi i Kartave të Vakteve
+        let currentIdx = -1;
+        const listHtml = vaktetRaw.map((v, i) => {
+            const [vh, vm] = v.koha.split(':').map(Number);
+            const vMin = vh * 60 + vm;
+            if (currentTotalMin >= vMin) currentIdx = i;
 
-        function showCelebration() { document.getElementById('celebration-modal').style.display = 'flex'; }
-        function closeCelebration() { document.getElementById('celebration-modal').style.display = 'none'; }
+            const isNow = (i === currentIdx);
+            const passed = (currentTotalMin > vMin) && !isNow;
 
-        function updateTasksUI() {
-            const btns = document.querySelectorAll('.task-btn');
-            completedTasks.forEach((s, i) => {
-                s ? btns[i].classList.add('done') : btns[i].classList.remove('done');
-            });
-            document.getElementById('task-count').innerText = `${completedTasks.filter(t => t).length}/5 Namaze`;
-        }
+            const cardStyle = isNow ? `style="background: ${v.gradient}; border: none; transform: scale(1.05); box-shadow: 0 15px 30px rgba(0,0,0,0.4); z-index: 10;"` : '';
+            const iconStyle = isNow ? `style="background: rgba(255,255,255,0.2); color: white; filter: drop-shadow(0 0 8px white);"` : '';
+            const textStyle = isNow ? `style="color: white; opacity: 1;"` : '';
 
-        function updateUI() {
-            const now = new Date();
-            const currentTotalMin = (now.getHours() * 60) + now.getMinutes();
-            document.getElementById('live-clock').innerText = now.toLocaleTimeString('sq-AL', {hour12: false, hour: '2-digit', minute: '2-digit'});
-            
-
-
-                   // Kontrolli për njoftim impulsiv pikerisht në minutën e vaktit
-              vaktetRaw.forEach(v => {
-           const tani = new Date();
-               const kohaTani = tani.toLocaleTimeString('sq-AL', {hour12:false, hour:'2-digit', minute:'2-digit'});
-    
-          // Nëse ora shënon fiks vaktin dhe nuk kemi dërguar njoftim për këtë minutë
-             if (kohaTani === v.koha && lastNotifiedVakt !== v.emri) {
-            sendImpulsiveNotification(v.emri);
-             activateFocusMode(v.emri); // Aktivizon pamjen impulsive brenda faqes
-             lastNotifiedVakt = v.emri;
-             }
-         });
-
-let lastNotifiedVakt = ""; // Variabël globale për të mos dërguar 60 njoftime brenda 1 minute
-
-
-
-            let currentIdx = -1;
-            const listHtml = vaktetRaw.map((v, i) => {
-                const [vh, vm] = v.koha.split(':').map(Number);
-                const vMin = vh * 60 + vm;
-                if (currentTotalMin >= vMin) currentIdx = i;
-                const isNow = (i === currentIdx);
-                const passed = (currentTotalMin > vMin) && !isNow;
-                
-                return `
-                <div class="glass-card vakt-card ${isNow ? 'active' : ''} ${passed ? 'opacity-30' : ''}">
-                    <div class="vakt-icon-container">
+            return `
+                <div class="glass-card vakt-card ${isNow ? 'active' : ''} ${passed ? 'opacity-30' : ''}" ${cardStyle}>
+                    <div class="vakt-icon-container" ${iconStyle}>
                         <i class="fa-solid ${v.ikona}"></i>
                     </div>
-                    <span class="text-[9px] uppercase font-black tracking-[0.2em] text-gray-500 block mb-1">${v.emri}</span>
-                    <span class="text-xl font-bold italic tracking-tight">${v.koha}</span>
+                    <span class="text-[9px] uppercase font-black tracking-[0.2em] ${isNow ? '' : 'text-gray-500'} block mb-1" ${textStyle}>${v.emri}</span>
+                    <span class="text-xl font-bold italic tracking-tight" ${textStyle}>${v.koha}</span>
                 </div>`;
-            }).join('');
-            
-            document.getElementById('vaktet-list').innerHTML = listHtml;
-            
-            const nextIdx = (currentIdx + 1) % vaktetRaw.length;
-            const nextP = vaktetRaw[nextIdx];
-            document.getElementById('next-prayer-name').innerText = nextP.emri;
-            
-            const [nh, nm] = nextP.koha.split(':').map(Number);
-            let target = new Date(); target.setHours(nh, nm, 0);
-            if (target < now) target.setDate(target.getDate() + 1);
-            
-            const diff = target - now;
-            const h = Math.floor(diff/3600000).toString().padStart(2,'0');
-            const m = Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
-            const s = Math.floor((diff%60000)/1000).toString().padStart(2,'0');
-            document.getElementById('prayer-countdown').innerText = `${h}:${m}:${s}`;
-            
-            const totalSec = (now.getHours()*3600) + (now.getMinutes()*60) + now.getSeconds();
-            document.getElementById('progress-bar').style.strokeDashoffset = 596.9 - ((totalSec / 86400) * 596.9);
-        }
+        }).join('');
 
-       async function fetchLiveVaktet() {
-    try {
-        // 1. Merr metodën dhe kalibrimin nga memorja
-        const metodat = localStorage.getItem('zenith_api_method') || '13';
-        const offset = parseInt(localStorage.getItem('zenith_offset')) || 0;
+        document.getElementById('vaktet-list').innerHTML = listHtml;
 
-        // 2. Thirr API-në me metodën e zgjedhur
-        const res = await fetch(`https://api.aladhan.com/v1/timingsByAddress?address=Ratkoc,Kosovo&method=${metodat}`);
-        const data = await res.json();
-        const t = data.data.timings;
-
-        // Funksion i vogël brenda për të shtuar/hiqur minutat (Kalibrimi)
-        const applyOffset = (timeStr) => {
-            if (offset === 0) return timeStr;
-            let [h, m] = timeStr.split(':').map(Number);
-            let d = new Date();
-            d.setHours(h);
-            d.setMinutes(m + offset);
-            return d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
-        };
-
-        // 3. Mbush vaktet me kohën e re të kalibruar
-        vaktetRaw[0].koha = applyOffset(t.Fajr);
-        vaktetRaw[1].koha = applyOffset(t.Sunrise);
-        vaktetRaw[2].koha = applyOffset(t.Dhuhr);
-        vaktetRaw[3].koha = applyOffset(t.Asr);
-        vaktetRaw[4].koha = applyOffset(t.Maghrib);
-        vaktetRaw[5].koha = applyOffset(t.Isha);
-
-        updateUI();
-        updateLockScreenWidget();
-    } catch (e) { 
-        console.warn("API Error: Nuk u morën dot të dhënat"); 
+        // 3. Countdown dhe Progress Ring
+        updateNextPrayer(now, currentIdx);
     }
-}
 
-        async function updateLockScreenWidget() {
+    function updateNextPrayer(now, currentIdx) {
+        const nextIdx = (currentIdx + 1) % vaktetRaw.length;
+        const nextP = vaktetRaw[nextIdx];
+        document.getElementById('next-prayer-name').innerText = nextP.emri;
+
+        const [nh, nm] = nextP.koha.split(':').map(Number);
+        let target = new Date();
+        target.setHours(nh, nm, 0);
+        if (target < now) target.setDate(target.getDate() + 1);
+
+        const diff = target - now;
+        const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
+        const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+        const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+        document.getElementById('prayer-countdown').innerText = `${h}:${m}:${s}`;
+
+        const totalSec = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
+        const offset = 596.9 - ((totalSec / 86400) * 596.9);
+        document.getElementById('progress-bar').style.strokeDashoffset = offset;
+    }
+
+    // --- SISTEMI I TASBIHUT DHE NAMAZIT ---
+    function incrementTasbih() {
+        tasbihCount++;
+        if (navigator.vibrate) navigator.vibrate(20);
+        if (tasbihCount > 33) {
+            tasbihCount = 1;
+            dhikerIndex = (dhikerIndex + 1) % dhikret.length;
+            document.getElementById('dhiker-label').innerText = dhikret[dhikerIndex];
+        }
+        document.getElementById('tasbih-num').innerText = tasbihCount;
+        localStorage.setItem('tasbihCount', tasbihCount);
+    }
+
+    function toggleTask(idx) {
+        completedTasks[idx] = !completedTasks[idx];
+        localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+        updateTasksUI();
+        if (completedTasks.filter(t => t).length === 5) showCelebration();
+    }
+
+    function updateTasksUI() {
+        const btns = document.querySelectorAll('.task-btn');
+        completedTasks.forEach((s, i) => {
+            s ? btns[i].classList.add('done') : btns[i].classList.remove('done');
+        });
+        document.getElementById('task-count').innerText = `${completedTasks.filter(t => t).length}/5 Namaze`;
+    }
+
+    // --- MODALET DHE NAVIGIMI ---
+    function toggleMenu() {
+        const menu = document.getElementById('full-menu');
+        const trigger = document.querySelector('.menu-trigger');
+        trigger.classList.toggle('open');
+        menu.classList.toggle('active');
+        document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+    }
+
+    function openSure(ora) {
+        const sure = sureatDitore[ora];
+        if (!sure) return;
+        document.getElementById('sure-title').innerText = sure.titulli;
+        document.getElementById('sure-rendesia').innerText = sure.rendesia;
+        document.getElementById('sure-content').innerText = sure.teksti;
+        document.getElementById('sure-main-icon').className = `fa-solid ${sure.ikona} text-3xl text-emerald-500`;
+        document.getElementById('sure-modal').style.display = 'flex';
+        if (navigator.vibrate) navigator.vibrate(100);
+    }
+
+    function closeSure() { document.getElementById('sure-modal').style.display = 'none'; }
+    function showCelebration() { document.getElementById('celebration-modal').style.display = 'flex'; }
+    function closeCelebration() { document.getElementById('celebration-modal').style.display = 'none'; }
+
+    // --- API DHE SINKRONIZIMI ---
+    async function fetchLiveVaktet() {
+        try {
+            const metoda = localStorage.getItem('zenith_api_method') || '13';
+            const offset = parseInt(localStorage.getItem('zenith_offset')) || 0;
+            const res = await fetch(`https://api.aladhan.com/v1/timingsByAddress?address=Ratkoc,Kosovo&method=${metoda}`);
+            const data = await res.json();
+            const t = data.data.timings;
+
+            const applyOffset = (timeStr) => {
+                let [h, m] = timeStr.split(':').map(Number);
+                let d = new Date();
+                d.setHours(h, m + offset);
+                return d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
+            };
+
+            const map = { Fajr: 0, Sunrise: 1, Dhuhr: 2, Asr: 3, Maghrib: 4, Isha: 5 };
+            const vKeys = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+            vKeys.forEach((key, idx) => { vaktetRaw[idx].koha = applyOffset(t[key]); });
+
+            updateUI();
+            updateLockScreenWidget();
+        } catch (e) { console.error("API Error"); }
+    }
+
+    // --- NJOFTIMET DHE FOCUS MODE ---
+    function activateFocusMode(vaktiEmri) {
+        const cards = document.querySelectorAll('.vakt-card');
+        cards.forEach(card => {
+            if (card.innerText.includes(vaktiEmri)) {
+                card.classList.add('vakt-impulse');
+                setTimeout(() => card.classList.remove('vakt-impulse'), 60000);
+            }
+        });
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 300]);
+    }
+
+    function sendImpulsiveNotification(emri) {
+        if (Notification.permission === "granted") {
+            new Notification(`ALLAHU EKBER!`, {
+                body: `Hyri koha e namazit të ${emri}.`,
+                icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg'
+            });
+        }
+    }
+
+    async function updateLockScreenWidget() {
+        if ('serviceWorker' in navigator && Notification.permission === "granted") {
+            const reg = await navigator.serviceWorker.ready;
             const tani = new Date();
             const oraTani = tani.getHours() * 3600 + tani.getMinutes() * 60;
-            let vaktirradhes = vaktetRaw.find(v => {
-                const [vOra, vMin] = v.koha.split(':').map(Number);
-                return (vOra * 3600 + vMin * 60) > oraTani;
+            let vradhes = vaktetRaw.find(v => {
+                const [vO, vM] = v.koha.split(':').map(Number);
+                return (vO * 3600 + vM * 60) > oraTani;
             }) || vaktetRaw[0];
 
-            if ('serviceWorker' in navigator && 'Notification' in window) {
-                if (Notification.permission === "granted") {
-                    const reg = await navigator.serviceWorker.ready;
-                    reg.showNotification(`Vaktia: ${vaktirradhes.emri}`, {
-                        body: `Koha e namazit : ${vaktirradhes.koha}`,
-                        icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
-                        tag: 'vaktia-live',
-                        silent: true
-                    });
-                }
-            }
+            reg.showNotification(`Vaktia: ${vradhes.emri}`, {
+                body: `Koha: ${vradhes.koha}`,
+                tag: 'vaktia-live',
+                silent: true
+            });
         }
-
-        window.onload = () => {
-
-// Shtoje këtë rresht brenda window.onload ekzistues
-window.onfocus = () => fetchLiveVaktet();
-            
-            if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
-            fetchLiveVaktet();
-            updateTasksUI();
-            const options = { day: 'numeric', month: 'long', year: 'numeric', calendar: 'islamic-uma' };
-            document.getElementById('hijri-date-top').innerText = new Intl.DateTimeFormat('sq-u-ca-islamic-uma', options).format(new Date());
-            document.getElementById('tasbih-num').innerText = tasbihCount;
-            setInterval(updateUI, 1000);
-            setInterval(updateLockScreenWidget, 60000);
-        };
-
-
-const sureatDitore = {
-    12: { 
-        titulli: "Sureja El-Ihlas", 
-        teksti: "Bismil-lahir-rahmanir-rahim. Thuaj: Ai, Allahu është Një! Allahu është Ai, të Cilit çdo krijesë I drejtohet për çdo nevojë. As nuk ka lindur kush, as nuk është i lindur. Dhe Atij askush nuk i është i barabartë.", 
-        rendesia: "Për orën 12:00 (Mesditë): Vlen sa një e treta e Kuranit dhe forcon besimin në njëshmërinë e Zotit gjatë vrullit të ditës.",
-        ikona: "fa-sun" 
-    },
-    17: { 
-        titulli: "Sureja El-Felek & En-Nas", 
-        teksti: "Bismil-lahir-rahmanir-rahim. Thuaj: I mbështetem Zotit të agimit... Thuaj: I mbështetem Zotit të njerëzve, Sundimtarit të njerëzve, Të Adhuruarit të njerëzve, nga ligësia e cytësit që fshihet...", 
-        rendesia: "Për orën 17:00 (Pasdite): Mbrojtje nga syri i keq, zilija dhe të këqijat që mund të vijnë me perëndimin e diellit.",
-        ikona: "fa-shield-halved" 
-    },
-    20: { 
-        titulli: "Sureja El-Mulk", 
-        teksti: "Bismil-lahir-rahmanir-rahim. I Madhëruar është Ai, në dorën e të Cilit është i tërë pushteti dhe Ai është i Fuqishëm mbi çdo send... Ai që krijoi vdekjen dhe jetën për t'ju provuar se kush prej jush është më vepërmirë...", 
-        rendesia: "Për orën 20:00 (Para gjumit): Profeti (a.s) ka thënë se kjo sure e mbron personin nga dënimi i varrit nëse lexohet çdo natë.",
-        ikona: "fa-moon" 
     }
-};
 
+    // --- INITIALIZATION ---
+    window.onload = () => {
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+        fetchLiveVaktet();
+        updateTasksUI();
+        
+        const options = { day: 'numeric', month: 'long', year: 'numeric', calendar: 'islamic-uma' };
+        document.getElementById('hijri-date-top').innerText = new Intl.DateTimeFormat('sq-u-ca-islamic-uma', options).format(new Date());
+        
+        setInterval(updateUI, 1000);
+        setInterval(updateLockScreenWidget, 60000);
+        window.onfocus = () => fetchLiveVaktet();
+    };
 
-function openSure(ora) {
-    const sure = sureatDitore[ora];
-    if (!sure) return;
+    const sureatDitore = {
+        12: { titulli: "Sureja El-Ihlas", teksti: "Ai, Allahu është Një!...", rendesia: "Vlen sa 1/3 e Kuranit.", ikona: "fa-sun" },
+        17: { titulli: "Sureja El-Felek & En-Nas", teksti: "I mbështetem Zotit të agimit...", rendesia: "Mbrojtje nga zilija.", ikona: "fa-shield-halved" },
+        20: { titulli: "Sureja El-Mulk", teksti: "I Madhëruar është Ai...", rendesia: "Mbrojtje nga dënimi i varrit.", ikona: "fa-moon" }
+    };
+</script>
 
-    document.getElementById('sure-title').innerText = sure.titulli;
-    document.getElementById('sure-rendesia').innerText = sure.rendesia;
-    document.getElementById('sure-content').innerText = sure.teksti;
-    
-    // Ndrysho ikonën sipas kohës
-    const iconElement = document.getElementById('sure-main-icon');
-    iconElement.className = `fa-solid ${sure.ikona} text-3xl text-emerald-500`;
-
-    document.getElementById('sure-modal').style.display = 'flex';
-    if (navigator.vibrate) navigator.vibrate(100); // Dridhje e lehtë kur hapet
-}
-
-
-
-
-function activateFocusMode(vaktiEmri) {
-    // 1. Gjej kartën e vaktit aktual
-    const cards = document.querySelectorAll('.vakt-card');
-    cards.forEach(card => {
-        if(card.innerText.includes(vaktiEmri)) {
-            card.classList.add('vakt-impulse');
-            
-            // 2. Pas 60 sekondave (1 minutë), hiqe efektin impulsiv
-            setTimeout(() => {
-                card.classList.remove('vakt-impulse');
-                // Faqja kthehet në gjendje normale dhe updateUI do të llogarisë vaktin tjetër
-                console.log("Minuta e vaktit kaloi. Fokusimi te namazi i rradhës.");
-            }, 60000); 
-        }
-    });
-    
-    // 3. Dridhje e fortë impulsive e telefonit
-    if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 300]);
-}
-
-function sendImpulsiveNotification(emri) {
-    if (Notification.permission === "granted") {
-        new Notification(`ALLAHU EKBER!`, {
-            body: `Hyri koha e namazit të ${emri}. Ndalo çdo gjë dhe përgjigju thirrjes.`,
-            icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
-            silent: false // Le të dëgjohet zhurma e njoftimit
-        });
-    }
-}
-
-
-    </script>
 </body>
 </html>
+
 
 
 
