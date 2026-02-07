@@ -30,6 +30,26 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
         
+
+
+/* Pamja impulsive kur hyn vakti */
+.vakt-impulse {
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%) !important;
+    border: 2px solid #10b981 !important;
+    box-shadow: 0 0 40px rgba(16, 185, 129, 0.4) !important;
+    animation: pulseBorder 1.5s infinite !important;
+    transform: scale(1.05);
+    z-index: 50;
+}
+
+@keyframes pulseBorder {
+    0% { border-color: #10b981; }
+    50% { border-color: #ffffff; }
+    100% { border-color: #10b981; }
+}
+
+
+
         :root {
             --primary: #10b981;
             --bg: #020617;
@@ -352,6 +372,25 @@ function toggleMenu() {
             const currentTotalMin = (now.getHours() * 60) + now.getMinutes();
             document.getElementById('live-clock').innerText = now.toLocaleTimeString('sq-AL', {hour12: false, hour: '2-digit', minute: '2-digit'});
             
+
+
+                   // Kontrolli për njoftim impulsiv pikerisht në minutën e vaktit
+              vaktetRaw.forEach(v => {
+           const tani = new Date();
+               const kohaTani = tani.toLocaleTimeString('sq-AL', {hour12:false, hour:'2-digit', minute:'2-digit'});
+    
+          // Nëse ora shënon fiks vaktin dhe nuk kemi dërguar njoftim për këtë minutë
+             if (kohaTani === v.koha && lastNotifiedVakt !== v.emri) {
+            sendImpulsiveNotification(v.emri);
+             activateFocusMode(v.emri); // Aktivizon pamjen impulsive brenda faqes
+             lastNotifiedVakt = v.emri;
+             }
+         });
+
+let lastNotifiedVakt = ""; // Variabël globale për të mos dërguar 60 njoftime brenda 1 minute
+
+
+
             let currentIdx = -1;
             const listHtml = vaktetRaw.map((v, i) => {
                 const [vh, vm] = v.koha.split(':').map(Number);
@@ -500,6 +539,40 @@ function openSure(ora) {
     document.getElementById('sure-modal').style.display = 'flex';
     if (navigator.vibrate) navigator.vibrate(100); // Dridhje e lehtë kur hapet
 }
+
+
+
+
+function activateFocusMode(vaktiEmri) {
+    // 1. Gjej kartën e vaktit aktual
+    const cards = document.querySelectorAll('.vakt-card');
+    cards.forEach(card => {
+        if(card.innerText.includes(vaktiEmri)) {
+            card.classList.add('vakt-impulse');
+            
+            // 2. Pas 60 sekondave (1 minutë), hiqe efektin impulsiv
+            setTimeout(() => {
+                card.classList.remove('vakt-impulse');
+                // Faqja kthehet në gjendje normale dhe updateUI do të llogarisë vaktin tjetër
+                console.log("Minuta e vaktit kaloi. Fokusimi te namazi i rradhës.");
+            }, 60000); 
+        }
+    });
+    
+    // 3. Dridhje e fortë impulsive e telefonit
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 300]);
+}
+
+function sendImpulsiveNotification(emri) {
+    if (Notification.permission === "granted") {
+        new Notification(`ALLAHU EKBER!`, {
+            body: `Hyri koha e namazit të ${emri}. Ndalo çdo gjë dhe përgjigju thirrjes.`,
+            icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg',
+            silent: false // Le të dëgjohet zhurma e njoftimit
+        });
+    }
+}
+
 
     </script>
 </body>
