@@ -1,6 +1,6 @@
 {
-  "name": "Zenith Vaktia",
-  "short_name": "Zenith",
+  "name": "Perkujtuesi Ditor",
+  "short_name": "Perkujtuesi Ditor",
   "description": "Orari i namazit dhe përkujtuesi ditor për besimtarët.",
   "start_url": "index.html",
   "display": "standalone",
@@ -22,3 +22,4 @@
     }
   ]
 }
+
