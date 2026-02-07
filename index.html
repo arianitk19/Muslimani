@@ -309,15 +309,60 @@
     </main>
 
     <script>
-        // Korigjuar ikonat që të funksionojnë (Versioni FREE)
-        const vaktetRaw = [
-            { emri: 'Sabahu', koha: '05:30', ikona: 'fa-cloud-sun' },
-            { emri: 'Lindja', koha: '07:05', ikona: 'fa-sun' },
-            { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun-bright' }, // FontAwesome do e zevendesoje automatikisht me fa-sun
-            { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud' },
-            { emri: 'Akshami', koha: '16:21', ikona: 'fa-mountain-sun' },
-            { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon' }
-        ];
+
+        const vaktetRaw = [
+    { 
+        emri: 'Sabahu', 
+        koha: '05:30', 
+        ikona: 'fa-sun-haze', // Pamje agimi
+        color: '#4A90E2',    // Blu e hapur
+        gradient: 'linear-gradient(135deg, #1e3c72, #2a5298)' 
+    },
+    { 
+        emri: 'Lindja', 
+        koha: '07:05', 
+        ikona: 'fa-sun-range', 
+        color: '#F5A623',    // Portokalli e artë
+        gradient: 'linear-gradient(135deg, #ff9966, #ff5e62)' 
+    },
+    { 
+        emri: 'Dreka', 
+        koha: '11:48', 
+        ikona: 'fa-sun-bright', 
+        color: '#FFD200',    // E verdhë e fortë
+        gradient: 'linear-gradient(135deg, #fceeb5, #f5d020)' 
+    },
+    { 
+        emri: 'Ikindia', 
+        koha: '14:12', 
+        ikona: 'fa-cloud-sun-rays', 
+        color: '#D0021B',    // E kuqe e ngrohtë
+        gradient: 'linear-gradient(135deg, #feb47b, #ff7e5f)' 
+    },
+    { 
+        emri: 'Akshami', 
+        koha: '16:21', 
+        ikona: 'fa-mountain-sun', 
+        color: '#9013FE',    // Vjollcë perëndimi
+        gradient: 'linear-gradient(135deg, #6a11cb, #2575fc)' 
+    },
+    { 
+        emri: 'Jacia', 
+        koha: '17:54', 
+        ikona: 'fa-moon-stars', 
+        color: '#2C3E50',    // Blu nate
+        gradient: 'linear-gradient(135deg, #0f2027, #2c5364)' 
+    }
+];
+
+        // Shembull logjike
+const cardHtml = `
+    <div class="card" style="background: ${vakti.gradient}; border-left: 5px solid ${vakti.color}">
+        <i class="fas ${vakti.ikona}"></i>
+        <h3>${vakti.emri}</h3>
+        <p>${vakti.koha}</p>
+    </div>
+`;
         
        // Zëvendëso funksionin toggleMenu aktual me këtë
 function toggleMenu() {
@@ -577,5 +622,6 @@ function sendImpulsiveNotification(emri) {
     </script>
 </body>
 </html>
+
 
 
