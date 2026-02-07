@@ -687,13 +687,13 @@ function openLibrary(kategoria) {
         rendesia.innerText = "Mësimi i tyre është shkak për Xhenet";
         icon.className = "fa-solid fa-star-and-crescent text-3xl text-amber-500";
         content.innerHTML = `
-            <div class="grid grid-cols-2 gap-2 text-[12px]">
-                <div class="bg-white/5 p-2 rounded-lg">1. Er-Rahman</div>
-                <div class="bg-white/5 p-2 rounded-lg">2. Er-Rahim</div>
-                <div class="bg-white/5 p-2 rounded-lg">3. El-Melik</div>
-                <div class="bg-white/5 p-2 rounded-lg">4. El-Kuddus</div>
-                <div class="bg-white/5 p-2 rounded-lg">5. Es-Selam</div>
-                <div class="bg-white/5 p-2 rounded-lg">...dhe të tjerët.</div>
+            <div class="grid grid-cols-2 gap-2 text-[11px] text-left">
+                <div class="bg-white/5 p-2 rounded-lg border border-white/5">1. Er-Rahman</div>
+                <div class="bg-white/5 p-2 rounded-lg border border-white/5">2. Er-Rahim</div>
+                <div class="bg-white/5 p-2 rounded-lg border border-white/5">3. El-Melik</div>
+                <div class="bg-white/5 p-2 rounded-lg border border-white/5">4. El-Kuddus</div>
+                <div class="bg-white/5 p-2 rounded-lg border border-white/5">5. Es-Selam</div>
+                <div class="bg-white/10 p-2 rounded-lg border border-emerald-500/20 text-center col-span-2">Dhe 94 tjerë...</div>
             </div>
         `;
     } else if (kategoria === 'duate') {
@@ -721,6 +721,7 @@ function openLibrary(kategoria) {
 
 </body>
 </html>
+
 
 
 
