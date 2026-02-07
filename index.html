@@ -27,86 +27,181 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
-        
+ <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
 
+    :root {
+        --primary: #10b981;
+        --bg: #020617;
+        --glass: rgba(255, 255, 255, 0.03);
+        --border: rgba(255, 255, 255, 0.08);
+        --neon-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+    }
 
-/* Pamja impulsive kur hyn vakti */
-.vakt-impulse {
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%) !important;
-    border: 2px solid #10b981 !important;
-    box-shadow: 0 0 40px rgba(16, 185, 129, 0.4) !important;
-    animation: pulseBorder 1.5s infinite !important;
-    transform: scale(1.05);
-    z-index: 50;
-}
+    /* --- BAZA --- */
+    body {
+        background: var(--bg);
+        color: white;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        min-height: 100vh;
+        margin: 0;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+    }
 
-@keyframes pulseBorder {
-    0% { border-color: #10b981; }
-    50% { border-color: #ffffff; }
-    100% { border-color: #10b981; }
-}
+    /* --- PROGRESS RING (NEON) --- */
+    .progress-container {
+        position: relative;
+        width: 220px;
+        height: 220px;
+        margin: 2rem auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
+    #progress-bar {
+        stroke-dasharray: 596.9;
+        stroke-dashoffset: 596.9;
+        transition: stroke-dashoffset 1s linear;
+        stroke-linecap: round;
+        filter: drop-shadow(0 0 8px var(--primary));
+    }
 
+    .progress-bg {
+        stroke: rgba(255, 255, 255, 0.05);
+    }
 
-        :root {
-            --primary: #10b981;
-            --bg: #020617;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
-        }
+    /* --- VAKT CARDS (GLASSMORPISM) --- */
+    .glass-card {
+        background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+        border-radius: 2rem;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
 
-        body {
-            background: var(--bg);
-            color: white;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -webkit-tap-highlight-color: transparent;
-        }
+    .vakt-card {
+        position: relative;
+        padding: 1.5rem 1rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 120px;
+    }
 
-        .glass-card {
-            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            border-radius: 2rem;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+    /* Kur vakti është aktiv (JavaScript shton klasën .active) */
+    .vakt-card.active {
+        border: none !important;
+        transform: scale(1.05);
+    }
 
-        .vakt-card { position: relative; padding: 1.5rem 1rem; text-align: center; overflow: hidden; }
-        .vakt-card.active { border-color: var(--primary); background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.1), transparent); }
-        
-        .vakt-icon-container {
-            width: 45px; height: 45px; margin: 0 auto 0.75rem;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 1rem; background: rgba(255,255,255,0.03); transition: 0.3s;
-        }
-        .vakt-icon-container i { font-size: 1.3rem; color: rgba(255,255,255,0.2); }
-        .active .vakt-icon-container { background: var(--primary); box-shadow: 0 0 20px var(--primary); }
-        .active .vakt-icon-container i { color: #020617 !important; }
+    .vakt-card.active * {
+        color: white !important;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
 
-     /* Zëvendëso bllokun ZENITH MENU me këtë */
-.menu-trigger { position: fixed; top: 2.5rem; right: 1.5rem; z-index: 2000; padding: 12px; background: var(--glass); border-radius: 1.2rem; border: 1px solid var(--border); cursor: pointer; }
-.burger-line { width: 22px; height: 1.5px; background: var(--primary); margin: 5px 0; transition: 0.4s; border-radius: 10px; }
-.open .line-1 { transform: translateY(6.5px) rotate(45deg); }
-.open .line-2 { opacity: 0; }
-.open .line-3 { transform: translateY(-6.5px) rotate(-45deg); }
+    .vakt-icon-container {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 1rem;
+        background: rgba(255,255,255,0.03);
+        transition: 0.3s;
+    }
 
-#full-menu { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(50px); z-index: 1999; display: flex; flex-direction: column; justify-content: center; padding: 3rem; visibility: hidden; opacity: 0; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); }
-#full-menu.active { visibility: visible; opacity: 1; }
+    .active .vakt-icon-container {
+        background: rgba(255,255,255,0.2);
+        box-shadow: 0 0 15px rgba(255,255,255,0.3);
+    }
 
-.menu-link { 
-    font-size: 2.5rem; font-weight: 900; margin: 0.8rem 0; 
-    display: flex; align-items: center; gap: 1.5rem; 
-    color: rgba(255,255,255,0.3); transition: 0.4s; 
-    text-decoration: none; letter-spacing: -1px; 
-}
-.menu-link i { font-size: 1.8rem; color: var(--primary); opacity: 0.5; }
-.menu-link.active-page { color: white; }
-.menu-link.active-page i { opacity: 1; filter: drop-shadow(0 0 8px var(--primary)); }
-.menu-link:hover { color: white; transform: translateX(10px); }
-    </style>
+    /* --- EFEKTI IMPULSIV (FOCUS MODE) --- */
+    .vakt-impulse {
+        animation: pulseGlow 2s infinite ease-in-out !important;
+        z-index: 100;
+        border: 2px solid var(--primary) !important;
+    }
+
+    @keyframes pulseGlow {
+        0% { transform: scale(1.05); box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+        50% { transform: scale(1.1); box-shadow: 0 0 50px rgba(16, 185, 129, 0.7); }
+        100% { transform: scale(1.05); box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+    }
+
+    /* --- MENU --- */
+    .menu-trigger {
+        position: fixed;
+        top: 2.5rem;
+        right: 1.5rem;
+        z-index: 2000;
+        padding: 12px;
+        background: var(--glass);
+        border-radius: 1.2rem;
+        border: 1px solid var(--border);
+        cursor: pointer;
+    }
+
+    .burger-line {
+        width: 22px;
+        height: 1.5px;
+        background: var(--primary);
+        margin: 5px 0;
+        transition: 0.4s;
+    }
+
+    #full-menu {
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 6, 23, 0.98);
+        backdrop-filter: blur(50px);
+        -webkit-backdrop-filter: blur(50px);
+        z-index: 1999;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 3rem;
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    #full-menu.active {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .menu-link {
+        font-size: 2.5rem;
+        font-weight: 900;
+        margin: 0.8rem 0;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        color: rgba(255,255,255,0.3);
+        text-decoration: none;
+        transition: 0.4s;
+    }
+
+    .menu-link:hover, .menu-link.active-page {
+        color: white;
+        transform: translateX(10px);
+    }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 480px) {
+        .vakt-card { padding: 1rem 0.5rem; min-height: 110px; }
+        .menu-link { font-size: 1.8rem; }
+        .progress-container { width: 180px; height: 180px; }
+    }
+
+    .opacity-30 { opacity: 0.3; filter: grayscale(0.8); }
+</style>
 </head>
 
 <div id="intro-screen" class="fixed inset-0 z-[5000] flex flex-col items-center justify-center bg-[#020617] transition-all duration-1000">
@@ -538,6 +633,7 @@
 
 </body>
 </html>
+
 
 
 
