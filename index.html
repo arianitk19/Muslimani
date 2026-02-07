@@ -309,39 +309,16 @@
     </main>
 
     <script>
-        const vaktetRaw = [
-    { emri: 'Sabahu', koha: '05:30', ikona: 'fa-kaaba', tema: 'sabahu' },
-    { emri: 'Lindja', koha: '07:05', ikona: 'fa-sun-low', tema: 'lindja' },
-    { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun', tema: 'dreka' },
-    { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud-sun-inv', tema: 'ikindia' },
-    { emri: 'Akshami', koha: '16:21', ikona: 'fa-mountain-sun', tema: 'akshami' },
-    { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon', tema: 'jacia' }
-];
-
-// Funksioni që gjeneron kartat në ekran
-function shfaqVaktet() {
-    const container = document.getElementById('prayer-container'); // Sigurohu që ke një div me këtë ID
-    container.innerHTML = ''; 
-
-    vaktetRaw.forEach(vakti => {
-        const kartaHTML = `
-            <div class="prayer-card ${vakti.tema}">
-                <div class="card-glass"></div>
-                <div class="card-content">
-                    <i class="fa-solid ${vakti.ikona} prayer-icon"></i>
-                    <div class="prayer-details">
-                        <span class="prayer-name">${vakti.emri}</span>
-                        <span class="prayer-time">${vakti.koha}</span>
-                    </div>
-                </div>
-            </div>
-        `;
-        container.innerHTML += kartaHTML;
-    });
-}
-
-shfaqVaktet();
-
+        // Korigjuar ikonat që të funksionojnë (Versioni FREE)
+        const vaktetRaw = [
+            { emri: 'Sabahu', koha: '05:30', ikona: 'fa-cloud-sun' },
+            { emri: 'Lindja', koha: '07:05', ikona: 'fa-sun' },
+            { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun-bright' }, // FontAwesome do e zevendesoje automatikisht me fa-sun
+            { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud' },
+            { emri: 'Akshami', koha: '16:21', ikona: 'fa-mountain-sun' },
+            { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon' }
+        ];
+        
        // Zëvendëso funksionin toggleMenu aktual me këtë
 function toggleMenu() {
     document.querySelector('.menu-trigger').classList.toggle('open');
@@ -600,4 +577,5 @@ function sendImpulsiveNotification(emri) {
     </script>
 </body>
 </html>
+
 
