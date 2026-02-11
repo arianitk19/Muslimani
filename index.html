@@ -683,50 +683,147 @@ function openLibrary(kategoria) {
     const rendesia = document.getElementById('sure-rendesia');
     const icon = document.getElementById('sure-main-icon');
 
-    // Pastrojmë përmbajtjen paraprake
-    content.innerHTML = "";
-    content.innerText = "";
+    content.innerHTML = ""; 
 
     if (kategoria === 'emrat') {
         title.innerText = "99 Emrat e Allahut";
-        rendesia.innerText = "Mësimi i tyre është shkak për Xhenet";
+        rendesia.innerText = "Transmetohet se kush i mëson ata, hyn në Xhenet.";
         icon.className = "fa-solid fa-star-and-crescent text-3xl text-amber-500";
+        
+        const emrat = [
+            {a: "Allah", s: "Zoti i Vetëm"}, {a: "Er-Rahman", s: "I Gjithëmëshirshmi"}, {a: "Er-Rahim", s: "Mëshirëploti"},
+            {a: "El-Melik", s: "Sunduesi"}, {a: "El-Kuddus", s: "I Pastërti"}, {a: "Es-Selam", s: "Paqedënësi"},
+            {a: "El-Mu'min", s: "Siguruesi"}, {a: "El-Muhejmin", s: "Mbikëqyrësi"}, {a: "El-Aziz", s: "I Fuqishmi"},
+            {a: "El-Xhebbar", s: "I Gjithëfuqishmi"}, {a: "El-Mutekebbir", s: "I Madhërishmi"}, {a: "El-Khalik", s: "Krijuesi"},
+            {a: "El-Bari'", s: "Filluesi"}, {a: "El-Musawwir", s: "Formësuesi"}, {a: "El-Gaffar", s: "Gjithëfalësi"},
+            {a: "El-Kahhar", s: "Mposhtësi"}, {a: "El-Wehhab", s: "Dhuruesi"}, {a: "Er-Rezzak", s: "Furnizuesi"},
+            {a: "El-Fettah", s: "Zgjidhësi"}, {a: "El-Alim", s: "I Gjithëdituri"}, {a: "El-Kabid", s: "Shtrënguesi"},
+            {a: "El-Basit", s: "Çliruesi"}, {a: "El-Khafid", s: "Ulësi"}, {a: "Er-Rafi'", s: "Lartësuesi"},
+            {a: "El-Mu'izz", s: "Nderuesi"}, {a: "El-Mudhill", s: "Përulësi"}, {a: "Es-Semi'", s: "Dëgjuesi"},
+            {a: "El-Basir", s: "Vëzhguesi"}, {a: "El-Hekem", s: "Gjykatësi"}, {a: "El-Adl", s: "I Drejti"},
+            {a: "El-Latif", s: "I Buti"}, {a: "El-Khabir", s: "I Njohuri"}, {a: "El-Halim", s: "I Buti"},
+            {a: "El-Adhim", s: "Madhështori"}, {a: "El-Gafur", s: "Falësi"}, {a: "Esh-Shekur", s: "Mirënjohësi"},
+            {a: "El-Alijj", s: "I Larti"}, {a: "El-Kebir", s: "I Madhi"}, {a: "El-Hafidh", s: "Ruajtësi"},
+            {a: "El-Mukit", s: "Ushqyesi"}, {a: "El-Hasib", s: "Llogaritësi"}, {a: "El-Xhelil", s: "I Nderuari"},
+            {a: "El-Kerim", s: "Bujari"}, {a: "Er-Rakib", s: "Mbikëqyrësi"}, {a: "El-Muxhib", s: "Lutjepranuesi"},
+            {a: "El-Wasi'", s: "Gjerëpërfshirësi"}, {a: "El-Hakim", s: "I Urti"}, {a: "El-Wedud", s: "I Dashuri"},
+            {a: "El-Mexhid", s: "Lavdiploti"}, {a: "El-Ba'ith", s: "Ringjallësi"}, {a: "Esh-Shehid", s: "Dëshmitari"},
+            {a: "El-Hakk", s: "I Vërteti"}, {a: "El-Wekil", s: "Besniku"}, {a: "El-Kawijj", s: "I Forti"},
+            {a: "El-Metin", s: "I Patunduri"}, {a: "El-Welijj", s: "Mbrojtësi"}, {a: "El-Hamid", s: "I Lavdëruari"},
+            {a: "El-Muhsi", s: "Regjistruesi"}, {a: "El-Mubdi'", s: "Nisësi"}, {a: "El-Mu'id", s: "Rikthyesi"},
+            {a: "El-Muhji", s: "Jetëdhënësi"}, {a: "El-Mumit", s: "Vdekjeprurësi"}, {a: "El-Hajj", s: "I Gjalli"},
+            {a: "El-Kajjum", s: "I Vetëqëndrueshmi"}, {a: "El-Waxhid", s: "Gjetësi"}, {a: "El-Maxhid", s: "I Nderuar"},
+            {a: "El-Wahid", s: "I Tekti"}, {a: "Es-Samed", s: "I Nevojshmi"}, {a: "El-Kadir", s: "I Fuqishmi"},
+            {a: "El-Muktedir", s: "I Plotfuqishmi"}, {a: "El-Mukaddim", s: "Përparësuesi"}, {a: "El-Mu'akhkhir", s: "Prapambetësi"},
+            {a: "El-Ewwel", s: "I Pari"}, {a: "El-Akhir", s: "I Fundit"}, {a: "Edh-Dhahir", s: "I Dukshmi"},
+            {a: "El-Batin", s: "I Fshehti"}, {a: "El-Wali", s: "Pushtetmbajtësi"}, {a: "El-Mute'ali", s: "Më i Larti"},
+            {a: "El-Berr", s: "Mirëbërësi"}, {a: "Et-Tewwab", s: "Pendimpranuesi"}, {a: "El-Muntekim", s: "Ndëshkuesi"},
+            {a: "El-Afuww", s: "Mëshiruesi"}, {a: "Er-Ra'uf", s: "I Dhimbshuri"}, {a: "Malikul-Mulk", s: "Sunduesi i Sundimit"},
+            {a: "Dhul-Xhelali wel-Ikram", s: "Zoti i Madhështisë"}, {a: "El-Muksit", s: "Asnjëanësi"}, {a: "El-Xhami'", s: "Bashkuesi"},
+            {a: "El-Ganijj", s: "I Pasuri"}, {a: "El-Mugni", s: "Pasuruesi"}, {a: "El-Mani'", s: "Penguesi"},
+            {a: "Ed-Darr", s: "Dëmtuesi"}, {a: "En-Nafi'", s: "Dobi-sjellësi"}, {a: "En-Nur", s: "Drita"},
+            {a: "El-Hadi", s: "Udhëzuesi"}, {a: "El-Bedi'", s: "Shpikësi"}, {a: "El-Baki", s: "I Amshuesmi"},
+            {a: "El-Warith", s: "Trashëguesi"}, {a: "Er-Reshid", s: "Rrugëzuesi"}, {a: "Es-Sabur", s: "Durimtari"}
+        ];
+
         content.innerHTML = `
-            <div class="grid grid-cols-2 gap-2 text-[11px]">
-                <div class="bg-white/5 p-2 rounded-lg border border-white/5 text-center">1. Er-Rahman</div>
-                <div class="bg-white/5 p-2 rounded-lg border border-white/5 text-center">2. Er-Rahim</div>
-                <div class="bg-white/5 p-2 rounded-lg border border-white/5 text-center">3. El-Melik</div>
-                <div class="bg-white/5 p-2 rounded-lg border border-white/5 text-center">4. El-Kuddus</div>
-                <div class="bg-white/5 p-2 rounded-lg border border-white/5 text-center">5. Es-Selam</div>
-                <div class="bg-white/10 p-2 rounded-lg border border-emerald-500/20 text-center col-span-2 italic">Dhe të tjerët...</div>
+            <div class="grid grid-cols-2 gap-2 max-h-[60vh] overflow-y-auto pr-1 custom-scroll">
+                ${emrat.map((e, i) => `
+                    <div class="bg-white/5 p-2 rounded-lg border border-white/5 text-center shadow-sm">
+                        <div class="text-[10px] text-amber-500/50 font-mono">${i+1}</div>
+                        <div class="text-[13px] font-bold text-white mb-1">${e.a}</div>
+                        <div class="text-[9px] text-gray-400 uppercase tracking-tighter">${e.s}</div>
+                    </div>
+                `).join('')}
             </div>
         `;
+
     } else if (kategoria === 'duate') {
-        title.innerText = "Lutja e Mëngjesit";
-        rendesia.innerText = "Mbrojtje nga çdo e keqe";
+        title.innerText = "Lutjet (Duatë)";
+        rendesia.innerText = "Lutja është arma e besimtarit";
         icon.className = "fa-solid fa-hands-praying text-3xl text-blue-500";
-        content.innerText = "Bismil-lahil-ledhi la jedur-ru me'as-mihi shej'un fil-erdi we la fis-semai we Huwes-Semi'ul-'Alim.";
+        
+        const duate = [
+            { t: "Mëngjesi & Mbrëmja", l: "Bismil-lahil-ledhi la jedur-ru me'as-mihi shej'un fil-erdi we la fis-semai we Huwes-Semi'ul-'Alim." },
+            { t: "Kur zgjohesh nga gjumi", l: "El-hamdu lil-lahil-ledhi ahjana ba'de ma ematena we ilejhin-nushur." },
+            { t: "Para se të flesh", l: "Bismik-Allahumme emutu we ahja." },
+            { t: "Kur hyn në shtëpi", l: "Bismil-lahi welexhna, we bismil-lahi kharexhna, we ala Rabbina tewekkelna." },
+            { t: "Për prindërit", l: "Rabbi-rgfir li we liwalidejje we lil-mu'minine jewme jekumul-hisab." },
+            { t: "Kërkimi i faljes", l: "Estagfirul-lah el-Adhim we etubu ilejh." }
+        ];
+
+        content.innerHTML = `
+            <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+                ${duate.map(d => `
+                    <div class="bg-white/5 p-3 rounded-xl border-l-4 border-blue-500/50">
+                        <p class="text-[10px] font-bold text-blue-400 uppercase mb-1">${d.t}</p>
+                        <p class="text-[13px] italic leading-relaxed text-gray-200">${d.l}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
     } else if (kategoria === 'suret') {
         title.innerText = "Suret e Zgjedhura";
-        rendesia.innerText = "Për lexim ditor";
+        rendesia.innerText = "Vlerat e disa sureve për lexim ditor";
         icon.className = "fa-solid fa-book-quran text-3xl text-emerald-500";
-        content.innerText = "Këtu mund të listoni suret si Jasin, El-Mulk, dhe sureat e shkurtra për namaz.";
+        
+        const vlerat = [
+            { s: "El-Fatiha", v: "Hapja e librit, shtylla e namazit dhe shërim." },
+            { s: "Ajeti Kursij", v: "Mbrojtje nga djajtë nëse lexohet para gjumit." },
+            { s: "El-Kehf", v: "Dritë mes dy të premteve (lexohet ditën e Xhuma)." },
+            { s: "El-Mulk", v: "Ndërhyn për lexuesin derisa ta shpëtojë nga dënimi i varrit." },
+            { s: "El-Ihlas", v: "Vlen sa 1/3 e Kuranit (Sinqeriteti ndaj Allahut)." },
+            { s: "Felek & Nas", v: "Mbrojtje nga syri i keq, magjia dhe vesveset." }
+        ];
+
+        content.innerHTML = `
+            <div class="space-y-3">
+                ${vlerat.map(item => `
+                    <div class="flex items-start gap-3 bg-white/5 p-3 rounded-lg border border-emerald-500/10">
+                        <div class="bg-emerald-500/20 text-emerald-400 p-2 rounded text-xs font-bold">${item.s}</div>
+                        <p class="text-[12px] text-gray-300 leading-tight">${item.v}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
     } else if (kategoria === 'hadithe') {
-        title.innerText = "Hadithi i Ditës";
-        rendesia.innerText = "Udhëzim profetik";
+        title.innerText = "Urtësi Profetike";
+        rendesia.innerText = "Mësime nga jeta e Profetit (savs)";
         icon.className = "fa-solid fa-quote-left text-3xl text-purple-500";
-        content.innerText = "Veprat vlerësohen sipas qëllimit (Nijetit). Çdo njeri do të shpërblehet sipas asaj që ka pasur për qëllim.";
+        
+        const hadithet = [
+            "Më i miri prej jush është ai që e mëson Kuranin dhe ua mëson të tjerëve.",
+            "Nuk beson asnjëri prej jush derisa të dëshirojë për vëllanë e tij atë që dëshiron për vete.",
+            "Veprat vlerësohen sipas qëllimit (nijetit).",
+            "Buzëqeshja në fytyrën e vëllait tënd është sadaka.",
+            "Kush beson Allahun dhe Ditën e Fundit, le të flasë mirë ose le të heshtë.",
+            "Musliman i mirë është ai, nga gjuha dhe dora e të cilit janë të qetë muslimanët tjerë."
+        ];
+
+        content.innerHTML = `
+            <div class="space-y-4">
+                ${hadithet.map(h => `
+                    <div class="bg-purple-500/5 p-4 rounded-2xl border-b border-purple-500/20 italic text-sm text-center relative shadow-inner">
+                        <span class="text-3xl text-purple-500/10 absolute top-0 left-2 font-serif">"</span>
+                        ${h}
+                        <span class="text-3xl text-purple-500/10 absolute bottom-0 right-2 font-serif">"</span>
+                    </div>
+                `).join('')}
+            </div>
+        `;
     }
 
     modal.style.display = 'flex';
     if (navigator.vibrate) navigator.vibrate(50);
-
 }
         
 </script>
 
 </body>
 </html>
+
 
 
 
