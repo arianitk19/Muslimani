@@ -251,115 +251,100 @@
         <footer class="text-center py-12 opacity-30"><p class="text-[9px] font-black uppercase tracking-[0.5em]">Ratkoci Digital • 2026</p></footer>
     </main>
 
-    <script>
-        // --- SINKRONIZIMI DHE LOGJIKA ---
-        function updateGlobalSetting(key, value) {
-            localStorage.setItem('ratkoc_' + key, value);
-            applyGlobalSettings();
-        }
-
-        function applyGlobalSettings() {
-            const savedSize = localStorage.getItem('ratkoc_fontSize') || '16';
-            const savedTheme = localStorage.getItem('ratkoc_theme') || '#10b981';
-            const savedOffset = localStorage.getItem('zenith_offset') || '0';
-
-            document.body.style.fontSize = savedSize + 'px';
-            document.documentElement.style.setProperty('--primary', savedTheme);
-            
-            const label = document.getElementById('font-size-label');
-            if(label) label.innerText = savedSize + 'px';
-            
-            document.querySelectorAll('.text-emerald-500').forEach(el => el.style.color = savedTheme);
-            const slider = document.getElementById('calibrationSlider');
-            if(slider) slider.value = savedOffset;
-            const calibVal = document.getElementById('calib-val');
-            if(calibVal) calibVal.innerText = (parseInt(savedOffset) > 0 ? "+" : "") + savedOffset + " min";
-        }
-
-        function showZenithNotification(vakti) {
-            const overlay = document.getElementById('notif-overlay');
-            const sound = document.getElementById('notif-sound');
-            const mode = localStorage.getItem('ratkoc_notif_mode') || 'none';
-
-            if(vakti === 'Sistemi') {
-                document.getElementById('notif-type').innerText = "Konfigurimi";
-                document.getElementById('notif-message').innerText = "Cilësimet u ruajtën me sukses";
-            }
-
-            if(mode === 'adhan' && sound) {
-                sound.currentTime = 0;
-                sound.play().catch(() => {});
-            }
-
-            overlay.classList.add('show');
-            if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
-            setTimeout(() => overlay.classList.remove('show'), 4000);
-        }
-
-        function toggleMenu() {
-            document.querySelector('.menu-trigger').classList.toggle('open');
-            document.getElementById('full-menu').classList.toggle('active');
-        }
-
-        // Funksionet e tjera mbeten identike (getUserLocation, updateRamadanCountdown, etj.)
-        function updateCalibration(val) {
-            localStorage.setItem('zenith_offset', val);
-            document.getElementById('calib-val').innerText = (parseInt(val) > 0 ? "+" : "") + val + " min";
-        }
-
-        function updateRamadanCountdown() {
-            const ramadanDate = new Date('February 18, 2026').getTime();
-            const now = new Date().getTime();
-            const daysLeft = Math.floor((ramadanDate - now) / (1000 * 60 * 60 * 24));
-            if (daysLeft > 0) {
-                document.getElementById('days-to-ramadan').innerText = daysLeft + " Ditë";
-                document.getElementById('ramadan-progress').style.width = Math.max(0, (1 - (daysLeft / 355)) * 100) + "%";
-            }
-        }
-
-        async function updateNotifMode(mode) {
-            localStorage.setItem('ratkoc_notif_mode', mode);
-            if (mode !== 'none') {
-                await Notification.requestPermission();
-            }
-            refreshNotifUI();
-        }
-
-        function refreshNotifUI() {
-            const mode = localStorage.getItem('ratkoc_notif_mode') || 'none';
-            document.querySelectorAll('.notif-btn').forEach(b => b.classList.remove('notif-active'));
-            const btn = document.getElementById('notif-' + mode);
-            if(btn) btn.classList.add('notif-active');
-        }
-
-        function changeAPIMethod(val) {
-            localStorage.setItem('zenith_api_method', val);
-            showZenithNotification('Sistemi');
-        }
-
-        function getUserLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(async pos => {
-                    const lat = pos.coords.latitude;
-                    const lon = pos.coords.longitude;
-                    document.getElementById('user-coords').innerText = `${lat.toFixed(4)}° N, ${lon.toFixed(4)}° E`;
-                    try {
-                        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
-                        const data = await res.json();
-                        document.getElementById('user-city').innerText = data.address.city || data.address.town || "Lokacioni Juaj";
-                    } catch (e) { document.getElementById('user-city').innerText = "Lokacioni u Gjet"; }
+   <script>
+    // --- KONFIGURIMI STRIKT PD (PERKUJTUESI DITOR) ---
+    const PD_STORE = {
+        save(key, val) {
+            localStorage.setItem('pd_' + key, val);
+            // Njofton të gjitha faqet e hapura (index.html)
+            window.dispatchEvent(new Event('storage'));
+            // Sinkronizon me Service Worker për njoftime në sfond
+            this.syncWorker();
+        },
+        get(key, def) {
+            return localStorage.getItem('pd_' + key) || def;
+        },
+        syncWorker() {
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                navigator.serviceWorker.controller.postMessage({
+                    type: 'UPDATE_CONFIG',
+                    config: {
+                        mode: this.get('notif_mode', 'none'),
+                        offset: this.get('offset', '0')
+                    }
                 });
             }
         }
+    };
 
-        window.addEventListener('DOMContentLoaded', () => {
-            applyGlobalSettings();
+    function applyGlobalSettings() {
+        const theme = PD_STORE.get('theme', '#10b981');
+        const fontSize = PD_STORE.get('fontSize', '16');
+        
+        document.body.style.fontSize = fontSize + 'px';
+        document.documentElement.style.setProperty('--primary', theme);
+        
+        const label = document.getElementById('font-size-label');
+        if(label) label.innerText = fontSize + 'px';
+        
+        // Përditëso UI e kalibrimit
+        const offset = PD_STORE.get('offset', '0');
+        const calibVal = document.getElementById('calib-val');
+        if(calibVal) calibVal.innerText = (parseInt(offset) > 0 ? "+" : "") + offset + " min";
+    }
+
+    function updateGlobalSetting(key, value) {
+        PD_STORE.save(key, value);
+        applyGlobalSettings();
+    }
+
+    function updateCalibration(val) {
+        PD_STORE.save('offset', val);
+        applyGlobalSettings();
+    }
+
+    async function updateNotifMode(mode) {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+            PD_STORE.save('notif_mode', mode);
             refreshNotifUI();
-            getUserLocation();
-            updateRamadanCountdown();
-            const savedMethod = localStorage.getItem('zenith_api_method') || '13';
-            if(document.getElementById('apiMethod')) document.getElementById('apiMethod').value = savedMethod;
-        });
-    </script>
+            showZenithNotification('Sistemi');
+        } else {
+            console.warn("Njoftimet nuk u lejuan.");
+        }
+    }
+
+    function showZenithNotification(tipi) {
+        const overlay = document.getElementById('notif-overlay');
+        if(!overlay) return;
+
+        if(tipi === 'Sistemi') {
+            document.getElementById('notif-type').innerText = "Sistemi PD";
+            document.getElementById('notif-message').innerText = "Cilësimet u sinkronizuan me sukses";
+        }
+
+        overlay.classList.add('show');
+        if(navigator.vibrate) navigator.vibrate([50, 30, 50]);
+        setTimeout(() => overlay.classList.remove('show'), 3000);
+    }
+
+    // Funksione Ndihmëse
+    function refreshNotifUI() {
+        const mode = PD_STORE.get('notif_mode', 'none');
+        document.querySelectorAll('.notif-btn').forEach(b => b.classList.remove('notif-active'));
+        const activeBtn = document.getElementById('notif-' + mode);
+        if(activeBtn) activeBtn.classList.add('notif-active');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        applyGlobalSettings();
+        refreshNotifUI();
+        // Vendos metodën API në select nëse ekziston
+        const savedMethod = PD_STORE.get('api_method', '13');
+        const apiSelect = document.getElementById('apiMethod');
+        if(apiSelect) apiSelect.value = savedMethod;
+    });
+</script>
 </body>
 </html>
+
