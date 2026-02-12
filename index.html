@@ -26,7 +26,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
- <style>
+<style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
 
     :root {
@@ -68,7 +68,7 @@
 
     .progress-bg { stroke: rgba(255, 255, 255, 0.05); }
 
-    /* --- GRIDI I RI I NAMAZIT (RIKONSTRUKTIMI) --- */
+    /* --- GRIDI I NAMAZIT (RIKONSTRUKTIMI) --- */
     #vaktet-container {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -78,40 +78,35 @@
         margin: 0 auto;
     }
 
-    /* --- KARTA PREMIUM (GËRSHETIM I GLASS + NEW DESIGN) --- */
+    /* --- VAKT CARDS (STILI YT I AVANCUAR) --- */
     .vakt-card {
         position: relative;
         padding: 1.8rem 1rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 120px;
         background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border: 1px solid var(--border);
         border-radius: 2.2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        overflow: hidden;
     }
 
-    /* Vakti Aktiv me efektin Neon që kërkuat */
     .vakt-card.active {
-        transform: scale(1.05) translateY(-5px);
-        border: 1px solid var(--primary);
+        transform: scale(1.05);
+        border: 2px solid var(--primary) !important;
         box-shadow: var(--neon-shadow);
+        z-index: 10;
     }
 
-    .active-bg {
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        opacity: 0;
-        transition: 0.5s;
+    .vakt-card.past {
+        opacity: 0.3;
+        filter: grayscale(1);
     }
-
-    .active .active-bg { opacity: 0.3; }
-
-    .vakt-card.past { opacity: 0.3; filter: grayscale(1); }
 
     .vakt-name {
         font-size: 0.85rem;
@@ -126,6 +121,25 @@
         font-size: 1.8rem;
         font-weight: 800;
         color: white;
+    }
+
+    .vakt-icon-container {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 1rem;
+        background: rgba(255,255,255,0.03);
+        font-size: 1.2rem;
+        color: var(--primary);
+    }
+
+    .active .vakt-icon-container {
+        background: var(--primary);
+        color: white;
+        box-shadow: 0 0 15px var(--primary);
     }
 
     /* --- MENU DHE BURGER (I MBAYTUR PLOTËSISHT) --- */
@@ -167,8 +181,9 @@
     #full-menu.active { visibility: visible; opacity: 1; }
 
     @media (max-width: 480px) {
-        #vaktet-container { gap: 0.8rem; padding: 1rem; }
+        #vaktet-container { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; padding: 1rem; }
         .vakt-time { font-size: 1.5rem; }
+        .progress-container { width: 180px; height: 180px; }
     }
 </style>
 </head>
@@ -419,53 +434,53 @@
     </main>
 
     <script>
-   // --- LOGJIKA E RENDERIMIT TË VAKTEVE ---
+ const vaktetRaw = [
+    { emri: 'Sabahu', koha: '05:30', ikona: 'fa-cloud-sun', gradient: 'linear-gradient(135deg, #1e3c72, #2a5298)' },
+    { emri: 'Lindja', koha: '07:05', ikona: 'fa-sun', gradient: 'linear-gradient(135deg, #ff9966, #ff5e62)' },
+    { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun', gradient: 'linear-gradient(135deg, #4facfe, #00f2fe)' },
+    { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud-sun', gradient: 'linear-gradient(135deg, #f093fb, #f5576c)' },
+    { emri: 'Akshami', koha: '16:21', ikona: 'fa-mountain-sun', gradient: 'linear-gradient(135deg, #434343, #000000)' },
+    { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon', gradient: 'linear-gradient(135deg, #0f2027, #2c5364)' }
+];
+
 function renderVaktet() {
     const container = document.getElementById('vaktet-container');
-    if (!container) return;
+    container.innerHTML = ''; // Pastro containerin
 
-    container.innerHTML = '';
     const tani = new Date();
-    const oraAktualeMinuta = tani.getHours() * 60 + tani.getMinutes();
+    const oraAktuale = tani.getHours() * 60 + tani.getMinutes();
 
     vaktetRaw.forEach((vakt, index) => {
-        const [h, m] = vakt.koha.split(':').map(Number);
-        const vaktMinuta = h * 60 + m;
+        const [ora, min] = vakt.koha.split(':').map(Number);
+        const vaktMinuta = ora * 60 + min;
+        
+        let statusClass = '';
+        let showGradient = '';
 
-        let statusi = '';
-        if (vaktMinuta < oraAktualeMinuta) {
-            statusi = 'past';
-        } else if (/* Logjika për vaktin aktiv mund të shtohet këtu */ index === gjejVaktinAktiv()) {
-            statusi = 'active';
-        }
-
+        // Përcaktimi i statusit (Strikt)
+        // Shënim: Kjo është logjikë bazë, duhet lidhur me funksionin tuaj të vërtetë të vaktit aktiv
+        if (vaktMinuta < oraAktuale) {
+            statusClass = 'past';
+        } 
+        
+        // Krijimi i kartës
         const card = document.createElement('div');
-        card.className = `vakt-card ${statusi}`;
+        card.className = `vakt-card ${statusClass}`;
         card.innerHTML = `
-            <div class="vakt-icon-container">
+            <div class="card-bg" style="background: ${vakt.gradient}; display: none;"></div>
+            <div class="vakt-icon-box">
                 <i class="fa-solid ${vakt.ikona}"></i>
             </div>
             <div class="vakt-name">${vakt.emri}</div>
             <div class="vakt-time">${vakt.koha}</div>
         `;
+        
         container.appendChild(card);
     });
 }
 
-// Funksion ndihmës për të gjetur cilin vakt duhet të ndriçojmë
-function gjejVaktinAktiv() {
-    const tani = new Date();
-    const min = tani.getHours() * 60 + tani.getMinutes();
-    for (let i = 0; i < vaktetRaw.length; i++) {
-        const [vh, vm] = vaktetRaw[i].koha.split(':').map(Number);
-        const vaktMin = vh * 60 + vm;
-        if (vaktMin > min) return i - 1; // Vakti që sapo ka hyrë
-    }
-    return vaktetRaw.length - 1;
-}
-
+// Thirrni funksionin pas ngarkimit
 document.addEventListener('DOMContentLoaded', renderVaktet);
-
 
 
         
@@ -852,6 +867,7 @@ window.addEventListener('storage', () => {
 
 </body>
 </html>
+
 
 
 
