@@ -47,7 +47,7 @@
         overflow-x: hidden;
     }
 
-    /* --- PROGRESS RING (I MBAYTUR) --- */
+    /* --- PROGRESS RING --- */
     .progress-container {
         position: relative;
         width: 220px;
@@ -68,7 +68,7 @@
 
     .progress-bg { stroke: rgba(255, 255, 255, 0.05); }
 
-    /* --- GRIDI I NAMAZIT (RIKONSTRUKTIMI) --- */
+    /* --- GRIDI I NAMAZIT --- */
     #vaktet-container {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -78,7 +78,7 @@
         margin: 0 auto;
     }
 
-    /* --- VAKT CARDS (STILI YT I AVANCUAR) --- */
+    /* --- VAKT CARDS --- */
     .vakt-card {
         position: relative;
         padding: 1.8rem 1rem;
@@ -142,7 +142,7 @@
         box-shadow: 0 0 15px var(--primary);
     }
 
-    /* --- MENU DHE BURGER (I MBAYTUR PLOTËSISHT) --- */
+    /* --- MENU TRIGGERS (KORIGJIMET) --- */
     .menu-trigger {
         position: fixed;
         top: 2.5rem;
@@ -163,11 +163,17 @@
         transition: 0.4s;
     }
 
+    /* Animacioni i X kur menuja hapet */
+    .menu-trigger.open .burger-line:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .menu-trigger.open .burger-line:nth-child(2) { opacity: 0; }
+    .menu-trigger.open .burger-line:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
     #full-menu {
         position: fixed;
         inset: 0;
         background: rgba(2, 6, 23, 0.98);
         backdrop-filter: blur(50px);
+        -webkit-backdrop-filter: blur(50px);
         z-index: 1999;
         display: flex;
         flex-direction: column;
@@ -178,12 +184,39 @@
         transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
-    #full-menu.active { visibility: visible; opacity: 1; }
+    #full-menu.active {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    /* Stili i linkeve të menusë që mungonte */
+    .menu-link {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin: 0.8rem 0;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        color: rgba(255,255,255,0.3);
+        text-decoration: none;
+        transition: 0.4s;
+    }
+
+    .menu-link:hover, .menu-link.active-page {
+        color: white;
+        transform: translateX(10px);
+    }
+
+    .menu-link i {
+        font-size: 1.5rem;
+        color: var(--primary);
+    }
 
     @media (max-width: 480px) {
         #vaktet-container { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; padding: 1rem; }
         .vakt-time { font-size: 1.5rem; }
         .progress-container { width: 180px; height: 180px; }
+        .menu-link { font-size: 1.8rem; }
     }
 </style>
 </head>
@@ -867,6 +900,7 @@ window.addEventListener('storage', () => {
 
 </body>
 </html>
+
 
 
 
