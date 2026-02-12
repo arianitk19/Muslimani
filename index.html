@@ -27,8 +27,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
-
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800;900&display=swap');
+    
     :root {
         --primary: #10b981;
         --bg: #020617;
@@ -41,182 +41,97 @@
         background: var(--bg);
         color: white;
         font-family: 'Plus Jakarta Sans', sans-serif;
-        min-height: 100vh;
-        margin: 0;
+        -webkit-tap-highlight-color: transparent;
         -webkit-font-smoothing: antialiased;
         overflow-x: hidden;
+        margin: 0;
     }
 
-    /* --- PROGRESS RING --- */
+    /* --- MENUJA (STILI YT PARAPRAK) --- */
+    .menu-trigger {
+        position: fixed; top: 2.5rem; right: 1.5rem; z-index: 2000;
+        padding: 12px; background: var(--glass); border-radius: 1.2rem; border: 1px solid var(--border);
+        cursor: pointer; backdrop-filter: blur(10px);
+    }
+    
+    .burger-line { 
+        width: 22px; height: 1.5px; background: var(--primary); 
+        margin: 5px 0; transition: 0.4s; border-radius: 10px; 
+    }
+    
+    /* Animacioni i korigjuar për linjat */
+    .open .line-1 { transform: translateY(6.5px) rotate(45deg); }
+    .open .line-2 { opacity: 0; }
+    .open .line-3 { transform: translateY(-6.5px) rotate(-45deg); }
+
+    #full-menu {
+        position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(50px);
+        z-index: 1999; display: flex; flex-direction: column; justify-content: center;
+        padding: 3rem; visibility: hidden; opacity: 0; transition: 0.5s;
+    }
+    #full-menu.active { visibility: visible; opacity: 1; }
+
+    .menu-link {
+        font-size: 2.5rem; font-weight: 700; margin: 1rem 0; display: flex; align-items: center;
+        gap: 1.5rem; color: rgba(255,255,255,0.4); transition: 0.4s; letter-spacing: -1px; text-decoration: none;
+    }
+    .menu-link i { font-size: 1.8rem; color: var(--primary); opacity: 0.5; }
+    .menu-link:hover, .menu-link.active-page { color: white; transform: translateX(10px); }
+
+    /* --- PROGRESS RING (MBETET I NJEJTE) --- */
     .progress-container {
-        position: relative;
-        width: 220px;
-        height: 220px;
-        margin: 2rem auto;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        position: relative; width: 220px; height: 220px;
+        margin: 2rem auto; display: flex; align-items: center; justify-content: center;
     }
-
     #progress-bar {
-        stroke-dasharray: 596.9;
-        stroke-dashoffset: 596.9;
-        transition: stroke-dashoffset 1s linear;
-        stroke-linecap: round;
+        stroke-dasharray: 596.9; stroke-dashoffset: 596.9;
+        transition: stroke-dashoffset 1s linear; stroke-linecap: round;
         filter: drop-shadow(0 0 8px var(--primary));
     }
-
     .progress-bg { stroke: rgba(255, 255, 255, 0.05); }
 
-    /* --- GRIDI I NAMAZIT --- */
+    /* --- GRIDI DHE KARTAT E RIKONSTRUKTUARA --- */
     #vaktet-container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1.25rem;
-        padding: 1.5rem;
-        max-width: 700px;
-        margin: 0 auto;
+        display: grid; grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem; padding: 1.5rem; max-width: 700px; margin: 0 auto;
     }
 
-    /* --- VAKT CARDS --- */
     .vakt-card {
-        position: relative;
-        padding: 1.8rem 1rem;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 120px;
-        background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border: 1px solid var(--border);
-        border-radius: 2.2rem;
+        position: relative; padding: 1.8rem 1rem; text-align: center;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        min-height: 120px; background: var(--glass); backdrop-filter: blur(20px);
+        border: 1px solid var(--border); border-radius: 2.2rem;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .vakt-card.active {
-        transform: scale(1.05);
-        border: 2px solid var(--primary) !important;
-        box-shadow: var(--neon-shadow);
-        z-index: 10;
+        transform: scale(1.05); border: 1.5px solid var(--primary) !important;
+        box-shadow: var(--neon-shadow); z-index: 10;
     }
-
-    .vakt-card.past {
-        opacity: 0.3;
-        filter: grayscale(1);
-    }
+    .vakt-card.past { opacity: 0.3; filter: grayscale(1); }
 
     .vakt-name {
-        font-size: 0.85rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        color: rgba(255,255,255,0.5);
-        margin-bottom: 0.5rem;
+        font-size: 0.85rem; font-weight: 600; text-transform: uppercase;
+        letter-spacing: 1.5px; color: rgba(255,255,255,0.5); margin-bottom: 0.5rem;
     }
-
-    .vakt-time {
-        font-size: 1.8rem;
-        font-weight: 800;
-        color: white;
-    }
+    .vakt-time { font-size: 1.8rem; font-weight: 800; color: white; }
 
     .vakt-icon-container {
-        width: 45px;
-        height: 45px;
-        margin-bottom: 0.75rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 1rem;
-        background: rgba(255,255,255,0.03);
-        font-size: 1.2rem;
-        color: var(--primary);
+        width: 45px; height: 45px; margin-bottom: 0.75rem;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 1rem; background: rgba(255,255,255,0.03);
+        font-size: 1.2rem; color: var(--primary);
     }
-
     .active .vakt-icon-container {
-        background: var(--primary);
-        color: white;
-        box-shadow: 0 0 15px var(--primary);
+        background: var(--primary); color: white; box-shadow: 0 0 15px var(--primary);
     }
 
-    /* --- MENU TRIGGERS (KORIGJIMET) --- */
-    .menu-trigger {
-        position: fixed;
-        top: 2.5rem;
-        right: 1.5rem;
-        z-index: 2000;
-        padding: 12px;
-        background: var(--glass);
-        border-radius: 1.2rem;
-        border: 1px solid var(--border);
-        cursor: pointer;
-    }
-
-    .burger-line {
-        width: 22px;
-        height: 1.5px;
-        background: var(--primary);
-        margin: 5px 0;
-        transition: 0.4s;
-    }
-
-    /* Animacioni i X kur menuja hapet */
-    .menu-trigger.open .burger-line:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-    .menu-trigger.open .burger-line:nth-child(2) { opacity: 0; }
-    .menu-trigger.open .burger-line:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
-
-    #full-menu {
-        position: fixed;
-        inset: 0;
-        background: rgba(2, 6, 23, 0.98);
-        backdrop-filter: blur(50px);
-        -webkit-backdrop-filter: blur(50px);
-        z-index: 1999;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 3rem;
-        visibility: hidden;
-        opacity: 0;
-        transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-    }
-
-    #full-menu.active {
-        visibility: visible;
-        opacity: 1;
-    }
-
-    /* Stili i linkeve të menusë që mungonte */
-    .menu-link {
-        font-size: 2.2rem;
-        font-weight: 800;
-        margin: 0.8rem 0;
-        display: flex;
-        align-items: center;
-        gap: 1.5rem;
-        color: rgba(255,255,255,0.3);
-        text-decoration: none;
-        transition: 0.4s;
-    }
-
-    .menu-link:hover, .menu-link.active-page {
-        color: white;
-        transform: translateX(10px);
-    }
-
-    .menu-link i {
-        font-size: 1.5rem;
-        color: var(--primary);
-    }
-
+    /* --- RESPONSIVE --- */
     @media (max-width: 480px) {
+        .menu-link { font-size: 1.8rem; }
         #vaktet-container { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; padding: 1rem; }
         .vakt-time { font-size: 1.5rem; }
         .progress-container { width: 180px; height: 180px; }
-        .menu-link { font-size: 1.8rem; }
     }
 </style>
 </head>
@@ -900,6 +815,7 @@ window.addEventListener('storage', () => {
 
 </body>
 </html>
+
 
 
 
