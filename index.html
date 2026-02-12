@@ -818,11 +818,30 @@ function openLibrary(kategoria) {
     modal.style.display = 'flex';
     if (navigator.vibrate) navigator.vibrate(50);
 }
+
+
+
+window.addEventListener('storage', () => {
+    // Kur ndryshon diçka te Info, Index reagon menjëherë
+    const theme = localStorage.getItem('pd_theme');
+    const fontSize = localStorage.getItem('pd_fontSize');
+    const offset = localStorage.getItem('pd_offset');
+    
+    if(theme) document.documentElement.style.setProperty('--primary', theme);
+    if(fontSize) document.body.style.fontSize = fontSize + 'px';
+    
+    // Rikalkulo vaktet me offsetin e ri automatikisht
+    if(typeof fetchVaktet === 'function') fetchVaktet();
+});
+
+
+
         
 </script>
 
 </body>
 </html>
+
 
 
 
