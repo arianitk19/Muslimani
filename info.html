@@ -719,8 +719,58 @@ document.querySelectorAll('.menu-link').forEach(link => {
 });
        
 
+
+
+// 1. Funksioni qendror që ruan dhe njofton
+function updateGlobalSetting(key, value) {
+    // Ruajmë në localStorage
+    localStorage.setItem('pd_' + key, value);
+    
+    // E aplikojmë menjëherë në faqen aktuale (info.html)
+    applyGlobalSettings(); 
+
+    // Opsionale: Shfaq njoftimin për sukses te faqja aktuale
+    if(typeof showZenithNotification === 'function') {
+        showZenithNotification('Sistemi');
+    }
+}
+
+// 2. Funksioni që lexon dhe aplikon dizajnin
+function applyGlobalSettings() {
+    const theme = localStorage.getItem('pd_theme') || '#10b981';
+    const fontSize = localStorage.getItem('pd_fontSize') || '16';
+    const offset = localStorage.getItem('pd_offset') || '0';
+
+    // Apliko ngjyrën
+    document.documentElement.style.setProperty('--primary', theme);
+    // Apliko fontin
+    document.body.style.fontSize = fontSize + 'px';
+    
+    // Përditëso etiketat (labels) nëse ekzistojnë
+    const label = document.getElementById('font-size-label');
+    if(label) label.innerText = fontSize + 'px';
+
+    const calibVal = document.getElementById('calib-val');
+    if(calibVal) calibVal.innerText = (parseInt(offset) > 0 ? "+" : "") + offset + " min";
+}
+
+// 3. KJO ËSHTË PËR FAQET E TJERA (Index, Lutje etj.)
+// Shtoje këtë në çdo faqe tjetër përveç Info.html
+window.addEventListener('storage', (e) => {
+    if (e.key && e.key.startsWith('pd_')) {
+        applyGlobalSettings();
+        if(typeof fetchVaktet === 'function') fetchVaktet();
+    }
+});
+
+// Inicializimi kur hapet faqja
+document.addEventListener('DOMContentLoaded', applyGlobalSettings);
+
+
+       
 </script>
 
 </body>
 
 </html>
+
