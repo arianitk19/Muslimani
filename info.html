@@ -720,52 +720,35 @@ document.querySelectorAll('.menu-link').forEach(link => {
        
 
 
-
-// 1. Funksioni qendror që ruan dhe njofton
-function updateGlobalSetting(key, value) {
-    // Ruajmë në localStorage
-    localStorage.setItem('pd_' + key, value);
-    
-    // E aplikojmë menjëherë në faqen aktuale (info.html)
-    applyGlobalSettings(); 
-
-    // Opsionale: Shfaq njoftimin për sukses te faqja aktuale
-    if(typeof showZenithNotification === 'function') {
-        showZenithNotification('Sistemi');
-    }
-}
-
-// 2. Funksioni që lexon dhe aplikon dizajnin
-function applyGlobalSettings() {
-    const theme = localStorage.getItem('pd_theme') || '#10b981';
-    const fontSize = localStorage.getItem('pd_fontSize') || '16';
-    const offset = localStorage.getItem('pd_offset') || '0';
-
-    // Apliko ngjyrën
-    document.documentElement.style.setProperty('--primary', theme);
-    // Apliko fontin
-    document.body.style.fontSize = fontSize + 'px';
-    
-    // Përditëso etiketat (labels) nëse ekzistojnë
-    const label = document.getElementById('font-size-label');
-    if(label) label.innerText = fontSize + 'px';
-
-    const calibVal = document.getElementById('calib-val');
-    if(calibVal) calibVal.innerText = (parseInt(offset) > 0 ? "+" : "") + offset + " min";
-}
-
-// 3. KJO ËSHTË PËR FAQET E TJERA (Index, Lutje etj.)
-// Shtoje këtë në çdo faqe tjetër përveç Info.html
-window.addEventListener('storage', (e) => {
-    if (e.key && e.key.startsWith('pd_')) {
-        applyGlobalSettings();
-        if(typeof fetchVaktet === 'function') fetchVaktet();
+// Kjo pjesë bën që faqet të komunikojnë me njëra-tjetrën
+window.addEventListener('storage', (event) => {
+    // Nëse ndryshon diçka që fillon me 'pd_' (si pd_theme, pd_fontSize)
+    if (event.key && event.key.startsWith('pd_')) {
+        
+        // 1. Reagimi: Apliko menjëherë ndryshimet vizuale
+        applyGlobalSettings(); 
+        
+        // 2. Paralajmërimi: Shfaq njoftimin "Dynamic Island" në të gjitha faqet
+        showZenithNotification('Sistemi'); 
+        
+        // 3. Përditëso butonat nëse jemi te faqja info
+        if (typeof refreshNotifUI === "function") refreshNotifUI();
+        
+        console.log("Sistemi u përditësua në kohë reale nga një faqe tjetër.");
     }
 });
 
-// Inicializimi kur hapet faqja
-document.addEventListener('DOMContentLoaded', applyGlobalSettings);
-
+// Dinamizmi i menusë (Pjesa që kërkove më parë, shtoje këtu)
+window.addEventListener('DOMContentLoaded', () => {
+    const currentPath = window.location.pathname.split("/").pop() || "index.html";
+    document.querySelectorAll('.menu-link').forEach(link => {
+        if(link.getAttribute('href') === currentPath) {
+            link.classList.add('active-page');
+        } else {
+            link.classList.remove('active-page');
+        }
+    });
+});
 
        
 </script>
@@ -773,4 +756,5 @@ document.addEventListener('DOMContentLoaded', applyGlobalSettings);
 </body>
 
 </html>
+
 
