@@ -856,17 +856,34 @@ function openLibrary(kategoria) {
 
 
 
-window.addEventListener('storage', () => {
-    // Kur ndryshon diçka te Info, Index reagon menjëherë
-    const theme = localStorage.getItem('pd_theme');
-    const fontSize = localStorage.getItem('pd_fontSize');
-    const offset = localStorage.getItem('pd_offset');
-    
-    if(theme) document.documentElement.style.setProperty('--primary', theme);
-    if(fontSize) document.body.style.fontSize = fontSize + 'px';
-    
-    // Rikalkulo vaktet me offsetin e ri automatikisht
-    if(typeof fetchVaktet === 'function') fetchVaktet();
+// Kjo pjesë bën që faqet të komunikojnë me njëra-tjetrën
+window.addEventListener('storage', (event) => {
+    // Nëse ndryshon diçka që fillon me 'pd_' (si pd_theme, pd_fontSize)
+    if (event.key && event.key.startsWith('pd_')) {
+        
+        // 1. Reagimi: Apliko menjëherë ndryshimet vizuale
+        applyGlobalSettings(); 
+        
+        // 2. Paralajmërimi: Shfaq njoftimin "Dynamic Island" në të gjitha faqet
+        showZenithNotification('Sistemi'); 
+        
+        // 3. Përditëso butonat nëse jemi te faqja info
+        if (typeof refreshNotifUI === "function") refreshNotifUI();
+        
+        console.log("Sistemi u përditësua në kohë reale nga një faqe tjetër.");
+    }
+});
+
+// Dinamizmi i menusë (Pjesa që kërkove më parë, shtoje këtu)
+window.addEventListener('DOMContentLoaded', () => {
+    const currentPath = window.location.pathname.split("/").pop() || "index.html";
+    document.querySelectorAll('.menu-link').forEach(link => {
+        if(link.getAttribute('href') === currentPath) {
+            link.classList.add('active-page');
+        } else {
+            link.classList.remove('active-page');
+        }
+    });
 });
 
 
@@ -876,6 +893,7 @@ window.addEventListener('storage', () => {
 
 </body>
 </html>
+
 
 
 
