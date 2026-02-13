@@ -25,356 +25,154 @@
     <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/mosque.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-<style>
 
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&display=swap');
-
-
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800;900&display=swap');
 
     :root {
-
         --primary: #10b981;
-
         --bg: #020617;
-
         --glass: rgba(255, 255, 255, 0.03);
-
         --border: rgba(255, 255, 255, 0.08);
-
-        --neon-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
-
+        --neon-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
     }
-
-
-
-    /* --- BAZA --- */
 
     body {
-
         background: var(--bg);
-
         color: white;
-
         font-family: 'Plus Jakarta Sans', sans-serif;
-
         min-height: 100vh;
-
         margin: 0;
-
         -webkit-font-smoothing: antialiased;
-
         overflow-x: hidden;
-
     }
 
-
-
-    /* --- PROGRESS RING (NEON) --- */
-
-    .progress-container {
-
-        position: relative;
-
-        width: 220px;
-
-        height: 220px;
-
-        margin: 2rem auto;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-    }
-
-
-
-    #progress-bar {
-
-        stroke-dasharray: 596.9;
-
-        stroke-dashoffset: 596.9;
-
-        transition: stroke-dashoffset 1s linear;
-
-        stroke-linecap: round;
-
-        filter: drop-shadow(0 0 8px var(--primary));
-
-    }
-
-
-
-    .progress-bg {
-
-        stroke: rgba(255, 255, 255, 0.05);
-
-    }
-
-
-
-    /* --- VAKT CARDS (GLASSMORPISM) --- */
-
-    .glass-card {
-
-        background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-
-        backdrop-filter: blur(20px);
-
-        -webkit-backdrop-filter: blur(20px);
-
-        border: 1px solid var(--border);
-
-        border-radius: 2rem;
-
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
-    }
-
-
-
-    .vakt-card {
-
-        position: relative;
-
-        padding: 1.5rem 1rem;
-
-        text-align: center;
-
-        display: flex;
-
-        flex-direction: column;
-
-        align-items: center;
-
-        justify-content: center;
-
-        min-height: 120px;
-
-    }
-
-
-
-    /* Kur vakti është aktiv (JavaScript shton klasën .active) */
-
-    .vakt-card.active {
-
-        border: none !important;
-
-        transform: scale(1.05);
-
-    }
-
-
-
-    .vakt-card.active * {
-
-        color: white !important;
-
-        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-
-    }
-
-
-
-    .vakt-icon-container {
-
-        width: 45px;
-
-        height: 45px;
-
-        margin-bottom: 0.75rem;
-
-        display: flex;
-
-        align-items: center;
-
-        justify-content: center;
-
-        border-radius: 1rem;
-
-        background: rgba(255,255,255,0.03);
-
-        transition: 0.3s;
-
-    }
-
-
-
-    .active .vakt-icon-container {
-
-        background: rgba(255,255,255,0.2);
-
-        box-shadow: 0 0 15px rgba(255,255,255,0.3);
-
-    }
-
-
-
-    /* --- EFEKTI IMPULSIV (FOCUS MODE) --- */
-
-    .vakt-impulse {
-
-        animation: pulseGlow 2s infinite ease-in-out !important;
-
-        z-index: 100;
-
-        border: 2px solid var(--primary) !important;
-
-    }
-
-
-
-    @keyframes pulseGlow {
-
-        0% { transform: scale(1.05); box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
-
-        50% { transform: scale(1.1); box-shadow: 0 0 50px rgba(16, 185, 129, 0.7); }
-
-        100% { transform: scale(1.05); box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
-
-    }
-
-
-
-    /* --- MENU --- */
-
+    /* --- MENUJA (IDENTIKE SI BAZA PARAPRAKE) --- */
     .menu-trigger {
-
-        position: fixed;
-
-        top: 2.5rem;
-
-        right: 1.5rem;
-
-        z-index: 2000;
-
-        padding: 12px;
-
-        background: var(--glass);
-
-        border-radius: 1.2rem;
-
-        border: 1px solid var(--border);
-
-        cursor: pointer;
-
+        position: fixed; top: 2.5rem; right: 1.5rem; z-index: 2000;
+        padding: 12px; background: var(--glass); border-radius: 1.2rem; border: 1px solid var(--border);
+        cursor: pointer; backdrop-filter: blur(10px);
     }
-
-
-
-    .burger-line {
-
-        width: 22px;
-
-        height: 1.5px;
-
-        background: var(--primary);
-
-        margin: 5px 0;
-
-        transition: 0.4s;
-
-    }
-
-
+    .burger-line { width: 22px; height: 1.5px; background: var(--primary); margin: 5px 0; transition: 0.4s; border-radius: 10px; }
+    .open .line-1 { transform: translateY(6.5px) rotate(45deg); }
+    .open .line-2 { opacity: 0; }
+    .open .line-3 { transform: translateY(-6.5px) rotate(-45deg); }
 
     #full-menu {
-
-        position: fixed;
-
-        inset: 0;
-
-        background: rgba(2, 6, 23, 0.98);
-
-        backdrop-filter: blur(50px);
-
-        -webkit-backdrop-filter: blur(50px);
-
-        z-index: 1999;
-
-        display: flex;
-
-        flex-direction: column;
-
-        justify-content: center;
-
-        padding: 3rem;
-
-        visibility: hidden;
-
-        opacity: 0;
-
-        transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-
+        position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(50px);
+        z-index: 1999; display: flex; flex-direction: column; justify-content: center;
+        padding: 3rem; visibility: hidden; opacity: 0; transition: 0.5s;
     }
-
-
-
-    #full-menu.active {
-
-        visibility: visible;
-
-        opacity: 1;
-
-    }
-
-
+    #full-menu.active { visibility: visible; opacity: 1; }
 
     .menu-link {
+        font-size: 2.5rem; font-weight: 700; margin: 1rem 0; display: flex; align-items: center;
+        gap: 1.5rem; color: rgba(255,255,255,0.4); transition: 0.4s; letter-spacing: -1px; text-decoration: none;
+    }
+    .menu-link i { font-size: 1.8rem; color: var(--primary); opacity: 0.5; }
+    .menu-link:hover, .menu-link.active-page { color: white; transform: translateX(10px); }
 
-        font-size: 2.5rem;
+    /* --- PROGRESS RING --- */
+    .progress-container {
+        position: relative; width: 220px; height: 220px;
+        margin: 2rem auto; display: flex; align-items: center; justify-content: center;
+    }
+    #progress-bar {
+        stroke-dasharray: 596.9; stroke-dashoffset: 596.9;
+        transition: stroke-dashoffset 1s linear; stroke-linecap: round;
+        filter: drop-shadow(0 0 8px var(--primary));
+    }
+    .progress-bg { stroke: rgba(255, 255, 255, 0.05); }
 
-        font-weight: 900;
+    /* --- RIKONSTRUKTIMI I KARTAVE (PREMIUM GRID) --- */
+    #vaktet-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        padding: 0 1.5rem 2rem 1.5rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
 
-        margin: 0.8rem 0;
-
+    .vakt-card {
+        position: relative;
+        background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+        border: 1px solid var(--border);
+        border-radius: 2.5rem;
+        padding: 1.5rem;
         display: flex;
-
+        flex-direction: column;
         align-items: center;
-
-        gap: 1.5rem;
-
-        color: rgba(255,255,255,0.3);
-
-        text-decoration: none;
-
-        transition: 0.4s;
-
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        overflow: hidden;
     }
 
-
-
-    .menu-link:hover, .menu-link.active-page {
-
-        color: white;
-
-        transform: translateX(10px);
-
+    /* Efekti kur vakti është aktiv */
+    .vakt-card.active {
+        background: var(--glass);
+        border: 1px solid var(--primary);
+        box-shadow: var(--neon-shadow);
+        transform: scale(1.02);
     }
 
+    /* Namazet që kanë kaluar */
+    .vakt-card.past {
+        opacity: 0.35;
+        filter: grayscale(0.8);
+    }
 
+    .vakt-icon-box {
+        width: 48px;
+        height: 48px;
+        background: rgba(255,255,255,0.03);
+        border-radius: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        color: var(--primary);
+        transition: 0.3s;
+    }
 
-    /* --- RESPONSIVE --- */
+    .active .vakt-icon-box {
+        background: var(--primary);
+        color: var(--bg);
+        box-shadow: 0 0 15px var(--primary);
+    }
+
+    .vakt-name {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: rgba(255,255,255,0.5);
+        margin-bottom: 0.3rem;
+    }
+
+    .vakt-time {
+        font-size: 1.75rem;
+        font-weight: 800;
+        letter-spacing: -1px;
+    }
+
+    /* Efekti i sfondit dinamik për vaktin aktiv */
+    .active-glow {
+        position: absolute;
+        width: 100px; height: 100px;
+        background: var(--primary);
+        filter: blur(60px);
+        opacity: 0.15;
+        z-index: -1;
+    }
 
     @media (max-width: 480px) {
-
-        .vakt-card { padding: 1rem 0.5rem; min-height: 110px; }
-
-        .menu-link { font-size: 1.8rem; }
-
-        .progress-container { width: 180px; height: 180px; }
-
+        #vaktet-container { gap: 0.75rem; padding: 0 1rem 2rem 1rem; }
+        .vakt-time { font-size: 1.4rem; }
+        .progress-container { width: 190px; height: 190px; }
     }
-
-
-
-    .opacity-30 { opacity: 0.3; filter: grayscale(0.8); }
-
 </style>
+
 </head>
 
 <div id="intro-screen" class="fixed inset-0 z-[5000] flex flex-col items-center justify-center bg-[#020617] transition-all duration-1000">
@@ -624,23 +422,42 @@
 
     <script>
 
-         // --- KONFIGURIMI DHE VARIABLAT GLOBALE ---
+       function renderVaktet() {
+    const container = document.getElementById('vaktet-container');
+    if (!container) return;
 
-    const vaktetRaw = [
+    container.innerHTML = '';
+    const tani = new Date();
+    const oraAktuale = tani.getHours() * 60 + tani.getMinutes();
 
-        { emri: 'Sabahu', koha: '05:30', ikona: 'fa-cloud-sun', gradient: 'linear-gradient(135deg, #1e3c72, #2a5298)' },
+    vaktetRaw.forEach((vakt, index) => {
+        const [h, m] = vakt.koha.split(':').map(Number);
+        const vaktMinuta = h * 60 + m;
+        
+        // Përcaktimi i statusit (past, active, future)
+        let statusClass = '';
+        if (vaktMinuta < oraAktuale) {
+            statusClass = 'past';
+        }
 
-        { emri: 'Lindja', koha: '07:05', ikona: 'fa-sun', gradient: 'linear-gradient(135deg, #ff9966, #ff5e62)' },
+        // Këtu mund të shtoni logjikën tuaj ekzistuese për klasën 'active'
+        // Për shembull: if(index === aktuali) statusClass = 'active';
 
-        { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun', gradient: 'linear-gradient(135deg, #4facfe, #00f2fe)' },
+        const card = document.createElement('div');
+        card.className = `vakt-card ${statusClass}`;
+        card.innerHTML = `
+            ${statusClass === 'active' ? '<div class="active-glow"></div>' : ''}
+            <div class="vakt-icon-box">
+                <i class="fa-solid ${vakt.ikona}"></i>
+            </div>
+            <div class="vakt-name">${vakt.emri}</div>
+            <div class="vakt-time">${vakt.koha}</div>
+        `;
+        container.appendChild(card);
+    });
+}
 
-        { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud-sun', gradient: 'linear-gradient(135deg, #f093fb, #f5576c)' },
-
-        { emri: 'Akshami', koha: '16:21', ikona: 'fa-mountain-sun', gradient: 'linear-gradient(135deg, #434343, #000000)' },
-
-        { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon', gradient: 'linear-gradient(135deg, #0f2027, #2c5364)' }
-
-    ];
+        
 
         
     let lastNotifiedVakt = "";
@@ -1025,6 +842,7 @@ window.addEventListener('storage', () => {
 
 </body>
 </html>
+
 
 
 
