@@ -1,21 +1,20 @@
 {
-  "name": "Zenith Professional",
-  "short_name": "Zenith",
-  "description": "Saktësi strikte dhe estetikë superiore për kohët e namazit.",
+  "name": "Perkujtuesi Ditor",
+  "short_name": "Përkujtuesi",
+  "description": "Saktësi strikte dhe përkujtim i vazhdueshëm për besimtarët.",
   "start_url": "index.html",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#020617",
-  "theme_color": "#020617",
+  "theme_color": "#10b981",
   "icons": [
     {
-      "src": "https://img.icons8.com/external-vitaliy-gorbachev-flat-vitaly-gorbachev/512/external-zenith-astronomy-vitaliy-gorbachev-flat-vitaly-gorbachev.png",
+      "src": "https://img.icons8.com/fluency/512/crescent-moon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://img.icons8.com/external-vitaliy-gorbachev-flat-vitaly-gorbachev/192/external-zenith-astronomy-vitaliy-gorbachev-flat-vitaly-gorbachev.png",
+      "src": "https://img.icons8.com/fluency/192/crescent-moon.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
