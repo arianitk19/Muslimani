@@ -420,33 +420,54 @@
 
     </main>
 
-    <script>
+   
 
-       function renderVaktet() {
+    
+<script>
+// --- KONFIGURIMI (Sistemi yt origjinal) ---
+const vaktetRaw = [
+    { emri: 'Sabahu', koha: '05:30', ikona: 'fa-cloud-sun' },
+    { emri: 'Lindja', koha: '07:05', ikona: 'fa-sun' },
+    { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun' },
+    { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud-sun' },
+    { emri: 'Akshami', koha: '16:21', ikona: 'fa-mountain-sun' },
+    { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon' }
+];
+
+function renderVaktet() {
     const container = document.getElementById('vaktet-container');
     if (!container) return;
 
     container.innerHTML = '';
     const tani = new Date();
-    const oraAktuale = tani.getHours() * 60 + tani.getMinutes();
+    const oraAktualeMinuta = tani.getHours() * 60 + tani.getMinutes();
 
+    // 1. Gjejmë vaktin AKTUAL (vakti i fundit që ka kaluar ose ka hyrë tani)
+    let indexAktual = -1;
+    for (let i = 0; i < vaktetRaw.length; i++) {
+        const [h, m] = vaktetRaw[i].koha.split(':').map(Number);
+        const vaktMinuta = h * 60 + m;
+        if (oraAktualeMinuta >= vaktMinuta) {
+            indexAktual = i;
+        }
+    }
+
+    // 2. Kriojmë kartat dhe i vendosim në Grid
     vaktetRaw.forEach((vakt, index) => {
         const [h, m] = vakt.koha.split(':').map(Number);
         const vaktMinuta = h * 60 + m;
-        
-        // Përcaktimi i statusit (past, active, future)
+
         let statusClass = '';
-        if (vaktMinuta < oraAktuale) {
-            statusClass = 'past';
+        if (index === indexAktual) {
+            statusClass = 'active'; // Vakti që po kalon tani
+        } else if (vaktMinuta < oraAktualeMinuta) {
+            statusClass = 'past'; // Vakti që ka përfunduar
         }
 
-        // Këtu mund të shtoni logjikën tuaj ekzistuese për klasën 'active'
-        // Për shembull: if(index === aktuali) statusClass = 'active';
-
         const card = document.createElement('div');
+        // Përputhja me Style: vakt-card është baza, statusClass shton efektet neon ose hije
         card.className = `vakt-card ${statusClass}`;
         card.innerHTML = `
-            ${statusClass === 'active' ? '<div class="active-glow"></div>' : ''}
             <div class="vakt-icon-box">
                 <i class="fa-solid ${vakt.ikona}"></i>
             </div>
@@ -457,7 +478,20 @@
     });
 }
 
-        
+// Logjika e Menusë (Identike me kërkesën tuaj paraprake)
+function toggleMenu(btn) {
+    const menu = document.getElementById('full-menu');
+    btn.classList.toggle('open');
+    menu.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+}
+
+// Ekzekutimi
+document.addEventListener('DOMContentLoaded', () => {
+    renderVaktet();
+    // Përditësohet çdo 30 sekonda për të qenë gjithmonë në kohë reale
+    setInterval(renderVaktet, 30000);
+});
 
         
     let lastNotifiedVakt = "";
@@ -842,6 +876,7 @@ window.addEventListener('storage', () => {
 
 </body>
 </html>
+
 
 
 
