@@ -44,169 +44,124 @@
         color: white; 
         font-family: 'Plus Jakarta Sans', sans-serif; 
         -webkit-tap-highlight-color: transparent;
-        overflow: hidden;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
+        overflow: hidden; height: 100vh; display: flex; flex-direction: column;
     }
 
-    /* Udhëzuesi i ri lart */
-    .onboarding-guide {
-        position: fixed; top: 2.5rem; left: 1.5rem; right: 5.5rem;
-        background: var(--glass);
-        backdrop-filter: blur(15px);
+    /* BAR-I I UDHËZIMIT SUPERIOR */
+    .smart-guide {
+        position: fixed; top: 1.5rem; left: 1.5rem; right: 1.5rem;
+        background: rgba(255,255,255,0.02);
+        backdrop-filter: blur(20px);
         border: 1px solid var(--border);
-        padding: 12px 20px;
-        border-radius: 1.2rem;
+        border-radius: 1.5rem;
+        padding: 1rem;
         z-index: 100;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .guide-dot {
-        width: 8px; height: 8px; border-radius: 50%;
-        background: var(--primary);
-        animation: pulse 2s infinite;
-    }
-
-    /* Menu Trigger Zenith */
-    .menu-trigger { 
-        position: fixed; top: 2.5rem; right: 1.5rem; z-index: 2000; 
-        padding: 12px; background: var(--glass); border-radius: 1.2rem; border: 1px solid var(--border);
-        backdrop-filter: blur(10px);
-    }
-    .burger-line { width: 22px; height: 1.5px; background: var(--primary); margin: 5px 0; transition: 0.4s; border-radius: 10px; }
-    .open .line-1 { transform: translateY(6.5px) rotate(45deg); }
-    .open .line-2 { opacity: 0; }
-    .open .line-3 { transform: translateY(-6.5px) rotate(-45deg); }
-
-    #full-menu { 
-        position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(50px); 
-        z-index: 1999; display: flex; flex-direction: column; justify-content: center; 
-        padding: 3rem; visibility: hidden; opacity: 0; transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1); 
-    }
-    #full-menu.active { visibility: visible; opacity: 1; }
-
-    .menu-link {
-        font-size: 2.5rem; font-weight: 700; margin: 1rem 0; display: flex; align-items: center; 
-        gap: 1.5rem; color: rgba(255,255,255,0.4); transition: 0.4s; text-decoration: none;
-    }
-    .menu-link.active-page { color: white; }
-
-    /* Compass UI */
-    .compass-container {
-        position: relative;
-        width: 320px; height: 320px;
         display: flex; align-items: center; justify-content: center;
+        transition: all 0.5s ease;
+    }
+
+    .guide-content { display: flex; align-items: center; gap: 12px; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; transition: 0.3s; }
+    .status-active .status-dot { background: var(--primary); box-shadow: 0 0 10px var(--primary); animation: pulse 1.5s infinite; }
+
+    /* COMPASS CORE RE-ENGINEERING */
+    .compass-container {
+        position: relative; width: 340px; height: 340px;
+        display: flex; align-items: center; justify-content: center;
+        perspective: 1000px;
     }
 
     .glass-card-circle { 
-        background: radial-gradient(circle at center, rgba(255,255,255,0.02) 0%, transparent 70%);
-        backdrop-filter: blur(20px); 
-        border: 2px solid var(--border); 
+        background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05) 0%, transparent 100%);
+        backdrop-filter: blur(25px); 
+        border: 1px solid var(--border); 
         border-radius: 50%; 
         position: absolute; width: 100%; height: 100%;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
     }
 
     #compass-disc {
-        width: 100%; height: 100%;
-        position: relative;
-        transition: transform 0.1s linear;
+        width: 100%; height: 100%; position: relative;
+        transition: transform 0.15s cubic-bezier(0.1, 0.3, 0.1, 1);
+        will-change: transform;
     }
 
-    /* Ikona e personit në sexhde */
+    /* PERSONI NË SEXHDE - MEKANIKA */
     #center-hub {
-        position: absolute;
-        width: 100px; height: 100px;
-        background: #020617;
-        border: 1px solid var(--border);
-        border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        z-index: 10;
-        transition: all 0.5s ease;
+        position: absolute; width: 90px; height: 90px;
+        background: #040a1d; border: 1px solid var(--border);
+        border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        z-index: 50; transition: all 0.4s ease;
     }
 
-    .sexhde-icon {
-        font-size: 2.5rem;
-        opacity: 0.1;
-        transition: all 0.5s ease;
-        transform: rotate(-90deg);
+    .prayer-icon {
+        font-size: 2.2rem; color: white; opacity: 0.1;
+        transform: rotate(-90deg) scale(0.8);
+        transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
+    /* SINJALI I DREJTIMIT TOTAL */
     .aligned-glow {
-        box-shadow: 0 0 80px rgba(16, 185, 129, 0.15);
         border-color: var(--primary) !important;
+        box-shadow: 0 0 50px rgba(16, 185, 129, 0.2), inset 0 0 20px rgba(16, 185, 129, 0.1);
+        transform: scale(1.05) translateZ(20px);
     }
 
-    .aligned-glow .sexhde-icon {
-        opacity: 1;
-        color: var(--primary);
-        filter: drop-shadow(0 0 10px var(--primary));
+    .aligned-glow .prayer-icon {
+        opacity: 1; color: var(--primary);
+        filter: drop-shadow(0 0 15px var(--primary));
         transform: rotate(-90deg) scale(1.1);
     }
 
+    /* TARGET NEEDLE */
     .needle-qibla {
-        position: absolute;
-        top: 30px; left: 50%;
+        position: absolute; top: 12%; left: 50%;
         transform: translateX(-50%);
-        color: var(--primary);
+        display: flex; flex-direction: column; align-items: center;
     }
+    .kaaba-icon { font-size: 2.5rem; color: var(--primary); filter: drop-shadow(0 0 10px var(--primary)); }
 
     @keyframes pulse {
-        0% { opacity: 0.5; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.2); }
-        100% { opacity: 0.5; transform: scale(1); }
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.3); opacity: 0.5; }
+        100% { transform: scale(1); opacity: 1; }
     }
 </style>
 
-<div class="onboarding-guide">
-    <div class="guide-dot"></div>
-    <span id="top-guide" class="text-[9px] font-black uppercase tracking-widest opacity-70">Mbajeni telefonin horizontalisht</span>
-</div>
-
-<div class="menu-trigger" onclick="toggleMenu()">
-    <div class="burger-line line-1"></div>
-    <div class="burger-line line-2"></div>
-    <div class="burger-line line-3"></div>
-</div>
-
-<nav id="full-menu">
-    <a href="index.html" class="menu-link">Vaktia</a>
-    <a href="kibla.html" class="menu-link active-page">Kibla</a>
-    <a href="info.html" class="menu-link">Info</a>
-</nav>
-
-<div id="permission-modal" class="modal-overlay">
-    <div class="modal-content">
-        <h2 class="text-3xl font-black italic mb-4">Start</h2>
-        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-8">Aktivizo sensorët për saktësi</p>
-        <button onclick="initSensor()" class="w-full py-4 bg-emerald-500 text-black rounded-2xl font-black uppercase text-[11px]">Lejo Qasjen</button>
+<div class="smart-guide" id="guide-bar">
+    <div class="guide-content">
+        <div class="status-dot"></div>
+        <span id="guide-text" class="text-[10px] font-black uppercase tracking-[0.2em]">Pritni GPS...</span>
     </div>
 </div>
 
 <main class="flex-1 flex flex-col items-center justify-center p-6 relative">
-    <div id="degree-val" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[12rem] font-black italic opacity-[0.02] pointer-events-none">0°</div>
+    <div id="degree-val" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[14rem] font-black italic tracking-tighter opacity-[0.02] pointer-events-none">0°</div>
 
     <div class="compass-container">
         <div id="compass-disc" class="glass-card-circle">
             <div class="needle-qibla">
-                <i class="fa-solid fa-kaaba text-4xl"></i>
+                <i class="fa-solid fa-kaaba kaaba-icon"></i>
+                <div class="w-[2px] h-10 bg-gradient-to-b from-emerald-500 to-transparent"></div>
             </div>
-            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-[10px] font-black opacity-20 uppercase tracking-[0.4em]">South</div>
+            
+            <div class="absolute inset-0 p-10 flex justify-center text-[10px] font-black opacity-20">NORTH</div>
         </div>
 
         <div id="center-hub">
-            <i class="fa-solid fa-person-praying sexhde-icon"></i>
+            <i class="fa-solid fa-person-praying prayer-icon"></i>
         </div>
     </div>
 
-    <div class="mt-12 text-center">
-        <p id="instruction" class="text-[11px] font-black uppercase tracking-[0.4em] text-white/40">Kërko drejtimin</p>
-        <div class="flex items-baseline gap-2 justify-center mt-4">
-            <span id="dist-val" class="text-2xl font-black italic text-emerald-500">--</span>
-            <span class="text-[9px] font-bold opacity-30 uppercase tracking-widest">KM deri në Mekë</span>
+    <div class="mt-16 bg-white/5 border border-white/5 rounded-3xl p-6 w-full max-w-[280px] backdrop-blur-lg">
+        <div class="flex justify-between items-center opacity-40 mb-1">
+            <span class="text-[8px] font-black uppercase tracking-widest">Distanca</span>
+            <i class="fa-solid fa-route text-[10px]"></i>
+        </div>
+        <div class="flex items-baseline gap-1">
+            <span id="dist-val" class="text-3xl font-black italic text-emerald-500">--</span>
+            <span class="text-[10px] font-bold opacity-30">KM</span>
         </div>
     </div>
 </main>
@@ -214,22 +169,34 @@
 <script>
     const disc = document.getElementById('compass-disc');
     const degVal = document.getElementById('degree-val');
-    const instr = document.getElementById('instruction');
-    const topGuide = document.getElementById('top-guide');
-    const discUI = document.querySelector('.glass-card-circle');
+    const guideText = document.getElementById('guide-text');
+    const guideBar = document.getElementById('guide-bar');
+    const prayerIcon = document.querySelector('.prayer-icon');
+    
     let qiblaAngle = 143;
 
     async function initSensor() {
         navigator.geolocation.getCurrentPosition(pos => {
             const lat = pos.coords.latitude;
             const lng = pos.coords.longitude;
-            qiblaAngle = calculateQibla(lat, lng);
             
+            // Formula precize
+            const phiK = 21.4225 * Math.PI / 180;
+            const lamK = 39.8262 * Math.PI / 180;
+            const phi = lat * Math.PI / 180;
+            const lam = lng * Math.PI / 180;
+            
+            qiblaAngle = (Math.atan2(Math.sin(lamK-lam), Math.cos(phi)*Math.tan(phiK)-Math.sin(phi)*Math.cos(lamK-lam)) * 180/Math.PI + 360) % 360;
+
+            // Distanca Haversine
             const R = 6371;
-            const dLat = (21.4225 - lat) * Math.PI / 180;
-            const dLon = (39.8262 - lng) * Math.PI / 180;
-            const a = Math.sin(dLat/2)**2 + Math.cos(lat*Math.PI/180)*Math.cos(21.4225*Math.PI/180)*Math.sin(dLon/2)**2;
+            const dLat = (21.4225 - lat) * Math.PI/180;
+            const dLon = (39.8262 - lng) * Math.PI/180;
+            const a = Math.sin(dLat/2)**2 + Math.cos(phi)*Math.cos(phiK)*Math.sin(dLon/2)**2;
             document.getElementById('dist-val').innerText = Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+            
+            guideBar.classList.add('status-active');
+            guideText.innerText = "Gati për orientim";
         });
 
         if (typeof DeviceOrientationEvent.requestPermission === 'function') {
@@ -241,54 +208,34 @@
         document.getElementById('permission-modal').style.display = 'none';
     }
 
-    function calculateQibla(lat, lng) {
-        const phiK = 21.4225 * Math.PI / 180.0;
-        const lamK = 39.8262 * Math.PI / 180.0;
-        const phi = lat * Math.PI / 180.0;
-        const lam = lng * Math.PI / 180.0;
-        return (Math.atan2(Math.sin(lamK-lam), Math.cos(phi)*Math.tan(phiK)-Math.sin(phi)*Math.cos(lamK-lam)) * 180/Math.PI + 360) % 360;
-    }
-
     function startCompass() {
-        window.addEventListener('deviceorientationabsolute', handleMotion, true);
-        window.addEventListener('deviceorientation', handleMotion, true);
-    }
+        window.addEventListener('deviceorientationabsolute', (e) => {
+            let heading = e.webkitCompassHeading || (360 - e.alpha);
+            if (!heading) return;
 
-    function handleMotion(e) {
-        let heading = e.webkitCompassHeading || (360 - e.alpha);
-        if (!heading) return;
+            const rotation = qiblaAngle - heading;
+            disc.style.transform = `rotate(${rotation}deg)`;
+            degVal.innerText = Math.round(heading) + "°";
 
-        let rotation = qiblaAngle - heading;
-        let roundedHeading = Math.round(heading);
-        degVal.innerText = roundedHeading + "°";
-
-        const diff = Math.abs((roundedHeading % 360) - Math.round(qiblaAngle));
-        
-        // Efekti "Magnetik" dhe Sinjali
-        if (diff < 3 || diff > 357) {
-            disc.style.transform = `rotate(${qiblaAngle - heading}deg) scale(1.05)`;
-            discUI.classList.add('aligned-glow');
-            instr.innerText = "JE DREJT KIBLËS";
-            instr.style.color = "var(--primary)";
-            topGuide.innerText = "NDALO! JE NË DREJTIMIN E DUHUR";
-            topGuide.style.color = "var(--primary)";
-            if(navigator.vibrate) navigator.vibrate(30);
-        } else {
-            disc.style.transform = `rotate(${rotation}deg) scale(1)`;
-            discUI.classList.remove('aligned-glow');
-            instr.innerText = "RROTULLOHU NGADALË";
-            instr.style.color = "rgba(255,255,255,0.4)";
-            topGuide.innerText = roundedHeading < qiblaAngle ? "Rrotullohu djathtas →" : "← Rrotullohu majtas";
-            topGuide.style.color = "white";
-        }
-    }
-
-    function toggleMenu() {
-        document.querySelector('.menu-trigger').classList.toggle('open');
-        document.getElementById('full-menu').classList.toggle('active');
+            const diff = Math.abs((Math.round(heading) % 360) - Math.round(qiblaAngle));
+            
+            // MEKANIKA E SAKTËSISË TOTALI
+            if (diff < 2 || diff > 358) {
+                disc.classList.add('aligned-glow');
+                guideText.innerText = "JE DREJT QABES - NDALO";
+                guideText.style.color = "var(--primary)";
+                if(navigator.vibrate) navigator.vibrate([30, 10, 30]); // Vibrim double për sukses
+            } else {
+                disc.classList.remove('aligned-glow');
+                guideText.style.color = "white";
+                guideText.innerText = heading < qiblaAngle ? "RROTULLOHU DJATHTAS →" : "← RROTULLOHU MAJTAS";
+            }
+        }, true);
     }
 </script>
+    
 </html>
+
 
 
 
