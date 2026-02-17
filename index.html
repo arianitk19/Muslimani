@@ -516,23 +516,19 @@ document.addEventListener('DOMContentLoaded', () => {
         // Përditëso orën live
         document.getElementById('live-clock').innerText = kohaTaniStr;
 
-      // Shto këtë variabël globalisht (në fillim të script)
-let lastMinuteNotified = -1; 
+        // 1. Logjika e Njoftimeve
+        vaktetRaw.forEach(v => {
+            if (kohaTaniStr === v.koha && lastNotifiedVakt !== v.emri) {
+                lastNotifiedVakt = v.emri;
+                sendImpulsiveNotification(v.emri);
+                activateFocusMode(v.emri);
+            }
+        });
 
-// Brenda funksionit updateUI()
-const tani = new Date();
-const minutaAktuale = tani.getHours() * 60 + tani.getMinutes();
-const kohaTaniStr = tani.toLocaleTimeString('sq-AL', { hour12: false, hour: '2-digit', minute: '2-digit' });
-
-// 1. Logjika e Njoftimeve të Namazit
-vaktetRaw.forEach(v => {
-    // Kontrollojmë nëse koha përputhet DHE nëse nuk kemi dërguar njoftim për këtë minutë
-    if (kohaTaniStr === v.koha && lastMinuteNotified !== minutaAktuale) {
-        lastMinuteNotified = minutaAktuale; // Bllokon njoftimet e tjera për 60 sekonda
-        sendImpulsiveNotification(v.emri);
-        activateFocusMode(v.emri);
-    }
-});
+        // Reset njoftimin kur kalon minuta
+        if (lastNotifiedVakt !== "" && vaktetRaw.every(v => kohaTaniStr !== v.koha)) {
+            lastNotifiedVakt = "";
+        }
 
         // 2. Gjenerimi i Kartave të Vakteve
         let currentIdx = -1;
@@ -865,33 +861,25 @@ function openLibrary(kategoria) {
     if (navigator.vibrate) navigator.vibrate(50);
 }
 
+
+
+// Kjo pjesë bën që faqet të komunikojnë me njëra-tjetrën
 window.addEventListener('storage', (event) => {
+    // Nëse ndryshon diçka që fillon me 'pd_' (si pd_theme, pd_fontSize)
     if (event.key && event.key.startsWith('pd_')) {
         
-        // 1. Apliko ndryshimet vizuale (shkrimi, tema, etj)
-        if (typeof applyGlobalSettings === "function") applyGlobalSettings(); 
-
-        // 2. Nëse ndryshimi është për njoftimet ose API-n
-        if (event.key === 'pd_notifications' || event.key === 'pd_api_method') {
-            const eshteAktiv = localStorage.getItem('pd_notifications') === 'true';
-            
-            // Shfaq njoftimin e konfirmimit në ekran menjëherë
-            if (Notification.permission === "granted" && eshteAktiv) {
-                new Notification("Sistemi u përditësua", {
-                    body: "Njoftimet e namazit u aktivizuan me sukses!",
-                    icon: 'https://img.icons8.com/fluency/48/checked.png',
-                    tag: 'update-success'
-                });
-            }
-
-            // Rifresko kohët e vakteve nëse ndryshoi metoda e API-t
-            if (typeof fetchLiveVaktet === "function") fetchLiveVaktet();
-        }
+        // 1. Reagimi: Apliko menjëherë ndryshimet vizuale
+        applyGlobalSettings(); 
         
-        console.log("Sinkronizimi u krye me sukses.");
+        // 2. Paralajmërimi: Shfaq njoftimin "Dynamic Island" në të gjitha faqet
+        showZenithNotification('Sistemi'); 
+        
+        // 3. Përditëso butonat nëse jemi te faqja info
+        if (typeof refreshNotifUI === "function") refreshNotifUI();
+        
+        console.log("Sistemi u përditësua në kohë reale nga një faqe tjetër.");
     }
 });
-
 
 // Dinamizmi i menusë (Pjesa që kërkove më parë, shtoje këtu)
 window.addEventListener('DOMContentLoaded', () => {
@@ -907,32 +895,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-    async function sendImpulsiveNotification(emri) {
-    // Kontrollojmë nëse përdoruesi i ka aktivizuar njoftimet te Info
-    const lejuarNgaUser = localStorage.getItem('pd_notifications') === 'true';
-    if (!lejuarNgaUser || Notification.permission !== "granted") return;
-
-    const options = {
-        body: `Hyri koha e namazit të ${emri}. Allahu e pranoftë!`,
-        icon: 'Images/logo.jpg',
-        badge: 'Images/logo.jpg',
-        vibrate: [200, 100, 200, 100, 400],
-        tag: 'vakti-aktual', // Ky TAG bën që njoftimet e vjetra të zëvendësohen, jo të grumbullohen 5 herë
-        renotify: true
-    };
-
-    if ('serviceWorker' in navigator) {
-        const reg = await navigator.serviceWorker.ready;
-        reg.showNotification(`Koha e ${emri}`, options);
-    } else {
-        new Notification(`Koha e ${emri}`, options);
-    }
-}
-
-
         
 </script>
 
 </body>
 </html>
-
