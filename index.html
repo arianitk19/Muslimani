@@ -895,11 +895,49 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+
+
+
+
+function applyGlobalSettings() {
+    // 1. Merr vlerat nga memoria (nese nuk ka, perdor ngjyren emarald si default)
+    const primaryColor = localStorage.getItem('pd_primary_color') || '#10b981';
+    const bgColor = localStorage.getItem('pd_bg_color') || '#020617';
+
+    // 2. Apliko variablat CSS ne menyre dinamike
+    document.documentElement.style.setProperty('--primary', primaryColor);
+    document.documentElement.style.setProperty('--bg', bgColor);
+
+    // 3. Perditeso ngjyrat e teksteve apo ikonave specifike qe nuk perdorin variabla
+    document.querySelectorAll('.text-emerald-500').forEach(el => {
+        el.style.color = primaryColor;
+    });
+}
+
+// Thirrja automatike sapo hapet faqja
+window.addEventListener('DOMContentLoaded', applyGlobalSettings);
+
+
+window.addEventListener('storage', (event) => {
+    // Kontrollojme nese ndryshimi ka te beje me parametrat e sistemit tonë
+    if (event.key && event.key.startsWith('pd_')) {
+        applyGlobalSettings(); // Apliko ndryshimet e reja menjëherë
+        
+        // Nese faqja ka sistem njoftimesh, shfaqe qe u be ndryshimi
+        if (typeof showZenithNotification === "function") {
+            showZenithNotification('Sistemi u Përditësua');
+        }
+    }
+});
+
+    
         
 </script>
 
 </body>
 </html>
+
 
 
 
