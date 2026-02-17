@@ -8,7 +8,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
-    <title>Info | Zenith Professional</title>
+    <title>Info</title>
 
     <link rel="manifest" href="manifest.json">
 
@@ -448,72 +448,34 @@
 
 
 
-        <section class="glass-card p-8">
+       <section class="glass-card p-8 border-emerald-500/20">
+    <div class="flex items-center gap-3 mb-8">
+        <i class="fa-solid fa-circle-half-stroke text-emerald-500"></i>
+        <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Tema e Sistemit</h3>
+    </div>
+    
+    <div class="grid grid-cols-3 gap-3">
+        <button onclick="updateTheme('light')" id="theme-light" class="theme-btn bg-white/5 py-4 rounded-2xl flex flex-col items-center gap-2 border border-white/5">
+            <i class="fa-solid fa-sun text-amber-500"></i>
+            <span class="text-[8px] font-black uppercase">Dritë</span>
+        </button>
+        
+        <button onclick="updateTheme('dark')" id="theme-dark" class="theme-btn bg-white/5 py-4 rounded-2xl flex flex-col items-center gap-2 border border-white/5">
+            <i class="fa-solid fa-moon text-blue-400"></i>
+            <span class="text-[8px] font-black uppercase">Natë</span>
+        </button>
 
-            <div class="flex items-center gap-3 mb-10">
-
-                <i class="fa-solid fa-sliders text-emerald-500"></i>
-
-                <h3 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Personalizimi</h3>
-
-            </div>
-
-            <div class="space-y-12">
-
-                <div>
-
-                    <div class="flex justify-between items-center mb-5">
-
-                        <span class="text-[11px] text-gray-400 uppercase font-black tracking-widest">Madhësia Fontit</span>
-
-                        <span id="font-size-label" class="text-sm font-black text-emerald-500">16px</span>
-
-                    </div>
-
-                    <input type="range" min="14" max="22" value="16" id="fontSlider" oninput="updateGlobalSetting('fontSize', this.value)">
-
-                </div>
-
-                <div>
-
-                    <span class="text-[11px] text-gray-400 uppercase font-black tracking-widest block mb-6">Tema Ngjyrave</span>
-
-                    <div class="flex justify-between gap-4">
-
-                        <button onclick="updateGlobalSetting('theme', '#10b981')" class="w-12 h-12 rounded-2xl bg-emerald-500 border-4 border-white/10 active:scale-90 transition-transform"></button>
-
-                        <button onclick="updateGlobalSetting('theme', '#3b82f6')" class="w-12 h-12 rounded-2xl bg-blue-500 border-4 border-white/10 active:scale-90 transition-transform"></button>
-
-                        <button onclick="updateGlobalSetting('theme', '#f59e0b')" class="w-12 h-12 rounded-2xl bg-amber-500 border-4 border-white/10 active:scale-90 transition-transform"></button>
-
-                        <button onclick="updateGlobalSetting('theme', '#f43f5e')" class="w-12 h-12 rounded-2xl bg-rose-500 border-4 border-white/10 active:scale-90 transition-transform"></button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
+        <button onclick="updateTheme('oled')" id="theme-oled" class="theme-btn bg-white/5 py-4 rounded-2xl flex flex-col items-center gap-2 border border-white/5">
+            <i class="fa-solid fa-bolt text-emerald-500"></i>
+            <span class="text-[8px] font-black uppercase">OLED</span>
+        </button>
+    </div>
+</section>
 
 
         <footer class="text-center py-12 opacity-30"><p class="text-[9px] font-black uppercase tracking-[0.5em]">Ratkoci Digital • 2026</p></footer>
 
     </main>
-
-    <div class="relative h-64 w-full overflow-hidden rounded-b-[3rem] shadow-2xl">
-    <img src="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=1000&auto=format&fit=crop" 
-         alt="Qabja" 
-         class="h-full w-full object-cover">
-    <div class="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent"></div>
-    <div class="absolute bottom-6 left-8">
-        <h1 class="text-3xl font-black text-white tracking-tight">Cilësimet</h1>
-        <p class="text-emerald-400 text-sm font-medium">Personalizo eksperiencën tënde</p>
-    </div>
-</div>
-
-
 
 <script>
     // --- 1. KONFIGURIMI STRIKT PD (DATABASE-I LOKAL) ---
@@ -540,29 +502,43 @@
         }
     };
 
-    // --- 2. APLIKIMI I CILËSIMEVE ---
-    function applyGlobalSettings() {
-        const primaryColor = PD_STORE.get('primary_color', '#10b981');
-        const bgColor = PD_STORE.get('bg_color', '#020617');
-        const fontSize = PD_STORE.get('fontSize', '16');
+  // Konfigurimi i Temave
+const THEMES = {
+    light: { bg: '#f8fafc', glass: 'rgba(0,0,0,0.03)', border: 'rgba(0,0,0,0.08)', text: '#020617' },
+    dark:  { bg: '#020617', glass: 'rgba(255,255,255,0.03)', border: 'rgba(255,255,255,0.08)', text: '#ffffff' },
+    oled:  { bg: '#000000', glass: 'rgba(255,255,255,0.05)', border: 'rgba(255,255,255,0.1)', text: '#ffffff' }
+};
 
-        document.documentElement.style.setProperty('--primary', primaryColor);
-        document.documentElement.style.setProperty('--bg', bgColor);
-        document.body.style.fontSize = fontSize + 'px';
+function updateTheme(mode) {
+    const theme = THEMES[mode];
+    PD_STORE.save('theme_mode', mode);
+    
+    // Apliko variablat CSS
+    document.documentElement.style.setProperty('--bg', theme.bg);
+    document.documentElement.style.setProperty('--glass', theme.glass);
+    document.documentElement.style.setProperty('--border', theme.border);
+    document.body.style.color = theme.text;
 
-        // Përditëso UI-në e faqes info
-        const fontSizeLabel = document.getElementById('font-size-label');
-        if(fontSizeLabel) fontSizeLabel.innerText = fontSize + 'px';
+    // Menaxhimi i butonave aktivë
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.remove('notif-active', 'border-emerald-500');
+        btn.style.background = "rgba(255,255,255,0.05)";
+    });
+    
+    const activeBtn = document.getElementById('theme-' + mode);
+    activeBtn.classList.add('notif-active');
+    
+    showZenithNotification('Tema u ndryshua');
+}
 
-        const offset = PD_STORE.get('offset', '0');
-        const calibVal = document.getElementById('calib-val');
-        if(calibVal) calibVal.innerText = (parseInt(offset) > 0 ? "+" : "") + offset + " min";
-
-        // Ndrysho ngjyrat e ikonave/teksteve që janë emerald
-        document.querySelectorAll('.text-emerald-500, .text-emerald-400').forEach(el => {
-            el.style.color = primaryColor;
-        });
-    }
+// Përditëso applyGlobalSettings që të lexojë temën në start
+function applyGlobalSettings() {
+    const mode = PD_STORE.get('theme_mode', 'dark');
+    updateTheme(mode);
+    
+    // Ruajmë smeraldin si ngjyrë primare standarde
+    document.documentElement.style.setProperty('--primary', '#10b981');
+}
 
     // --- 3. FUNKSIONET INTERAKTIVE ---
     function updateGlobalSetting(key, value) {
@@ -637,3 +613,4 @@
 
 </body>
 </html>
+
