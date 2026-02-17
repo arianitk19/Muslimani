@@ -16,7 +16,7 @@
 
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <link rel="apple-touch-icon" href="Images/604776747_122280490772225847_4370550408157022665_n.jpg">
+    <link rel="apple-touch-icon" href="Images/wp12285370.webp">
 
 
 
@@ -502,259 +502,138 @@
 
     </main>
 
+    <div class="relative h-64 w-full overflow-hidden rounded-b-[3rem] shadow-2xl">
+    <img src="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=1000&auto=format&fit=crop" 
+         alt="Qabja" 
+         class="h-full w-full object-cover">
+    <div class="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent"></div>
+    <div class="absolute bottom-6 left-8">
+        <h1 class="text-3xl font-black text-white tracking-tight">Cilësimet</h1>
+        <p class="text-emerald-400 text-sm font-medium">Personalizo eksperiencën tënde</p>
+    </div>
+</div>
 
 
-   <script>
 
-    // --- KONFIGURIMI STRIKT PD (PERKUJTUESI DITOR) ---
-
+<script>
+    // --- 1. KONFIGURIMI STRIKT PD (DATABASE-I LOKAL) ---
     const PD_STORE = {
-
         save(key, val) {
-
             localStorage.setItem('pd_' + key, val);
-
-            // Njofton të gjitha faqet e hapura (index.html)
-
+            // Kjo bën që index.html të "zgjohet" dhe të aplikojë ngjyrën/fontin e ri
             window.dispatchEvent(new Event('storage'));
-
-            // Sinkronizon me Service Worker për njoftime në sfond
-
             this.syncWorker();
-
         },
-
         get(key, def) {
-
             return localStorage.getItem('pd_' + key) || def;
-
         },
-
         syncWorker() {
-
             if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
-
                 navigator.serviceWorker.controller.postMessage({
-
                     type: 'UPDATE_CONFIG',
-
                     config: {
-
                         mode: this.get('notif_mode', 'none'),
-
                         offset: this.get('offset', '0')
-
                     }
-
                 });
-
             }
-
         }
-
     };
 
-
-
+    // --- 2. APLIKIMI I CILËSIMEVE ---
     function applyGlobalSettings() {
-
-        const theme = PD_STORE.get('theme', '#10b981');
-
+        const primaryColor = PD_STORE.get('primary_color', '#10b981');
+        const bgColor = PD_STORE.get('bg_color', '#020617');
         const fontSize = PD_STORE.get('fontSize', '16');
 
-        
-
+        document.documentElement.style.setProperty('--primary', primaryColor);
+        document.documentElement.style.setProperty('--bg', bgColor);
         document.body.style.fontSize = fontSize + 'px';
 
-        document.documentElement.style.setProperty('--primary', theme);
-
-        
-
-        const label = document.getElementById('font-size-label');
-
-        if(label) label.innerText = fontSize + 'px';
-
-        
-
-        // Përditëso UI e kalibrimit
+        // Përditëso UI-në e faqes info
+        const fontSizeLabel = document.getElementById('font-size-label');
+        if(fontSizeLabel) fontSizeLabel.innerText = fontSize + 'px';
 
         const offset = PD_STORE.get('offset', '0');
-
         const calibVal = document.getElementById('calib-val');
-
         if(calibVal) calibVal.innerText = (parseInt(offset) > 0 ? "+" : "") + offset + " min";
 
+        // Ndrysho ngjyrat e ikonave/teksteve që janë emerald
+        document.querySelectorAll('.text-emerald-500, .text-emerald-400').forEach(el => {
+            el.style.color = primaryColor;
+        });
     }
 
-
-
+    // --- 3. FUNKSIONET INTERAKTIVE ---
     function updateGlobalSetting(key, value) {
-
         PD_STORE.save(key, value);
-
         applyGlobalSettings();
-
     }
-
-
 
     function updateCalibration(val) {
-
         PD_STORE.save('offset', val);
-
         applyGlobalSettings();
-
     }
-
-
 
     async function updateNotifMode(mode) {
-
         const permission = await Notification.requestPermission();
-
         if (permission === 'granted') {
-
             PD_STORE.save('notif_mode', mode);
-
             refreshNotifUI();
-
             showZenithNotification('Sistemi');
-
         } else {
-
-            console.warn("Njoftimet nuk u lejuan.");
-
+            alert("Ju lutem lejoni njoftimet në cilësimet e browser-it.");
         }
-
     }
-
-
-
-    function showZenithNotification(tipi) {
-
-        const overlay = document.getElementById('notif-overlay');
-
-        if(!overlay) return;
-
-
-
-        if(tipi === 'Sistemi') {
-
-            document.getElementById('notif-type').innerText = "Sistemi PD";
-
-            document.getElementById('notif-message').innerText = "Cilësimet u sinkronizuan me sukses";
-
-        }
-
-
-
-        overlay.classList.add('show');
-
-        if(navigator.vibrate) navigator.vibrate([50, 30, 50]);
-
-        setTimeout(() => overlay.classList.remove('show'), 3000);
-
-    }
-
-
-
-    // Funksione Ndihmëse
 
     function refreshNotifUI() {
-
         const mode = PD_STORE.get('notif_mode', 'none');
-
-        document.querySelectorAll('.notif-btn').forEach(b => b.classList.remove('notif-active'));
-
-        const activeBtn = document.getElementById('notif-' + mode);
-
-        if(activeBtn) activeBtn.classList.add('notif-active');
-
+        document.querySelectorAll('.notif-btn').forEach(btn => {
+            btn.classList.remove('notif-active');
+            if(btn.id === 'notif-' + mode) btn.classList.add('notif-active');
+        });
     }
 
+    function showZenithNotification(tipi) {
+        const overlay = document.getElementById('notif-overlay');
+        if(!overlay) return;
+        overlay.classList.add('show');
+        if(navigator.vibrate) navigator.vibrate([50, 30, 50]);
+        setTimeout(() => overlay.classList.remove('show'), 3000);
+    }
 
+    // --- 4. NAVIGIMI DHE NISJA ---
+    function toggleMenu() {
+        const menu = document.getElementById('full-menu');
+        const trigger = document.querySelector('.menu-trigger');
+        menu.classList.toggle('active');
+        trigger.classList.toggle('open');
+        document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+    }
 
     window.addEventListener('DOMContentLoaded', () => {
-
         applyGlobalSettings();
-
         refreshNotifUI();
 
-        // Vendos metodën API në select nëse ekziston
-
+        // Vendos vlerën e API-t nëse ekziston select-i
         const savedMethod = PD_STORE.get('api_method', '13');
-
         const apiSelect = document.getElementById('apiMethod');
-
         if(apiSelect) apiSelect.value = savedMethod;
 
+        // Aktivizimi i linqeve të menusë
+        const currentPath = window.location.pathname.split("/").pop() || "index.html";
+        document.querySelectorAll('.menu-link').forEach(link => {
+            if(link.getAttribute('href') === currentPath) {
+                link.classList.add('active-page');
+            }
+        });
     });
 
-
-       function toggleMenu() {
-    const menu = document.getElementById('full-menu');
-    const trigger = document.querySelector('.menu-trigger');
-    
-    // Shton ose heq klasën 'active' për menunë
-    menu.classList.toggle('active');
-    
-    // Shton ose heq klasën 'open' për animacionin e butonit burger
-    trigger.classList.toggle('open');
-    
-    // Bllokon scroll-in e faqes kur menuja është e hapur
-    if (menu.classList.contains('active')) {
-        document.body.style.overflow = 'hidden';
-    } else {
-        document.body.style.overflow = 'auto';
-    }
-}
-
-// Mbyll menunë automatikisht kur klikohet një link
-document.querySelectorAll('.menu-link').forEach(link => {
-    link.addEventListener('click', () => {
-        document.getElementById('full-menu').classList.remove('active');
-        document.querySelector('.menu-trigger').classList.remove('open');
-        document.body.style.overflow = 'auto';
+    // Dëgjo për ndryshime nga faqet e tjera (p.sh. nëse ndryshon diçka te index)
+    window.addEventListener('storage', (e) => {
+        if (e.key && e.key.startsWith('pd_')) applyGlobalSettings();
     });
-});
-       
-
-
-// Kjo pjesë bën që faqet të komunikojnë me njëra-tjetrën
-window.addEventListener('storage', (event) => {
-    // Nëse ndryshon diçka që fillon me 'pd_' (si pd_theme, pd_fontSize)
-    if (event.key && event.key.startsWith('pd_')) {
-        
-        // 1. Reagimi: Apliko menjëherë ndryshimet vizuale
-        applyGlobalSettings(); 
-        
-        // 2. Paralajmërimi: Shfaq njoftimin "Dynamic Island" në të gjitha faqet
-        showZenithNotification('Sistemi'); 
-        
-        // 3. Përditëso butonat nëse jemi te faqja info
-        if (typeof refreshNotifUI === "function") refreshNotifUI();
-        
-        console.log("Sistemi u përditësua në kohë reale nga një faqe tjetër.");
-    }
-});
-
-// Dinamizmi i menusë (Pjesa që kërkove më parë, shtoje këtu)
-window.addEventListener('DOMContentLoaded', () => {
-    const currentPath = window.location.pathname.split("/").pop() || "index.html";
-    document.querySelectorAll('.menu-link').forEach(link => {
-        if(link.getAttribute('href') === currentPath) {
-            link.classList.add('active-page');
-        } else {
-            link.classList.remove('active-page');
-        }
-    });
-});
-
-       
 </script>
 
 </body>
-
 </html>
-
-
