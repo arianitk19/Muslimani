@@ -29,7 +29,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <style>
+<style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800;900&display=swap');
     
     :root { 
@@ -50,10 +50,30 @@
         flex-direction: column;
     }
 
-    /* Menu Trigger */
+    /* Udhëzuesi i ri lart */
+    .onboarding-guide {
+        position: fixed; top: 2.5rem; left: 1.5rem; right: 5.5rem;
+        background: var(--glass);
+        backdrop-filter: blur(15px);
+        border: 1px solid var(--border);
+        padding: 12px 20px;
+        border-radius: 1.2rem;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .guide-dot {
+        width: 8px; height: 8px; border-radius: 50%;
+        background: var(--primary);
+        animation: pulse 2s infinite;
+    }
+
+    /* Menu Trigger Zenith */
     .menu-trigger { 
         position: fixed; top: 2.5rem; right: 1.5rem; z-index: 2000; 
-        padding: 12px; background: var(--glass); border-radius: 1.2rem; border: 1px solid var(--border); 
+        padding: 12px; background: var(--glass); border-radius: 1.2rem; border: 1px solid var(--border);
         backdrop-filter: blur(10px);
     }
     .burger-line { width: 22px; height: 1.5px; background: var(--primary); margin: 5px 0; transition: 0.4s; border-radius: 10px; }
@@ -70,41 +90,24 @@
 
     .menu-link {
         font-size: 2.5rem; font-weight: 700; margin: 1rem 0; display: flex; align-items: center; 
-        gap: 1.5rem; color: rgba(255,255,255,0.4); transition: 0.4s; letter-spacing: -1px; text-decoration: none;
+        gap: 1.5rem; color: rgba(255,255,255,0.4); transition: 0.4s; text-decoration: none;
     }
     .menu-link.active-page { color: white; }
-    .menu-link i { color: var(--primary); }
 
-    /* Modern Compass Core */
-    .compass-viewport {
+    /* Compass UI */
+    .compass-container {
         position: relative;
-        width: 340px;
-        height: 340px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .compass-aura {
-        position: absolute;
-        inset: -20px;
-        background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
-        opacity: 0;
-        transition: opacity 0.8s ease, transform 0.8s ease;
-        filter: blur(40px);
-        z-index: 0;
+        width: 320px; height: 320px;
+        display: flex; align-items: center; justify-content: center;
     }
 
     .glass-card-circle { 
-        background: var(--glass); 
+        background: radial-gradient(circle at center, rgba(255,255,255,0.02) 0%, transparent 70%);
         backdrop-filter: blur(20px); 
         border: 2px solid var(--border); 
         border-radius: 50%; 
-        position: relative;
-        width: 100%;
-        height: 100%;
-        transition: all 0.5s ease;
-        z-index: 1;
+        position: absolute; width: 100%; height: 100%;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     #compass-disc {
@@ -113,176 +116,180 @@
         transition: transform 0.1s linear;
     }
 
-    /* Ikona e Qabes në diskun që rrotullohet */
-    .qibla-target {
+    /* Ikona e personit në sexhde */
+    #center-hub {
         position: absolute;
-        top: 25px; left: 50%;
+        width: 100px; height: 100px;
+        background: #020617;
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        z-index: 10;
+        transition: all 0.5s ease;
+    }
+
+    .sexhde-icon {
+        font-size: 2.5rem;
+        opacity: 0.1;
+        transition: all 0.5s ease;
+        transform: rotate(-90deg);
+    }
+
+    .aligned-glow {
+        box-shadow: 0 0 80px rgba(16, 185, 129, 0.15);
+        border-color: var(--primary) !important;
+    }
+
+    .aligned-glow .sexhde-icon {
+        opacity: 1;
+        color: var(--primary);
+        filter: drop-shadow(0 0 10px var(--primary));
+        transform: rotate(-90deg) scale(1.1);
+    }
+
+    .needle-qibla {
+        position: absolute;
+        top: 30px; left: 50%;
         transform: translateX(-50%);
         color: var(--primary);
-        text-align: center;
     }
 
-    /* Qendra: Personi në Sexhde */
-    .prayer-center {
-        position: absolute;
-        z-index: 10;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 5px;
-    }
-    
-    .prayer-icon {
-        font-size: 3.5rem;
-        color: rgba(255,255,255,0.1);
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    /* Kur je drejt */
-    .aligned-glow .compass-aura { opacity: 0.2; transform: scale(1.1); }
-    .aligned-glow .glass-card-circle { border-color: var(--primary); box-shadow: 0 0 40px rgba(16, 185, 129, 0.2); }
-    .aligned-glow .prayer-icon { color: var(--primary); filter: drop-shadow(0 0 15px var(--primary)); transform: scale(1.15); }
-
-    /* Modal */
-    .modal-overlay { 
-        display: flex; position: fixed; inset: 0; z-index: 3000; 
-        background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(15px); 
-        align-items: center; justify-content: center; padding: 20px; 
-    }
-    .modal-content { 
-        background: linear-gradient(145deg, #051911 0%, #020617 100%); 
-        border: 1px solid var(--border); border-radius: 3rem; padding: 2.5rem; text-align: center; width: 100%; max-width: 380px;
+    @keyframes pulse {
+        0% { opacity: 0.5; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.2); }
+        100% { opacity: 0.5; transform: scale(1); }
     }
 </style>
 
-<body>
-    <div class="menu-trigger" onclick="toggleMenu()">
-        <div class="burger-line line-1"></div>
-        <div class="burger-line line-2"></div>
-        <div class="burger-line line-3"></div>
+<div class="onboarding-guide">
+    <div class="guide-dot"></div>
+    <span id="top-guide" class="text-[9px] font-black uppercase tracking-widest opacity-70">Mbajeni telefonin horizontalisht</span>
+</div>
+
+<div class="menu-trigger" onclick="toggleMenu()">
+    <div class="burger-line line-1"></div>
+    <div class="burger-line line-2"></div>
+    <div class="burger-line line-3"></div>
+</div>
+
+<nav id="full-menu">
+    <a href="index.html" class="menu-link">Vaktia</a>
+    <a href="kibla.html" class="menu-link active-page">Kibla</a>
+    <a href="info.html" class="menu-link">Info</a>
+</nav>
+
+<div id="permission-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2 class="text-3xl font-black italic mb-4">Start</h2>
+        <p class="text-[10px] text-gray-500 font-bold uppercase tracking-widest mb-8">Aktivizo sensorët për saktësi</p>
+        <button onclick="initSensor()" class="w-full py-4 bg-emerald-500 text-black rounded-2xl font-black uppercase text-[11px]">Lejo Qasjen</button>
     </div>
+</div>
 
-    <nav id="full-menu">
-        <a href="index.html" class="menu-link">Vaktia</a>
-        <a href="kibla.html" class="menu-link active-page">Kibla</a>
-        <a href="info.html" class="menu-link">Info</a>
-    </nav>
+<main class="flex-1 flex flex-col items-center justify-center p-6 relative">
+    <div id="degree-val" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[12rem] font-black italic opacity-[0.02] pointer-events-none">0°</div>
 
-    <div id="permission-modal" class="modal-overlay">
-        <div class="modal-content">
-            <i class="fa-solid fa-location-dot text-emerald-500 text-4xl mb-4"></i>
-            <h2 class="text-3xl font-black italic mb-4">Saktësia</h2>
-            <p class="text-[10px] text-gray-500 uppercase tracking-widest mb-8">Aktivizoni GPS dhe sensorët për drejtimin në milimetër.</p>
-            <button onclick="initSensor()" class="w-full py-4 bg-emerald-500 text-black rounded-2xl font-black uppercase tracking-widest text-xs">Fillo</button>
+    <div class="compass-container">
+        <div id="compass-disc" class="glass-card-circle">
+            <div class="needle-qibla">
+                <i class="fa-solid fa-kaaba text-4xl"></i>
+            </div>
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 text-[10px] font-black opacity-20 uppercase tracking-[0.4em]">South</div>
+        </div>
+
+        <div id="center-hub">
+            <i class="fa-solid fa-person-praying sexhde-icon"></i>
         </div>
     </div>
 
-    <header class="pt-20 px-8 text-center">
-        <h1 class="text-5xl font-black italic tracking-tighter">Kibla<span class="text-emerald-500">.</span></h1>
-        <p id="instruction" class="text-[9px] uppercase tracking-[0.4em] text-white opacity-40 mt-2">Kërkohet orientimi</p>
-    </header>
+    <div class="mt-12 text-center">
+        <p id="instruction" class="text-[11px] font-black uppercase tracking-[0.4em] text-white/40">Kërko drejtimin</p>
+        <div class="flex items-baseline gap-2 justify-center mt-4">
+            <span id="dist-val" class="text-2xl font-black italic text-emerald-500">--</span>
+            <span class="text-[9px] font-bold opacity-30 uppercase tracking-widest">KM deri në Mekë</span>
+        </div>
+    </div>
+</main>
 
-    <main class="flex-1 flex flex-col items-center justify-center p-6 relative">
-        <div id="degree-val" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[14rem] font-black italic tracking-tighter opacity-[0.02] pointer-events-none">0°</div>
+<script>
+    const disc = document.getElementById('compass-disc');
+    const degVal = document.getElementById('degree-val');
+    const instr = document.getElementById('instruction');
+    const topGuide = document.getElementById('top-guide');
+    const discUI = document.querySelector('.glass-card-circle');
+    let qiblaAngle = 143;
 
-        <div class="compass-viewport" id="compass-ui">
-            <div class="compass-aura"></div>
+    async function initSensor() {
+        navigator.geolocation.getCurrentPosition(pos => {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            qiblaAngle = calculateQibla(lat, lng);
             
-            <div id="compass-disc" class="glass-card-circle">
-                <div class="qibla-target">
-                    <i class="fa-solid fa-kaaba text-4xl shadow-2xl"></i>
-                    <div class="text-[8px] font-black mt-2 tracking-[0.3em]">MEKKE</div>
-                </div>
-                <div class="absolute bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-black opacity-20 tracking-[0.5em]">SOUTH</div>
-            </div>
+            const R = 6371;
+            const dLat = (21.4225 - lat) * Math.PI / 180;
+            const dLon = (39.8262 - lng) * Math.PI / 180;
+            const a = Math.sin(dLat/2)**2 + Math.cos(lat*Math.PI/180)*Math.cos(21.4225*Math.PI/180)*Math.sin(dLon/2)**2;
+            document.getElementById('dist-val').innerText = Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+        });
 
-            <div class="prayer-center">
-                <div class="prayer-icon">
-                    <i class="fa-solid fa-person-praying rotate-[-90deg]"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-16 text-center">
-            <div id="dist-info" class="bg-white/5 px-6 py-3 rounded-full border border-white/5 opacity-0 transition-opacity duration-1000">
-                <span id="dist-val" class="text-xl font-black italic text-emerald-500">0</span>
-                <span class="text-[9px] font-bold opacity-40 uppercase ml-1 tracking-widest">KM deri në Qabe</span>
-            </div>
-        </div>
-    </main>
-
-    <script>
-        const disc = document.getElementById('compass-disc');
-        const degVal = document.getElementById('degree-val');
-        const instr = document.getElementById('instruction');
-        const ui = document.getElementById('compass-ui');
-        let qiblaAngle = 143; // Default
-
-        function toggleMenu() {
-            document.querySelector('.menu-trigger').classList.toggle('open');
-            document.getElementById('full-menu').classList.toggle('active');
+        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+            const res = await DeviceOrientationEvent.requestPermission();
+            if (res === 'granted') startCompass();
+        } else {
+            startCompass();
         }
+        document.getElementById('permission-modal').style.display = 'none';
+    }
 
-        async function initSensor() {
-            // GPS Location & Distance
-            navigator.geolocation.getCurrentPosition(pos => {
-                const lat = pos.coords.latitude;
-                const lng = pos.coords.longitude;
-                
-                // Llogaritja e këndit real
-                const phiK = 21.4225 * Math.PI / 180.0;
-                const lamK = 39.8262 * Math.PI / 180.0;
-                const phi = lat * Math.PI / 180.0;
-                const lam = lng * Math.PI / 180.0;
-                qiblaAngle = (Math.atan2(Math.sin(lamK-lam), Math.cos(phi)*Math.tan(phiK)-Math.sin(phi)*Math.cos(lamK-lam)) * 180/Math.PI + 360) % 360;
+    function calculateQibla(lat, lng) {
+        const phiK = 21.4225 * Math.PI / 180.0;
+        const lamK = 39.8262 * Math.PI / 180.0;
+        const phi = lat * Math.PI / 180.0;
+        const lam = lng * Math.PI / 180.0;
+        return (Math.atan2(Math.sin(lamK-lam), Math.cos(phi)*Math.tan(phiK)-Math.sin(phi)*Math.cos(lamK-lam)) * 180/Math.PI + 360) % 360;
+    }
 
-                // Distanca
-                const R = 6371;
-                const dLat = (21.4225 - lat) * Math.PI/180;
-                const dLon = (39.8262 - lng) * Math.PI/180;
-                const a = Math.sin(dLat/2)**2 + Math.cos(phi)*Math.cos(phiK)*Math.sin(dLon/2)**2;
-                document.getElementById('dist-val').innerText = Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
-                document.getElementById('dist-info').style.opacity = "1";
-            });
+    function startCompass() {
+        window.addEventListener('deviceorientationabsolute', handleMotion, true);
+        window.addEventListener('deviceorientation', handleMotion, true);
+    }
 
-            if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-                const res = await DeviceOrientationEvent.requestPermission();
-                if (res === 'granted') startCompass();
-            } else {
-                startCompass();
-            }
-            document.getElementById('permission-modal').style.display = 'none';
+    function handleMotion(e) {
+        let heading = e.webkitCompassHeading || (360 - e.alpha);
+        if (!heading) return;
+
+        let rotation = qiblaAngle - heading;
+        let roundedHeading = Math.round(heading);
+        degVal.innerText = roundedHeading + "°";
+
+        const diff = Math.abs((roundedHeading % 360) - Math.round(qiblaAngle));
+        
+        // Efekti "Magnetik" dhe Sinjali
+        if (diff < 3 || diff > 357) {
+            disc.style.transform = `rotate(${qiblaAngle - heading}deg) scale(1.05)`;
+            discUI.classList.add('aligned-glow');
+            instr.innerText = "JE DREJT KIBLËS";
+            instr.style.color = "var(--primary)";
+            topGuide.innerText = "NDALO! JE NË DREJTIMIN E DUHUR";
+            topGuide.style.color = "var(--primary)";
+            if(navigator.vibrate) navigator.vibrate(30);
+        } else {
+            disc.style.transform = `rotate(${rotation}deg) scale(1)`;
+            discUI.classList.remove('aligned-glow');
+            instr.innerText = "RROTULLOHU NGADALË";
+            instr.style.color = "rgba(255,255,255,0.4)";
+            topGuide.innerText = roundedHeading < qiblaAngle ? "Rrotullohu djathtas →" : "← Rrotullohu majtas";
+            topGuide.style.color = "white";
         }
+    }
 
-        function startCompass() {
-            window.addEventListener('deviceorientationabsolute', handleMotion, true);
-            window.addEventListener('deviceorientation', handleMotion, true);
-        }
-
-        function handleMotion(e) {
-            let heading = e.webkitCompassHeading || (360 - e.alpha);
-            if (!heading) return;
-
-            const rotation = qiblaAngle - heading;
-            disc.style.transform = `rotate(${rotation}deg)`;
-            degVal.innerText = Math.round(heading) + "°";
-
-            const diff = Math.abs((Math.round(heading) % 360) - Math.round(qiblaAngle));
-            if (diff < 3 || diff > 357) {
-                ui.classList.add('aligned-glow');
-                instr.innerText = "DREJTIMI I SAKTË";
-                instr.style.opacity = "1";
-                if(navigator.vibrate) navigator.vibrate(20);
-            } else {
-                ui.classList.remove('aligned-glow');
-                instr.innerText = "RROTULLOHU NGADALË";
-                instr.style.opacity = "0.4";
-            }
-        }
-    </script>
-</body>
-    
+    function toggleMenu() {
+        document.querySelector('.menu-trigger').classList.toggle('open');
+        document.getElementById('full-menu').classList.toggle('active');
+    }
+</script>
 </html>
+
 
 
 
