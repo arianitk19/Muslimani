@@ -8,174 +8,254 @@
 
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Përkujtuesi">
-    <link rel="apple-touch-icon" href="https://img.icons8.com/fluency/512/crescent-moon.png">
-    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/512/crescent-moon.png">
+<meta name="apple-mobile-web-app-title" content="Përkujtuesi">
 
+<link rel="apple-touch-icon" href="https://img.icons8.com/fluency/512/crescent-moon.png">
+
+<link rel="icon" type="image/png" href="https://img.icons8.com/fluency/512/crescent-moon.png">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <script>
+        (function(a, b, c) {
+            if (c in b && b[c]) {
+                var d, e = a.location, f = /^(a|html)$/i;
+                a.addEventListener("click", function(a) {
+                    d = a.target;
+                    while (!f.test(d.nodeName)) d = d.parentNode;
+                    "href" in d && (d.href.indexOf("http") || ~d.href.indexOf(e.host)) && (a.preventDefault(), e.href = d.href)
+                }, !1)
+            }
+        })(document, window.navigator, "standalone");
+    </script>
+
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/mosque.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800;900&display=swap');
 
-        :root {
-            --primary: #10b981;
-            --bg: #020617;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.07);
-        }
+    :root {
+        --primary: #10b981;
+        --bg: #020617;
+        --glass: rgba(255, 255, 255, 0.03);
+        --border: rgba(255, 255, 255, 0.08);
+        --neon-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
 
-        body {
-            background: var(--bg);
-            color: white;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
+    body {
+        background: var(--bg);
+        color: white;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        min-height: 100vh;
+        margin: 0;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+    }
 
-        /* --- PREMIUM PRAYER CARDS --- */
-        #vaktet-list {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.25rem;
-            padding: 1.5rem;
-        }
+    /* --- MENUJA (IDENTIKE SI BAZA PARAPRAKE) --- */
+    .menu-trigger {
+        position: fixed; top: 2.5rem; right: 1.5rem; z-index: 2000;
+        padding: 12px; background: var(--glass); border-radius: 1.2rem; border: 1px solid var(--border);
+        cursor: pointer; backdrop-filter: blur(10px);
+    }
+    .burger-line { width: 22px; height: 1.5px; background: var(--primary); margin: 5px 0; transition: 0.4s; border-radius: 10px; }
+    .open .line-1 { transform: translateY(6.5px) rotate(45deg); }
+    .open .line-2 { opacity: 0; }
+    .open .line-3 { transform: translateY(-6.5px) rotate(-45deg); }
 
-        .vakt-card {
-            position: relative;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 2.2rem;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
+    #full-menu {
+        position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(50px);
+        z-index: 1999; display: flex; flex-direction: column; justify-content: center;
+        padding: 3rem; visibility: hidden; opacity: 0; transition: 0.5s;
+    }
+    #full-menu.active { visibility: visible; opacity: 1; }
 
-        .vakt-icon-container {
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 1.1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-            border: 1px solid var(--border);
-            transition: 0.4s;
-        }
+    .menu-link {
+        font-size: 2.5rem; font-weight: 700; margin: 1rem 0; display: flex; align-items: center;
+        gap: 1.5rem; color: rgba(255,255,255,0.4); transition: 0.4s; letter-spacing: -1px; text-decoration: none;
+    }
+    .menu-link i { font-size: 1.8rem; color: var(--primary); opacity: 0.5; }
+    .menu-link:hover, .menu-link.active-page { color: white; transform: translateX(10px); }
 
-        /* Vakti Aktiv (The Highlight) */
-        .vakt-card.active {
-            transform: scale(1.05);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            z-index: 20;
-        }
+    /* --- PROGRESS RING --- */
+    .progress-container {
+        position: relative; width: 220px; height: 220px;
+        margin: 2rem auto; display: flex; align-items: center; justify-content: center;
+    }
+    #progress-bar {
+        stroke-dasharray: 596.9; stroke-dashoffset: 596.9;
+        transition: stroke-dashoffset 1s linear; stroke-linecap: round;
+        filter: drop-shadow(0 0 8px var(--primary));
+    }
+    .progress-bg { stroke: rgba(255, 255, 255, 0.05); }
 
-        .vakt-card.active::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at top right, rgba(255,255,255,0.15), transparent);
-            pointer-events: none;
-        }
+    /* --- RIKONSTRUKTIMI I KARTAVE (PREMIUM GRID) --- */
+    #vaktet-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        padding: 0 1.5rem 2rem 1.5rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
 
-        .vakt-card.active .vakt-icon-container {
-            background: white;
-            color: #000;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
+    .vakt-card {
+        position: relative;
+        background: linear-gradient(145deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+        border: 1px solid var(--border);
+        border-radius: 2.5rem;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        overflow: hidden;
+    }
 
-        /* Namazet që kanë kaluar */
-        .vakt-card.past {
-            opacity: 0.3;
-            filter: grayscale(0.5);
-            transform: scale(0.96);
-        }
+    /* Efekti kur vakti është aktiv */
+    .vakt-card.active {
+        background: var(--glass);
+        border: 1px solid var(--primary);
+        box-shadow: var(--neon-shadow);
+        transform: scale(1.02);
+    }
 
-        .vakt-name {
-            font-size: 0.7rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: rgba(255, 255, 255, 0.4);
-            margin-bottom: 0.25rem;
-        }
+    /* Namazet që kanë kaluar */
+    .vakt-card.past {
+        opacity: 0.35;
+        filter: grayscale(0.8);
+    }
 
-        .vakt-time {
-            font-size: 1.6rem;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
+    .vakt-icon-box {
+        width: 48px;
+        height: 48px;
+        background: rgba(255,255,255,0.03);
+        border-radius: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.25rem;
+        margin-bottom: 1rem;
+        color: var(--primary);
+        transition: 0.3s;
+    }
 
-        /* --- UI COMPONENTS --- */
-        .glass-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 2.5rem;
-            backdrop-filter: blur(15px);
-        }
+    .active .vakt-icon-box {
+        background: var(--primary);
+        color: var(--bg);
+        box-shadow: 0 0 15px var(--primary);
+    }
 
-        .task-btn {
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+    .vakt-name {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: rgba(255,255,255,0.5);
+        margin-bottom: 0.3rem;
+    }
 
-        .task-btn.done {
-            background: var(--primary) !important;
-            color: var(--bg) !important;
-            border-color: var(--primary) !important;
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
-        }
+    .vakt-time {
+        font-size: 1.75rem;
+        font-weight: 800;
+        letter-spacing: -1px;
+    }
 
-        /* --- MENU & PROGRESS --- */
-        .menu-trigger {
-            position: fixed; top: 2.5rem; right: 1.5rem; z-index: 2000;
-            padding: 12px; background: var(--card-bg); border-radius: 1.2rem; border: 1px solid var(--border);
-            cursor: pointer; backdrop-filter: blur(10px);
-        }
-        .burger-line { width: 22px; height: 1.8px; background: var(--primary); margin: 5px 0; transition: 0.4s; }
-        .open .line-1 { transform: translateY(6.8px) rotate(45deg); }
-        .open .line-2 { opacity: 0; }
-        .open .line-3 { transform: translateY(-6.8px) rotate(-45deg); }
+    /* Efekti i sfondit dinamik për vaktin aktiv */
+    .active-glow {
+        position: absolute;
+        width: 100px; height: 100px;
+        background: var(--primary);
+        filter: blur(60px);
+        opacity: 0.15;
+        z-index: -1;
+    }
 
-        #full-menu {
-            position: fixed; inset: 0; background: rgba(2, 6, 23, 0.98); backdrop-filter: blur(50px);
-            z-index: 1999; display: flex; flex-direction: column; justify-content: center;
-            padding: 3rem; visibility: hidden; opacity: 0; transition: 0.5s;
-        }
-        #full-menu.active { visibility: visible; opacity: 1; }
+    @media (max-width: 480px) {
+        #vaktet-container { gap: 0.75rem; padding: 0 1rem 2rem 1rem; }
+        .vakt-time { font-size: 1.4rem; }
+        .progress-container { width: 190px; height: 190px; }
+    }
+</style>
 
-        #progress-bar {
-            stroke-dasharray: 596.9; stroke-dashoffset: 596.9;
-            transition: stroke-dashoffset 1s linear; stroke-linecap: round;
-            filter: drop-shadow(0 0 10px var(--primary));
-        }
-
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 0 0px rgba(16, 185, 129, 0.4); }
-            100% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
-        }
-        .vakt-impulse { animation: pulse-glow 2s infinite; }
-    </style>
 </head>
 
-<body class="pb-12">
+<div id="intro-screen" class="fixed inset-0 z-[5000] flex flex-col items-center justify-center bg-[#020617] transition-all duration-1000">
+    <div class="absolute inset-0 opacity-10 pointer-events-none" 
+         style="background-image: radial-gradient(circle at 2px 2px, #10b981 1px, transparent 0); background-size: 40px 40px;">
+    </div>
 
-    <div id="intro-screen" class="fixed inset-0 z-[5000] flex flex-col items-center justify-center bg-[#020617] transition-all duration-1000">
-        <div class="relative z-10 text-center px-6">
-            <div class="w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto border border-emerald-500/30 mb-8">
+    <div class="relative z-10 text-center px-6">
+        <div class="mb-8 animate-bounce-slow">
+            <div class="w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto border border-emerald-500/30">
                 <i class="fa-solid fa-mosque text-5xl text-emerald-500"></i>
             </div>
-            <h1 class="text-4xl font-black italic tracking-tighter text-white mb-2">Përkujtuesi <span class="text-emerald-500">Ditor</span></h1>
-            <p class="text-gray-500 text-[10px] tracking-[0.4em] uppercase mb-12 opacity-70">Paqja qoftë mbi ju</p>
-            <button onclick="startApp()" class="px-12 py-4 border border-emerald-500/50 rounded-2xl text-emerald-500 font-bold uppercase tracking-widest text-xs hover:bg-emerald-500 hover:text-black transition-all">Hyni në Faqe</button>
+        </div>
+
+        <h1 class="text-4xl font-black italic tracking-tighter text-white mb-2">
+            Përkujtuesi <span class="text-emerald-500">Ditor</span>
+        </h1>
+        
+        <p class="text-gray-400 text-sm tracking-[0.2em] uppercase mb-12 opacity-0 animate-fade-in">
+            Paqja qoftë mbi ju
+        </p>
+
+        <button onclick="startApp()" class="group relative px-12 py-4 bg-transparent border border-emerald-500/50 rounded-2xl overflow-hidden transition-all hover:bg-emerald-500">
+            <span class="relative z-10 text-emerald-500 font-bold tracking-widest text-xs uppercase group-hover:text-black transition-colors">
+                Hyni në Faqe
+            </span>
+        </button>
+    </div>
+
+    <div class="absolute bottom-10">
+        <p class="text-[9px] text-gray-600 tracking-[0.5em] uppercase italic">Bismilah</p>
+    </div>
+</div>
+
+<style>
+    /* Animacionet për Intro */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 0.7; transform: translateY(0); }
+    }
+    .animate-fade-in { animation: fadeIn 1.5s ease forwards 0.5s; }
+    
+    @keyframes bounceSlow {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    .animate-bounce-slow { animation: bounceSlow 3s ease-in-out infinite; }
+
+    /* Zhdukja e Intros */
+    .fade-out {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+</style>
+
+<script>
+    function startApp() {
+        const intro = document.getElementById('intro-screen');
+        intro.classList.add('fade-out');
+        
+        // Opsionale: Aktivizo tingullin ose dridhjen kur klikohet
+        if (navigator.vibrate) navigator.vibrate(50);
+    }
+</script>
+    
+<body class="pb-12">
+
+    <div id="celebration-modal" class="fixed inset-0 z-[3000] hidden items-center justify-center p-8 backdrop-blur-xl bg-black/80">
+        <div class="modal-content glass-card p-10 text-center max-w-xs">
+            <div class="w-16 h-16 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fa-solid fa-check text-emerald-500 text-2xl"></i>
+            </div>
+            <h2 class="text-2xl font-black mb-2 italic">MashAllah!</h2>
+            <p class="text-gray-400 text-sm italic">Allahu ta pranoftë ibadetin tënd.</p>
+            <button onclick="closeCelebration()" class="mt-8 bg-emerald-500 text-black font-black py-3 px-8 rounded-2xl w-full uppercase tracking-widest text-xs">Amin</button>
         </div>
     </div>
 
@@ -185,233 +265,638 @@
         <div class="burger-line line-3"></div>
     </div>
 
-    <nav id="full-menu">
-        <div class="mb-10"><p class="text-emerald-500 font-black tracking-[0.4em] text-[10px] uppercase opacity-50">Navigimi</p></div>
-        <a href="index.html" class="text-4xl font-black mb-6 flex items-center gap-4 text-white"><i class="fa-solid fa-house-chimney text-emerald-500 text-2xl"></i> Vaktia</a>
-        <a href="lutje.html" class="text-4xl font-black mb-6 flex items-center gap-4 text-gray-600"><i class="fa-solid fa-hand-holding-heart text-emerald-500 text-2xl"></i> Lutjet</a>
-        <a href="kibla.html" class="text-4xl font-black mb-6 flex items-center gap-4 text-gray-600"><i class="fa-solid fa-compass text-emerald-500 text-2xl"></i> Kibla</a>
-        <a href="info.html" class="text-4xl font-black mb-6 flex items-center gap-4 text-gray-600"><i class="fa-solid fa-circle-info text-emerald-500 text-2xl"></i> Info</a>
-    </nav>
+    <div class="menu-trigger" onclick="toggleMenu()">
+    <div class="burger-line line-1"></div>
+    <div class="burger-line line-2"></div>
+    <div class="burger-line line-3"></div>
+</div>
 
-    <header class="pt-20 px-8 max-w-md mx-auto">
-        <div class="mb-10">
-            <h2 class="text-5xl font-black tracking-tighter italic leading-tight">Selam<br>Alejkum<span class="text-emerald-500">.</span></h2>
-            <p id="hijri-date-top" class="text-[10px] uppercase tracking-[0.3em] text-emerald-500 font-black mt-3 opacity-80"></p>
+<nav id="full-menu">
+    <div class="mb-10"><p class="text-emerald-500 font-black tracking-[0.4em] text-xs uppercase opacity-50">Navigimi</p></div>
+    <a href="index.html" class="menu-link active-page"><i class="fa-solid fa-house-chimney"></i> Vaktia</a>
+    <a href="lutje.html" class="menu-link"><i class="fa-solid fa-hand-holding-heart"></i> Lutjet</a>
+    <a href="kibla.html" class="menu-link"><i class="fa-solid fa-compass"></i> Kibla</a>
+    <a href="ligjeratat.html" class="menu-link"><i class="fa-solid fa-microphone-lines"></i> Ligjërata</a>
+    <a href="info.html" class="menu-link"><i class="fa-solid fa-circle-info"></i> Info</a>
+    <div class="mt-auto pt-10 border-t border-white/5">
+        <p class="text-[10px] text-gray-500 tracking-widest uppercase italic">Perkujtuesi Ditor &copy; 2026</p>
+    </div>
+</nav>
+
+    <header class="pt-20 px-8">
+        <div class="max-w-md mx-auto mb-10">
+            <h2 class="text-5xl font-black tracking-tighter mb-2 italic">Selam Alejkum<span class="text-emerald-500">.</span></h2>
+            <p id="hijri-date-top" class="text-[10px] uppercase tracking-[0.3em] text-emerald-500 font-bold opacity-70"></p>
         </div>
 
-        <div class="relative w-56 h-56 mx-auto mb-16">
-            <svg viewBox="0 0 220 220" class="w-full h-full transform -rotate-90">
-                <circle cx="110" cy="110" r="95" stroke="rgba(255,255,255,0.05)" stroke-width="2" fill="none"/>
-                <circle id="progress-bar" cx="110" cy="110" r="95" stroke="var(--primary)" stroke-width="3" fill="none"/>
+        <div class="progress-container mb-12 relative text-center">
+            <svg width="220" height="220" class="mx-auto">
+                <circle class="text-white/5" stroke-width="2" stroke="currentColor" fill="transparent" r="95" cx="110" cy="110"/>
+                <circle id="progress-bar" class="progress-ring__circle" stroke-width="3" stroke-dasharray="596.9" stroke-dashoffset="596.9" stroke-linecap="round" fill="transparent" r="95" cx="110" cy="110" transform="rotate(-90 110 110)"/>
             </svg>
-            <div class="absolute inset-0 flex flex-col items-center justify-center rotate-0">
-                <span id="live-clock" class="text-5xl font-black italic tracking-tighter">00:00</span>
-                <span class="text-[8px] uppercase tracking-[0.5em] text-gray-500 font-bold mt-2">Koha Aktuale</span>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                <span id="live-clock" class="text-5xl font-black tracking-tighter text-white italic">00:00</span>
+                <span class="text-[9px] uppercase tracking-[0.4em] text-gray-500 font-bold mt-2">Koha Lokale</span>
             </div>
         </div>
     </header>
 
-    <main class="max-w-md mx-auto px-6 space-y-8">
-        <div class="glass-card p-10 text-center relative overflow-hidden">
-            <div class="absolute -top-4 -right-4 opacity-[0.03] rotate-12">
-                <i class="fa-solid fa-mosque text-9xl"></i>
+    <main class="max-w-md mx-auto px-6 space-y-6">
+        <div class="glass-card p-8 text-center relative overflow-hidden bg-gradient-to-br from-white/5 to-transparent">
+            <div class="absolute top-0 right-0 p-4 opacity-10">
+                <i class="fa-solid fa-mosque text-6xl"></i>
             </div>
-            <p class="text-[10px] uppercase tracking-[0.6em] text-emerald-500 font-black mb-3">I Radhës</p>
-            <h3 id="next-prayer-name" class="text-6xl font-black italic tracking-tighter mb-6">-</h3>
-            <div class="inline-flex items-center gap-3 px-6 py-3 rounded-2xl bg-black/40 border border-white/5">
+            <p class="text-[10px] uppercase tracking-[0.5em] text-emerald-500 font-black mb-2">I Radhës</p>
+            <h3 id="next-prayer-name" class="text-5xl font-black italic tracking-tighter mb-4">-</h3>
+            <div class="inline-flex items-center gap-3 px-6 py-2 rounded-2xl bg-black/40 border border-white/5">
                 <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span id="prayer-countdown" class="text-lg font-black font-mono text-emerald-500">00:00:00</span>
+                <span id="prayer-countdown" class="text-sm font-bold font-mono tracking-widest text-emerald-500">00:00:00</span>
             </div>
         </div>
 
-        <div id="vaktet-list">
-            </div>
+        <div id="vaktet-list" class="grid grid-cols-2 gap-4"></div>
 
-        <div class="glass-card p-8">
-            <div class="flex justify-between items-center mb-8">
-                <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500">Ecuria Ditore</h4>
-                <p id="task-count" class="text-[10px] text-emerald-500 font-black uppercase tracking-widest">0/5</p>
+        <div class="glass-card p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h4 class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Namazi Ditor</h4>
+                <p id="task-count" class="text-[10px] text-emerald-500 font-bold uppercase tracking-widest">0/5</p>
             </div>
             
-            <div class="grid grid-cols-5 gap-3 mb-10">
-                <button onclick="toggleTask(0)" class="task-btn h-14 rounded-2xl border border-white/5 bg-white/5 text-[10px] font-black">S</button>
-                <button onclick="toggleTask(1)" class="task-btn h-14 rounded-2xl border border-white/5 bg-white/5 text-[10px] font-black">D</button>
-                <button onclick="toggleTask(2)" class="task-btn h-14 rounded-2xl border border-white/5 bg-white/5 text-[10px] font-black">I</button>
-                <button onclick="toggleTask(3)" class="task-btn h-14 rounded-2xl border border-white/5 bg-white/5 text-[10px] font-black">A</button>
-                <button onclick="toggleTask(4)" class="task-btn h-14 rounded-2xl border border-white/5 bg-white/5 text-[10px] font-black">J</button>
+            <div class="grid grid-cols-5 gap-3 mb-8">
+                <button onclick="toggleTask(0)" class="task-btn h-14 rounded-2xl border border-white/5 bg-white/5 text-[11px] font-black transition-all active:scale-90">S</button>
+                <button onclick="toggleTask(1)" class="task-btn h-14 rounded-2xl border border-white/5 bg-white/5 text-[11px] font-black transition-all active:scale-90">D</button>
+                <button onclick="toggleTask(2)" class="task-btn h-14 rounded-2xl border border-white/5 bg-white/5 text-[11px] font-black transition-all active:scale-90">I</button>
+                <button onclick="toggleTask(3)" class="task-btn h-14 rounded-2xl border border-white/5 bg-white/5 text-[11px] font-black transition-all active:scale-90">A</button>
+                <button onclick="toggleTask(4)" class="task-btn h-14 rounded-2xl border border-white/5 bg-white/5 text-[11px] font-black transition-all active:scale-90">J</button>
             </div>
 
-            <div class="flex items-center justify-between pt-8 border-t border-white/5">
-                <div>
-                    <span id="dhiker-label" class="text-lg font-black italic block">SubhanAllah</span>
-                    <span class="text-[8px] text-emerald-500 uppercase font-black tracking-[0.3em] opacity-60">Dhikri Aktual</span>
+            <div class="pt-6 border-t border-white/5 flex items-center justify-between">
+                <div class="flex flex-col">
+                    <span id="dhiker-label" class="text-sm font-bold italic text-white leading-tight">SubhanAllah</span>
+                    <span class="text-[9px] text-emerald-500 uppercase font-black tracking-widest opacity-60">Dhikri Aktual</span>
                 </div>
-                <button onclick="incrementTasbih()" class="w-16 h-16 rounded-[2rem] bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 active:scale-90 transition-all">
-                    <span id="tasbih-num" class="text-xl font-black text-black">0</span>
+                <button onclick="incrementTasbih()" class="w-16 h-16 rounded-3xl bg-emerald-500 flex items-center justify-center shadow-xl shadow-emerald-500/20 active:scale-95 transition-all">
+                    <span id="tasbih-num" class="text-xl font-black text-slate-900">0</span>
                 </button>
             </div>
         </div>
+
+        
+
+<div id="vaktet-list" class="grid grid-cols-2 gap-4"></div>
+
+<section class="glass-card p-6 mt-6 mb-6 relative z-50">
+    <div class="flex justify-between items-center mb-5">
+        <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Libraria Islame</h4>
+        <i class="fa-solid fa-book-open text-emerald-500 text-xs opacity-50"></i>
+    </div>
+    
+    <div class="grid grid-cols-2 gap-3">
+        <div onclick="openLibrary('suret')" class="bg-white/5 border border-white/5 rounded-2xl p-4 transition-all active:scale-95 cursor-pointer hover:bg-emerald-500/10 group">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3 group-hover:bg-emerald-500 group-hover:text-black">
+                <i class="fa-solid fa-book-quran"></i>
+            </div>
+            <h5 class="text-sm font-bold italic">Suret</h5>
+            <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1 font-bold">Lexim</p>
+        </div>
+
+        <div onclick="openLibrary('duate')" class="bg-white/5 border border-white/5 rounded-2xl p-4 transition-all active:scale-95 cursor-pointer hover:bg-blue-500/10 group">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center mb-3 group-hover:bg-blue-500 group-hover:text-black">
+                <i class="fa-solid fa-hands-praying"></i>
+            </div>
+            <h5 class="text-sm font-bold italic">Duatë</h5>
+            <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1 font-bold">Mbrojtje</p>
+        </div>
+
+        <div onclick="openLibrary('emrat')" class="bg-white/5 border border-white/5 rounded-2xl p-4 transition-all active:scale-95 cursor-pointer hover:bg-amber-500/10 group">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center mb-3 group-hover:bg-amber-500 group-hover:text-black">
+                <i class="fa-solid fa-star-and-crescent"></i>
+            </div>
+            <h5 class="text-sm font-bold italic">99 Emrat</h5>
+            <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1 font-bold">Dija</p>
+        </div>
+
+        <div onclick="openLibrary('hadithe')" class="bg-white/5 border border-white/5 rounded-2xl p-4 transition-all active:scale-95 cursor-pointer hover:bg-purple-500/10 group">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center mb-3 group-hover:bg-purple-500 group-hover:text-black">
+                <i class="fa-solid fa-quote-left"></i>
+            </div>
+            <h5 class="text-sm font-bold italic">Hadithe</h5>
+            <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1 font-bold">Thënie</p>
+        </div>
+    </div>
+</section>
+
+        
+        <div class="glass-card p-8">
+            <h4 class="text-[10px] uppercase tracking-[0.4em] text-gray-500 font-bold mb-6">Analitika Ditore</h4>
+            <div class="flex items-end gap-3 h-16 mb-6 px-2">
+                <div class="flex-1 bg-emerald-500/10 rounded-t-lg h-[40%]"></div>
+                <div class="flex-1 bg-emerald-500/20 rounded-t-lg h-[70%]"></div>
+                <div class="flex-1 bg-emerald-500/40 rounded-t-lg h-[100%] border-t-2 border-emerald-500"></div>
+                <div class="flex-1 bg-emerald-500/20 rounded-t-lg h-[60%]"></div>
+                <div class="flex-1 bg-emerald-500/10 rounded-t-lg h-[30%]"></div>
+            </div>
+            <p id="quote-text" class="text-gray-400 text-xs italic font-medium leading-relaxed border-l-2 border-emerald-500/30 pl-4">
+                "Përmendeni Allahun që Ai t'ju përmend juve."
+            </p>
+        </div>
+
+<div id="sure-modal" class="fixed inset-0 z-[6000] hidden items-center justify-center p-6 backdrop-blur-3xl bg-[#020617]/90">
+    <div class="glass-card w-full max-w-sm p-8 relative border-emerald-500/20 shadow-2xl shadow-emerald-500/5">
+        
+        <div class="text-center mb-6">
+            <div id="sure-icon-bg" class="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald-500/30">
+                <i id="sure-main-icon" class="fa-solid fa-book-quran text-3xl text-emerald-500"></i>
+            </div>
+            <h3 id="sure-title" class="text-3xl font-black italic tracking-tighter">Sureja...</h3>
+            <p id="sure-rendesia" class="text-[10px] text-emerald-500/70 uppercase tracking-[0.2em] mt-2 font-bold px-4"></p>
+        </div>
+
+        <div class="relative bg-black/20 rounded-2xl p-6 border border-white/5">
+            <i class="fa-solid fa-quote-left absolute top-4 left-4 opacity-10 text-4xl"></i>
+            <div id="sure-content" class="text-gray-200 text-sm leading-relaxed text-center italic font-medium max-h-48 overflow-y-auto custom-scrollbar">
+                </div>
+        </div>
+
+        <button onclick="closeSure()" class="mt-8 w-full py-4 bg-emerald-500 text-black font-black rounded-2xl uppercase tracking-widest text-[11px] hover:scale-[1.02] active:scale-95 transition-all">
+            Elhamdulillah, u lexua
+        </button>
+    </div>
+
+</div>
+
     </main>
 
-    <script>
-        const PD_STORE = {
-            save(key, val) { localStorage.setItem('pd_' + key, val); },
-            get(key, def) { return localStorage.getItem('pd_' + key) || def; }
-        };
+   
 
-        let vaktetRaw = [
-            { emri: 'Sabahu', koha: '--:--', ikona: 'fa-cloud-moon', gradient: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' },
-            { emri: 'Lindja', koha: '--:--', ikona: 'fa-sun-haze', gradient: 'linear-gradient(135deg, #334155 0%, #475569 100%)' },
-            { emri: 'Dreka', koha: '--:--', ikona: 'fa-sun', gradient: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)' },
-            { emri: 'Ikindia', koha: '--:--', ikona: 'fa-cloud-sun', gradient: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)' },
-            { emri: 'Akshami', koha: '--:--', ikona: 'fa-mountain-sun', gradient: 'linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)' },
-            { emri: 'Jacia', koha: '--:--', ikona: 'fa-moon-stars', gradient: 'linear-gradient(135deg, #1e1b4b 0%, #020617 100%)' }
+    
+<script>
+// --- KONFIGURIMI (Sistemi yt origjinal) ---
+const vaktetRaw = [
+    { emri: 'Sabahu', koha: '05:30', ikona: 'fa-cloud-sun' },
+    { emri: 'Lindja', koha: '07:05', ikona: 'fa-sun' },
+    { emri: 'Dreka', koha: '11:48', ikona: 'fa-sun' },
+    { emri: 'Ikindia', koha: '14:12', ikona: 'fa-cloud-sun' },
+    { emri: 'Akshami', koha: '16:21', ikona: 'fa-mountain-sun' },
+    { emri: 'Jacia', koha: '17:54', ikona: 'fa-moon' }
+];
+
+function renderVaktet() {
+    const container = document.getElementById('vaktet-container');
+    if (!container) return;
+
+    container.innerHTML = '';
+    const tani = new Date();
+    const oraAktualeMinuta = tani.getHours() * 60 + tani.getMinutes();
+
+    // 1. Gjejmë vaktin AKTUAL (vakti i fundit që ka kaluar ose ka hyrë tani)
+    let indexAktual = -1;
+    for (let i = 0; i < vaktetRaw.length; i++) {
+        const [h, m] = vaktetRaw[i].koha.split(':').map(Number);
+        const vaktMinuta = h * 60 + m;
+        if (oraAktualeMinuta >= vaktMinuta) {
+            indexAktual = i;
+        }
+    }
+
+    // 2. Kriojmë kartat dhe i vendosim në Grid
+    vaktetRaw.forEach((vakt, index) => {
+        const [h, m] = vakt.koha.split(':').map(Number);
+        const vaktMinuta = h * 60 + m;
+
+        let statusClass = '';
+        if (index === indexAktual) {
+            statusClass = 'active'; // Vakti që po kalon tani
+        } else if (vaktMinuta < oraAktualeMinuta) {
+            statusClass = 'past'; // Vakti që ka përfunduar
+        }
+
+        const card = document.createElement('div');
+        // Përputhja me Style: vakt-card është baza, statusClass shton efektet neon ose hije
+        card.className = `vakt-card ${statusClass}`;
+        card.innerHTML = `
+            <div class="vakt-icon-box">
+                <i class="fa-solid ${vakt.ikona}"></i>
+            </div>
+            <div class="vakt-name">${vakt.emri}</div>
+            <div class="vakt-time">${vakt.koha}</div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// Logjika e Menusë (Identike me kërkesën tuaj paraprake)
+function toggleMenu(btn) {
+    const menu = document.getElementById('full-menu');
+    btn.classList.toggle('open');
+    menu.classList.toggle('active');
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+}
+
+// Ekzekutimi
+document.addEventListener('DOMContentLoaded', () => {
+    renderVaktet();
+    // Përditësohet çdo 30 sekonda për të qenë gjithmonë në kohë reale
+    setInterval(renderVaktet, 30000);
+});
+
+        
+    let lastNotifiedVakt = "";
+    const dhikret = ["SubhanAllah", "Elhamdulillah", "Allahu Akbar", "Estagfirullah", "La ilaha illallah"];
+    let dhikerIndex = 0;
+    let tasbihCount = parseInt(localStorage.getItem('tasbihCount')) || 0;
+    let completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || [false, false, false, false, false];
+
+    // --- FUNKSIONI KRYESOR I PËRDITËSIMIT (ÇDO SEKONDË) ---
+    function updateUI() {
+        const now = new Date();
+        const currentTotalMin = (now.getHours() * 60) + now.getMinutes();
+        const kohaTaniStr = now.toLocaleTimeString('sq-AL', { hour12: false, hour: '2-digit', minute: '2-digit' });
+
+        // Përditëso orën live
+        document.getElementById('live-clock').innerText = kohaTaniStr;
+
+        // 1. Logjika e Njoftimeve
+        vaktetRaw.forEach(v => {
+            if (kohaTaniStr === v.koha && lastNotifiedVakt !== v.emri) {
+                lastNotifiedVakt = v.emri;
+                sendImpulsiveNotification(v.emri);
+                activateFocusMode(v.emri);
+            }
+        });
+
+        // Reset njoftimin kur kalon minuta
+        if (lastNotifiedVakt !== "" && vaktetRaw.every(v => kohaTaniStr !== v.koha)) {
+            lastNotifiedVakt = "";
+        }
+
+        // 2. Gjenerimi i Kartave të Vakteve
+        let currentIdx = -1;
+        const listHtml = vaktetRaw.map((v, i) => {
+            const [vh, vm] = v.koha.split(':').map(Number);
+            const vMin = vh * 60 + vm;
+            if (currentTotalMin >= vMin) currentIdx = i;
+
+            const isNow = (i === currentIdx);
+            const passed = (currentTotalMin > vMin) && !isNow;
+
+            const cardStyle = isNow ? `style="background: ${v.gradient}; border: none; transform: scale(1.05); box-shadow: 0 15px 30px rgba(0,0,0,0.4); z-index: 10;"` : '';
+            const iconStyle = isNow ? `style="background: rgba(255,255,255,0.2); color: white; filter: drop-shadow(0 0 8px white);"` : '';
+            const textStyle = isNow ? `style="color: white; opacity: 1;"` : '';
+
+            return `
+                <div class="glass-card vakt-card ${isNow ? 'active' : ''} ${passed ? 'opacity-30' : ''}" ${cardStyle}>
+                    <div class="vakt-icon-container" ${iconStyle}>
+                        <i class="fa-solid ${v.ikona}"></i>
+                    </div>
+                    <span class="text-[9px] uppercase font-black tracking-[0.2em] ${isNow ? '' : 'text-gray-500'} block mb-1" ${textStyle}>${v.emri}</span>
+                    <span class="text-xl font-bold italic tracking-tight" ${textStyle}>${v.koha}</span>
+                </div>`;
+        }).join('');
+
+        document.getElementById('vaktet-list').innerHTML = listHtml;
+
+        // 3. Countdown dhe Progress Ring
+        updateNextPrayer(now, currentIdx);
+    }
+
+    function updateNextPrayer(now, currentIdx) {
+        const nextIdx = (currentIdx + 1) % vaktetRaw.length;
+        const nextP = vaktetRaw[nextIdx];
+        document.getElementById('next-prayer-name').innerText = nextP.emri;
+
+        const [nh, nm] = nextP.koha.split(':').map(Number);
+        let target = new Date();
+        target.setHours(nh, nm, 0);
+        if (target < now) target.setDate(target.getDate() + 1);
+
+        const diff = target - now;
+        const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
+        const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
+        const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
+        document.getElementById('prayer-countdown').innerText = `${h}:${m}:${s}`;
+
+        const totalSec = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
+        const offset = 596.9 - ((totalSec / 86400) * 596.9);
+        document.getElementById('progress-bar').style.strokeDashoffset = offset;
+    }
+
+    // --- SISTEMI I TASBIHUT DHE NAMAZIT ---
+    function incrementTasbih() {
+        tasbihCount++;
+        if (navigator.vibrate) navigator.vibrate(20);
+        if (tasbihCount > 33) {
+            tasbihCount = 1;
+            dhikerIndex = (dhikerIndex + 1) % dhikret.length;
+            document.getElementById('dhiker-label').innerText = dhikret[dhikerIndex];
+        }
+        document.getElementById('tasbih-num').innerText = tasbihCount;
+        localStorage.setItem('tasbihCount', tasbihCount);
+    }
+
+    function toggleTask(idx) {
+        completedTasks[idx] = !completedTasks[idx];
+        localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+        updateTasksUI();
+        if (completedTasks.filter(t => t).length === 5) showCelebration();
+    }
+
+    function updateTasksUI() {
+        const btns = document.querySelectorAll('.task-btn');
+        completedTasks.forEach((s, i) => {
+            s ? btns[i].classList.add('done') : btns[i].classList.remove('done');
+        });
+        document.getElementById('task-count').innerText = `${completedTasks.filter(t => t).length}/5 Namaze`;
+    }
+
+    // --- MODALET DHE NAVIGIMI ---
+    function toggleMenu() {
+        const menu = document.getElementById('full-menu');
+        const trigger = document.querySelector('.menu-trigger');
+        trigger.classList.toggle('open');
+        menu.classList.toggle('active');
+        document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
+    }
+
+    function openSure(ora) {
+        const sure = sureatDitore[ora];
+        if (!sure) return;
+        document.getElementById('sure-title').innerText = sure.titulli;
+        document.getElementById('sure-rendesia').innerText = sure.rendesia;
+        document.getElementById('sure-content').innerText = sure.teksti;
+        document.getElementById('sure-main-icon').className = `fa-solid ${sure.ikona} text-3xl text-emerald-500`;
+        document.getElementById('sure-modal').style.display = 'flex';
+        if (navigator.vibrate) navigator.vibrate(100);
+    }
+
+    function closeSure() { document.getElementById('sure-modal').style.display = 'none'; }
+    function showCelebration() { document.getElementById('celebration-modal').style.display = 'flex'; }
+    function closeCelebration() { document.getElementById('celebration-modal').style.display = 'none'; }
+
+    // --- API DHE SINKRONIZIMI ---
+    async function fetchLiveVaktet() {
+        try {
+            const metoda = localStorage.getItem('zenith_api_method') || '13';
+            const offset = parseInt(localStorage.getItem('zenith_offset')) || 0;
+            const res = await fetch(`https://api.aladhan.com/v1/timingsByAddress?address=Ratkoc,Kosovo&method=${metoda}`);
+            const data = await res.json();
+            const t = data.data.timings;
+
+            const applyOffset = (timeStr) => {
+                let [h, m] = timeStr.split(':').map(Number);
+                let d = new Date();
+                d.setHours(h, m + offset);
+                return d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
+            };
+
+            const map = { Fajr: 0, Sunrise: 1, Dhuhr: 2, Asr: 3, Maghrib: 4, Isha: 5 };
+            const vKeys = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+            vKeys.forEach((key, idx) => { vaktetRaw[idx].koha = applyOffset(t[key]); });
+
+            updateUI();
+            updateLockScreenWidget();
+        } catch (e) { console.error("API Error"); }
+    }
+
+    // --- NJOFTIMET DHE FOCUS MODE ---
+    function activateFocusMode(vaktiEmri) {
+        const cards = document.querySelectorAll('.vakt-card');
+        cards.forEach(card => {
+            if (card.innerText.includes(vaktiEmri)) {
+                card.classList.add('vakt-impulse');
+                setTimeout(() => card.classList.remove('vakt-impulse'), 60000);
+            }
+        });
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 300]);
+    }
+
+    function sendImpulsiveNotification(emri) {
+        if (Notification.permission === "granted") {
+            new Notification(`ALLAHU EKBER!`, {
+                body: `Hyri koha e namazit të ${emri}.`,
+                icon: 'Images/604776747_122280490772225847_4370550408157022665_n.jpg'
+            });
+        }
+    }
+
+    async function updateLockScreenWidget() {
+        if ('serviceWorker' in navigator && Notification.permission === "granted") {
+            const reg = await navigator.serviceWorker.ready;
+            const tani = new Date();
+            const oraTani = tani.getHours() * 3600 + tani.getMinutes() * 60;
+            let vradhes = vaktetRaw.find(v => {
+                const [vO, vM] = v.koha.split(':').map(Number);
+                return (vO * 3600 + vM * 60) > oraTani;
+            }) || vaktetRaw[0];
+
+            reg.showNotification(`Vaktia: ${vradhes.emri}`, {
+                body: `Koha: ${vradhes.koha}`,
+                tag: 'vaktia-live',
+                silent: true
+            });
+        }
+    }
+
+    // --- INITIALIZATION ---
+    window.onload = () => {
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+        fetchLiveVaktet();
+        updateTasksUI();
+        
+        const options = { day: 'numeric', month: 'long', year: 'numeric', calendar: 'islamic-uma' };
+        document.getElementById('hijri-date-top').innerText = new Intl.DateTimeFormat('sq-u-ca-islamic-uma', options).format(new Date());
+        
+        setInterval(updateUI, 1000);
+        setInterval(updateLockScreenWidget, 60000);
+        window.onfocus = () => fetchLiveVaktet();
+    };
+
+    const sureatDitore = {
+        12: { titulli: "Sureja El-Ihlas", teksti: "Ai, Allahu është Një!...", rendesia: "Vlen sa 1/3 e Kuranit.", ikona: "fa-sun" },
+        17: { titulli: "Sureja El-Felek & En-Nas", teksti: "I mbështetem Zotit të agimit...", rendesia: "Mbrojtje nga zilija.", ikona: "fa-shield-halved" },
+        20: { titulli: "Sureja El-Mulk", teksti: "I Madhëruar është Ai...", rendesia: "Mbrojtje nga dënimi i varrit.", ikona: "fa-moon" }
+    };
+
+
+function openLibrary(kategoria) {
+    const modal = document.getElementById('sure-modal');
+    const title = document.getElementById('sure-title');
+    const content = document.getElementById('sure-content');
+    const rendesia = document.getElementById('sure-rendesia');
+    const icon = document.getElementById('sure-main-icon');
+
+    content.innerHTML = ""; 
+
+    if (kategoria === 'emrat') {
+        title.innerText = "99 Emrat e Allahut";
+        rendesia.innerText = "Transmetohet se kush i mëson ata, hyn në Xhenet.";
+        icon.className = "fa-solid fa-star-and-crescent text-3xl text-amber-500";
+        
+        const emrat = [
+            {a: "Allah", s: "Zoti i Vetëm"}, {a: "Er-Rahman", s: "I Gjithëmëshirshmi"}, {a: "Er-Rahim", s: "Mëshirëploti"},
+            {a: "El-Melik", s: "Sunduesi"}, {a: "El-Kuddus", s: "I Pastërti"}, {a: "Es-Selam", s: "Paqedënësi"},
+            {a: "El-Mu'min", s: "Siguruesi"}, {a: "El-Muhejmin", s: "Mbikëqyrësi"}, {a: "El-Aziz", s: "I Fuqishmi"},
+            {a: "El-Xhebbar", s: "I Gjithëfuqishmi"}, {a: "El-Mutekebbir", s: "I Madhërishmi"}, {a: "El-Khalik", s: "Krijuesi"},
+            {a: "El-Bari'", s: "Filluesi"}, {a: "El-Musawwir", s: "Formësuesi"}, {a: "El-Gaffar", s: "Gjithëfalësi"},
+            {a: "El-Kahhar", s: "Mposhtësi"}, {a: "El-Wehhab", s: "Dhuruesi"}, {a: "Er-Rezzak", s: "Furnizuesi"},
+            {a: "El-Fettah", s: "Zgjidhësi"}, {a: "El-Alim", s: "I Gjithëdituri"}, {a: "El-Kabid", s: "Shtrënguesi"},
+            {a: "El-Basit", s: "Çliruesi"}, {a: "El-Khafid", s: "Ulësi"}, {a: "Er-Rafi'", s: "Lartësuesi"},
+            {a: "El-Mu'izz", s: "Nderuesi"}, {a: "El-Mudhill", s: "Përulësi"}, {a: "Es-Semi'", s: "Dëgjuesi"},
+            {a: "El-Basir", s: "Vëzhguesi"}, {a: "El-Hekem", s: "Gjykatësi"}, {a: "El-Adl", s: "I Drejti"},
+            {a: "El-Latif", s: "I Buti"}, {a: "El-Khabir", s: "I Njohuri"}, {a: "El-Halim", s: "I Buti"},
+            {a: "El-Adhim", s: "Madhështori"}, {a: "El-Gafur", s: "Falësi"}, {a: "Esh-Shekur", s: "Mirënjohësi"},
+            {a: "El-Alijj", s: "I Larti"}, {a: "El-Kebir", s: "I Madhi"}, {a: "El-Hafidh", s: "Ruajtësi"},
+            {a: "El-Mukit", s: "Ushqyesi"}, {a: "El-Hasib", s: "Llogaritësi"}, {a: "El-Xhelil", s: "I Nderuari"},
+            {a: "El-Kerim", s: "Bujari"}, {a: "Er-Rakib", s: "Mbikëqyrësi"}, {a: "El-Muxhib", s: "Lutjepranuesi"},
+            {a: "El-Wasi'", s: "Gjerëpërfshirësi"}, {a: "El-Hakim", s: "I Urti"}, {a: "El-Wedud", s: "I Dashuri"},
+            {a: "El-Mexhid", s: "Lavdiploti"}, {a: "El-Ba'ith", s: "Ringjallësi"}, {a: "Esh-Shehid", s: "Dëshmitari"},
+            {a: "El-Hakk", s: "I Vërteti"}, {a: "El-Wekil", s: "Besniku"}, {a: "El-Kawijj", s: "I Forti"},
+            {a: "El-Metin", s: "I Patunduri"}, {a: "El-Welijj", s: "Mbrojtësi"}, {a: "El-Hamid", s: "I Lavdëruari"},
+            {a: "El-Muhsi", s: "Regjistruesi"}, {a: "El-Mubdi'", s: "Nisësi"}, {a: "El-Mu'id", s: "Rikthyesi"},
+            {a: "El-Muhji", s: "Jetëdhënësi"}, {a: "El-Mumit", s: "Vdekjeprurësi"}, {a: "El-Hajj", s: "I Gjalli"},
+            {a: "El-Kajjum", s: "I Vetëqëndrueshmi"}, {a: "El-Waxhid", s: "Gjetësi"}, {a: "El-Maxhid", s: "I Nderuar"},
+            {a: "El-Wahid", s: "I Tekti"}, {a: "Es-Samed", s: "I Nevojshmi"}, {a: "El-Kadir", s: "I Fuqishmi"},
+            {a: "El-Muktedir", s: "I Plotfuqishmi"}, {a: "El-Mukaddim", s: "Përparësuesi"}, {a: "El-Mu'akhkhir", s: "Prapambetësi"},
+            {a: "El-Ewwel", s: "I Pari"}, {a: "El-Akhir", s: "I Fundit"}, {a: "Edh-Dhahir", s: "I Dukshmi"},
+            {a: "El-Batin", s: "I Fshehti"}, {a: "El-Wali", s: "Pushtetmbajtësi"}, {a: "El-Mute'ali", s: "Më i Larti"},
+            {a: "El-Berr", s: "Mirëbërësi"}, {a: "Et-Tewwab", s: "Pendimpranuesi"}, {a: "El-Muntekim", s: "Ndëshkuesi"},
+            {a: "El-Afuww", s: "Mëshiruesi"}, {a: "Er-Ra'uf", s: "I Dhimbshuri"}, {a: "Malikul-Mulk", s: "Sunduesi i Sundimit"},
+            {a: "Dhul-Xhelali wel-Ikram", s: "Zoti i Madhështisë"}, {a: "El-Muksit", s: "Asnjëanësi"}, {a: "El-Xhami'", s: "Bashkuesi"},
+            {a: "El-Ganijj", s: "I Pasuri"}, {a: "El-Mugni", s: "Pasuruesi"}, {a: "El-Mani'", s: "Penguesi"},
+            {a: "Ed-Darr", s: "Dëmtuesi"}, {a: "En-Nafi'", s: "Dobi-sjellësi"}, {a: "En-Nur", s: "Drita"},
+            {a: "El-Hadi", s: "Udhëzuesi"}, {a: "El-Bedi'", s: "Shpikësi"}, {a: "El-Baki", s: "I Amshuesmi"},
+            {a: "El-Warith", s: "Trashëguesi"}, {a: "Er-Reshid", s: "Rrugëzuesi"}, {a: "Es-Sabur", s: "Durimtari"}
         ];
 
-        let tasbihCount = parseInt(localStorage.getItem('tasbihCount')) || 0;
-        let dhikerIndex = 0;
-        const dhikret = ["SubhanAllah", "Elhamdulillah", "Allahu Akbar", "Estagfirullah", "La ilaha illallah"];
-        let completedTasks = JSON.parse(localStorage.getItem('completedTasks')) || [false, false, false, false, false];
-
-        async function fetchVaktet() {
-            try {
-                const metoda = PD_STORE.get('api_method', '13');
-                const offset = parseInt(PD_STORE.get('offset', '0'));
-                const res = await fetch(`https://api.aladhan.com/v1/timingsByAddress?address=Prishtina,Kosovo&method=${metoda}`);
-                const data = await res.json();
-                const t = data.data.timings;
-
-                const vKeys = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-                vKeys.forEach((key, idx) => {
-                    let [h, m] = t[key].split(':').map(Number);
-                    let d = new Date();
-                    d.setHours(h, m + offset);
-                    vaktetRaw[idx].koha = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
-                });
-                renderVaktet();
-            } catch (e) { console.error("API Error"); }
-        }
-
-        function renderVaktet() {
-            const now = new Date();
-            const currentTotalMin = now.getHours() * 60 + now.getMinutes();
-            let currentIdx = -1;
-
-            vaktetRaw.forEach((v, i) => {
-                const [h, m] = v.koha.split(':').map(Number);
-                if (currentTotalMin >= (h * 60 + m)) currentIdx = i;
-            });
-
-            const html = vaktetRaw.map((v, i) => {
-                const isNow = (i === currentIdx);
-                const [vh, vm] = v.koha.split(':').map(Number);
-                const isPast = (currentTotalMin > (vh * 60 + vm)) && !isNow;
-
-                return `
-                    <div class="vakt-card ${isNow ? 'active' : ''} ${isPast ? 'past' : ''}" 
-                         style="${isNow ? `background: ${v.gradient}; border: none;` : ''}">
-                        <div class="vakt-icon-container">
-                            <i class="fa-solid ${v.ikona}"></i>
-                        </div>
-                        <span class="vakt-name" style="${isNow ? 'color: rgba(255,255,255,0.7)' : ''}">${v.emri}</span>
-                        <span class="vakt-time">${v.koha}</span>
+        content.innerHTML = `
+            <div class="grid grid-cols-2 gap-2 max-h-[60vh] overflow-y-auto pr-1 custom-scroll">
+                ${emrat.map((e, i) => `
+                    <div class="bg-white/5 p-2 rounded-lg border border-white/5 text-center shadow-sm">
+                        <div class="text-[10px] text-amber-500/50 font-mono">${i+1}</div>
+                        <div class="text-[13px] font-bold text-white mb-1">${e.a}</div>
+                        <div class="text-[9px] text-gray-400 uppercase tracking-tighter">${e.s}</div>
                     </div>
-                `;
-            }).join('');
+                `).join('')}
+            </div>
+        `;
 
-            document.getElementById('vaktet-list').innerHTML = html;
-            updateCountdown(now, currentIdx);
+    } else if (kategoria === 'duate') {
+        title.innerText = "Lutjet (Duatë)";
+        rendesia.innerText = "Lutja është arma e besimtarit";
+        icon.className = "fa-solid fa-hands-praying text-3xl text-blue-500";
+        
+        const duate = [
+            { t: "Mëngjesi & Mbrëmja", l: "Bismil-lahil-ledhi la jedur-ru me'as-mihi shej'un fil-erdi we la fis-semai we Huwes-Semi'ul-'Alim." },
+            { t: "Kur zgjohesh nga gjumi", l: "El-hamdu lil-lahil-ledhi ahjana ba'de ma ematena we ilejhin-nushur." },
+            { t: "Para se të flesh", l: "Bismik-Allahumme emutu we ahja." },
+            { t: "Kur hyn në shtëpi", l: "Bismil-lahi welexhna, we bismil-lahi kharexhna, we ala Rabbina tewekkelna." },
+            { t: "Për prindërit", l: "Rabbi-rgfir li we liwalidejje we lil-mu'minine jewme jekumul-hisab." },
+            { t: "Kërkimi i faljes", l: "Estagfirul-lah el-Adhim we etubu ilejh." }
+        ];
+
+        content.innerHTML = `
+            <div class="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+                ${duate.map(d => `
+                    <div class="bg-white/5 p-3 rounded-xl border-l-4 border-blue-500/50">
+                        <p class="text-[10px] font-bold text-blue-400 uppercase mb-1">${d.t}</p>
+                        <p class="text-[13px] italic leading-relaxed text-gray-200">${d.l}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+    } else if (kategoria === 'suret') {
+        title.innerText = "Suret e Zgjedhura";
+        rendesia.innerText = "Vlerat e disa sureve për lexim ditor";
+        icon.className = "fa-solid fa-book-quran text-3xl text-emerald-500";
+        
+        const vlerat = [
+            { s: "El-Fatiha", v: "Hapja e librit, shtylla e namazit dhe shërim." },
+            { s: "Ajeti Kursij", v: "Mbrojtje nga djajtë nëse lexohet para gjumit." },
+            { s: "El-Kehf", v: "Dritë mes dy të premteve (lexohet ditën e Xhuma)." },
+            { s: "El-Mulk", v: "Ndërhyn për lexuesin derisa ta shpëtojë nga dënimi i varrit." },
+            { s: "El-Ihlas", v: "Vlen sa 1/3 e Kuranit (Sinqeriteti ndaj Allahut)." },
+            { s: "Felek & Nas", v: "Mbrojtje nga syri i keq, magjia dhe vesveset." }
+        ];
+
+        content.innerHTML = `
+            <div class="space-y-3">
+                ${vlerat.map(item => `
+                    <div class="flex items-start gap-3 bg-white/5 p-3 rounded-lg border border-emerald-500/10">
+                        <div class="bg-emerald-500/20 text-emerald-400 p-2 rounded text-xs font-bold">${item.s}</div>
+                        <p class="text-[12px] text-gray-300 leading-tight">${item.v}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+    } else if (kategoria === 'hadithe') {
+        title.innerText = "Urtësi Profetike";
+        rendesia.innerText = "Mësime nga jeta e Profetit (savs)";
+        icon.className = "fa-solid fa-quote-left text-3xl text-purple-500";
+        
+        const hadithet = [
+            "Më i miri prej jush është ai që e mëson Kuranin dhe ua mëson të tjerëve.",
+            "Nuk beson asnjëri prej jush derisa të dëshirojë për vëllanë e tij atë që dëshiron për vete.",
+            "Veprat vlerësohen sipas qëllimit (nijetit).",
+            "Buzëqeshja në fytyrën e vëllait tënd është sadaka.",
+            "Kush beson Allahun dhe Ditën e Fundit, le të flasë mirë ose le të heshtë.",
+            "Musliman i mirë është ai, nga gjuha dhe dora e të cilit janë të qetë muslimanët tjerë."
+        ];
+
+        content.innerHTML = `
+            <div class="space-y-4">
+                ${hadithet.map(h => `
+                    <div class="bg-purple-500/5 p-4 rounded-2xl border-b border-purple-500/20 italic text-sm text-center relative shadow-inner">
+                        <span class="text-3xl text-purple-500/10 absolute top-0 left-2 font-serif">"</span>
+                        ${h}
+                        <span class="text-3xl text-purple-500/10 absolute bottom-0 right-2 font-serif">"</span>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    modal.style.display = 'flex';
+    if (navigator.vibrate) navigator.vibrate(50);
+}
+
+
+
+// Kjo pjesë bën që faqet të komunikojnë me njëra-tjetrën
+window.addEventListener('storage', (event) => {
+    // Nëse ndryshon diçka që fillon me 'pd_' (si pd_theme, pd_fontSize)
+    if (event.key && event.key.startsWith('pd_')) {
+        
+        // 1. Reagimi: Apliko menjëherë ndryshimet vizuale
+        applyGlobalSettings(); 
+        
+        // 2. Paralajmërimi: Shfaq njoftimin "Dynamic Island" në të gjitha faqet
+        showZenithNotification('Sistemi'); 
+        
+        // 3. Përditëso butonat nëse jemi te faqja info
+        if (typeof refreshNotifUI === "function") refreshNotifUI();
+        
+        console.log("Sistemi u përditësua në kohë reale nga një faqe tjetër.");
+    }
+});
+
+// Dinamizmi i menusë (Pjesa që kërkove më parë, shtoje këtu)
+window.addEventListener('DOMContentLoaded', () => {
+    const currentPath = window.location.pathname.split("/").pop() || "index.html";
+    document.querySelectorAll('.menu-link').forEach(link => {
+        if(link.getAttribute('href') === currentPath) {
+            link.classList.add('active-page');
+        } else {
+            link.classList.remove('active-page');
         }
+    });
+});
 
-        function updateCountdown(now, currentIdx) {
-            const nextIdx = (currentIdx + 1) % vaktetRaw.length;
-            const nextP = vaktetRaw[nextIdx];
-            document.getElementById('next-prayer-name').innerText = nextP.emri;
 
-            const [nh, nm] = nextP.koha.split(':').map(Number);
-            let target = new Date();
-            target.setHours(nh, nm, 0);
-            if (target < now) target.setDate(target.getDate() + 1);
 
-            const diff = target - now;
-            const h = Math.floor(diff / 3600000).toString().padStart(2, '0');
-            const m = Math.floor((diff % 3600000) / 60000).toString().padStart(2, '0');
-            const s = Math.floor((diff % 60000) / 1000).toString().padStart(2, '0');
-            document.getElementById('prayer-countdown').innerText = `${h}:${m}:${s}`;
+        
+</script>
 
-            // Progress Bar
-            const totalSec = (now.getHours() * 3600) + (now.getMinutes() * 60) + now.getSeconds();
-            const offset = 596.9 - ((totalSec / 86400) * 596.9);
-            document.getElementById('progress-bar').style.strokeDashoffset = offset;
-        }
-
-        function startApp() {
-            document.getElementById('intro-screen').classList.add('opacity-0', 'pointer-events-none');
-            if (navigator.vibrate) navigator.vibrate(50);
-        }
-
-        function toggleMenu() {
-            const menu = document.getElementById('full-menu');
-            const trigger = document.querySelector('.menu-trigger');
-            menu.classList.toggle('active');
-            trigger.classList.toggle('open');
-            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : 'auto';
-        }
-
-        function incrementTasbih() {
-            tasbihCount++;
-            if (navigator.vibrate) navigator.vibrate(15);
-            if (tasbihCount > 33) {
-                tasbihCount = 1;
-                dhikerIndex = (dhikerIndex + 1) % dhikret.length;
-                document.getElementById('dhiker-label').innerText = dhikret[dhikerIndex];
-            }
-            document.getElementById('tasbih-num').innerText = tasbihCount;
-            localStorage.setItem('tasbihCount', tasbihCount);
-        }
-
-        function toggleTask(idx) {
-            completedTasks[idx] = !completedTasks[idx];
-            localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
-            updateTasksUI();
-            if (navigator.vibrate) navigator.vibrate(30);
-        }
-
-        function updateTasksUI() {
-            const btns = document.querySelectorAll('.task-btn');
-            completedTasks.forEach((s, i) => {
-                if(btns[i]) s ? btns[i].classList.add('done') : btns[i].classList.remove('done');
-            });
-            document.getElementById('task-count').innerText = `${completedTasks.filter(t => t).length}/5 Namaze`;
-        }
-
-        function applyGlobalSettings() {
-            const primary = PD_STORE.get('primary_color', '#10b981');
-            const bg = PD_STORE.get('bg_color', '#020617');
-            document.documentElement.style.setProperty('--primary', primary);
-            document.documentElement.style.setProperty('--bg', bg);
-            document.querySelectorAll('.text-emerald-500').forEach(el => el.style.color = primary);
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            fetchVaktet();
-            applyGlobalSettings();
-            updateTasksUI();
-            document.getElementById('tasbih-num').innerText = tasbihCount;
-            
-            const hijriOptions = { day: 'numeric', month: 'long', year: 'numeric', calendar: 'islamic-uma' };
-            document.getElementById('hijri-date-top').innerText = new Intl.DateTimeFormat('sq-u-ca-islamic-uma', hijriOptions).format(new Date());
-
-            setInterval(() => {
-                const now = new Date();
-                document.getElementById('live-clock').innerText = now.toLocaleTimeString('sq-AL', { hour: '2-digit', minute: '2-digit', hour12: false });
-                renderVaktet();
-            }, 1000);
-        });
-
-        window.addEventListener('storage', (e) => {
-            if (e.key && e.key.startsWith('pd_')) applyGlobalSettings();
-        });
-    </script>
 </body>
 </html>
