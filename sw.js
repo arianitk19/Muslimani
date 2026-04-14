@@ -1,5 +1,5 @@
 const CACHE_NAME = 'pd-professional-v3';
-const ICON_URL = 'https://img.icons8.com/external-flat-icons-maxicons/512/external-isla-islamic-flat-flat-icons-maxicons-2.png';
+const ICON_URL = 'https://img.icons8.com/?size=100&id=eCJlw2IL5uAv&format=png&color=000000';
 
 // Dokumentet që do të ruhen në memorien e telefonit (Offline)
 const ASSETS_TO_CACHE = [
