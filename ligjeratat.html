@@ -124,6 +124,105 @@
                    class="bg-transparent border-none outline-none text-sm w-full font-medium text-white">
         </div>
 
+
+
+
+
+<body class="pb-20">
+
+    <!-- Menu Trigger & Navigation (Mbeten konsistente) -->
+    <div class="menu-trigger" onclick="toggleMenu()">
+        <div class="burger-line line-1"></div>
+        <div class="burger-line line-2"></div>
+        <div class="burger-line line-3"></div>
+    </div>
+
+    <nav id="full-menu">
+        <div class="mb-12"><p class="text-emerald-500 font-black tracking-[0.4em] text-xs uppercase opacity-50">Navigimi</p></div>
+        <a href="index.html" class="menu-link"><i class="fa-solid fa-house-chimney"></i> Vaktia</a>
+        <a href="lutje.html" class="menu-link"><i class="fa-solid fa-hand-holding-heart"></i> Lutjet</a>
+        <a href="kibla.html" class="menu-link"><i class="fa-solid fa-compass"></i> Kibla</a>
+        <a href="ligjeratat.html" class="menu-link active-page"><i class="fa-solid fa-microphone-lines"></i> Ligjërata</a>
+        <a href="info.html" class="menu-link"><i class="fa-solid fa-circle-info"></i> Info</a>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="pt-24 px-8 mb-10 text-center">
+        <div class="max-w-md mx-auto">
+            <h1 class="text-5xl font-black italic tracking-tighter mb-2">Eksploro<span class="text-emerald-500">.</span></h1>
+            <p class="text-[10px] text-emerald-500 uppercase tracking-[0.4em] font-bold opacity-70 italic">Dritë për mendjen dhe zemrën</p>
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto px-6 space-y-12">
+        
+        <!-- 1. Search Bar Modern -->
+        <div class="glass-card flex items-center px-6 py-4 focus-within:ring-2 ring-emerald-500/50 transition-all">
+            <i class="fa-solid fa-magnifying-glass text-emerald-500 mr-4"></i>
+            <input type="text" id="lectureSearch" oninput="searchLectures()" placeholder="Kërko ligjërata, artikuj, lutje..."
+                   class="bg-transparent border-none outline-none text-sm w-full font-medium text-white placeholder:text-gray-600">
+        </div>
+
+        <!-- 2. Quick Actions (Lutjet ditore) -->
+        <section>
+            <h2 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-500 mb-5 ml-2">Lutjet e Ditës</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="glass-card p-5 border-l-4 border-l-emerald-500 bg-emerald-500/5">
+                    <i class="fa-solid fa-sun text-xl mb-3 text-emerald-500"></i>
+                    <h4 class="font-bold text-sm">Mëngjesi</h4>
+                    <p class="text-[10px] text-gray-400 mt-1 italic">Mbrojtje për ditën</p>
+                </div>
+                <div class="glass-card p-5 border-l-4 border-l-blue-500 bg-blue-500/5">
+                    <i class="fa-solid fa-moon text-xl mb-3 text-blue-500"></i>
+                    <h4 class="font-bold text-sm">Mbrëmja</h4>
+                    <p class="text-[10px] text-gray-400 mt-1 italic">Qetësi para gjumit</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Featured Article (Dizajn Modern) -->
+        <section class="glass-card overflow-hidden relative group">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10"></div>
+            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800" class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700" alt="Artikull">
+            <div class="absolute bottom-0 p-6 z-20">
+                <span class="bg-emerald-500 text-black text-[8px] font-black px-2 py-1 rounded mb-3 inline-block uppercase">Artikull i ri</span>
+                <h3 class="text-xl font-bold leading-tight">Vlera e durimit në kohë vështirësish</h3>
+                <p class="text-[11px] text-gray-300 mt-2 line-clamp-2">Durimi nuk është vetëm pritje, por sjellja jonë ndërsa presim përgjigjen e lutjes...</p>
+            </div>
+        </section>
+
+        <!-- 4. Filter Buttons -->
+        <div class="flex gap-3 overflow-x-auto no-scrollbar pb-2" id="lectureFilters">
+            <button onclick="filterLectures('all', this)" class="cat-btn cat-active bg-white/5 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Të Gjitha</button>
+            <button onclick="filterLectures('imani', this)" class="cat-btn bg-white/5 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Imani</button>
+            <button onclick="filterLectures('keshilla', this)" class="cat-btn bg-white/5 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Këshilla</button>
+            <button onclick="filterLectures('shpresa', this)" class="cat-btn bg-white/5 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Shpresa</button>
+        </div>
+
+        <!-- 5. Video Lectures List -->
+        <section id="lectures-list" class="space-y-8">
+            <!-- Videot do te mbushen nga JS -->
+        </section>
+
+        <!-- 6. Bottom Quote -->
+        <section class="text-center py-10 opacity-40">
+            <i class="fa-solid fa-quote-left text-2xl mb-4 text-emerald-500"></i>
+            <p class="italic text-sm px-10">"Vërtet, pas vështirësisë vjen lehtësimi."</p>
+        </section>
+
+    </main>
+    
+    <!-- JS scripts mbeten te njejta si ne origjinal per funksionalitetin -->
+</body>
+
+
+
+
+
+
+
+        
+
         <div class="flex gap-3 overflow-x-auto no-scrollbar pb-2" id="lectureFilters">
             <button onclick="filterLectures('all', this)" class="cat-btn cat-active bg-white/5 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Të Gjitha</button>
             <button onclick="filterLectures('imani', this)" class="cat-btn bg-white/5 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap">Imani</button>
