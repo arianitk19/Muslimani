@@ -346,43 +346,64 @@
 
 <div id="vaktet-list" class="grid grid-cols-2 gap-4"></div>
 
-<section class="glass-card p-6 mt-6 mb-6 relative z-50">
-    <div class="flex justify-between items-center mb-5">
-        <h4 class="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Libraria Islame</h4>
-        <i class="fa-solid fa-book-open text-emerald-500 text-xs opacity-50"></i>
+<section class="mt-8 mb-10 px-2">
+    <div class="flex items-center justify-between mb-6 px-4">
+        <div>
+            <h4 class="text-[10px] font-black uppercase tracking-[0.4em] text-emerald-500/70">Resurset Digjitale</h4>
+            <h2 class="text-2xl font-bold italic tracking-tighter">Libraria Islame</h2>
+        </div>
+        <div class="h-10 w-10 glass-card rounded-full flex items-center justify-center border-emerald-500/20">
+            <i class="fa-solid fa-book-open text-emerald-500 text-sm"></i>
+        </div>
     </div>
     
-    <div class="grid grid-cols-2 gap-3">
-        <div onclick="openLibrary('suret')" class="bg-white/5 border border-white/5 rounded-2xl p-4 transition-all active:scale-95 cursor-pointer hover:bg-emerald-500/10 group">
-            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-3 group-hover:bg-emerald-500 group-hover:text-black">
-                <i class="fa-solid fa-book-quran"></i>
+    <div class="grid grid-cols-2 gap-4">
+        <!-- Card 1: Suret -->
+        <div onclick="openLibrary('suret')" class="glass-card p-5 relative overflow-hidden group cursor-pointer border-emerald-500/10 hover:border-emerald-500/40 transition-all duration-500">
+            <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-20 transition-opacity">
+                <i class="fa-solid fa-book-quran text-6xl rotate-12"></i>
             </div>
-            <h5 class="text-sm font-bold italic">Suret</h5>
-            <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1 font-bold">Lexim</p>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center mb-4 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-black transition-all">
+                <i class="fa-solid fa-book-quran text-xl"></i>
+            </div>
+            <h5 class="font-black italic text-white tracking-tight">Suret</h5>
+            <p class="text-[9px] text-emerald-500 uppercase font-black tracking-widest mt-1">Lexim & Dritë</p>
         </div>
 
-        <div onclick="openLibrary('duate')" class="bg-white/5 border border-white/5 rounded-2xl p-4 transition-all active:scale-95 cursor-pointer hover:bg-blue-500/10 group">
-            <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center mb-3 group-hover:bg-blue-500 group-hover:text-black">
-                <i class="fa-solid fa-hands-praying"></i>
+        <!-- Card 2: Duate -->
+        <div onclick="openLibrary('duate')" class="glass-card p-5 relative overflow-hidden group cursor-pointer border-blue-500/10 hover:border-blue-500/40 transition-all duration-500">
+            <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-20 transition-opacity">
+                <i class="fa-solid fa-hands-praying text-6xl rotate-12"></i>
             </div>
-            <h5 class="text-sm font-bold italic">Duatë</h5>
-            <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1 font-bold">Mbrojtje</p>
+            <div class="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center mb-4 text-blue-500 group-hover:bg-blue-500 group-hover:text-black transition-all">
+                <i class="fa-solid fa-hands-praying text-xl"></i>
+            </div>
+            <h5 class="font-black italic text-white tracking-tight">Duatë</h5>
+            <p class="text-[9px] text-blue-500 uppercase font-black tracking-widest mt-1">Mbrojtje</p>
         </div>
 
-        <div onclick="openLibrary('emrat')" class="bg-white/5 border border-white/5 rounded-2xl p-4 transition-all active:scale-95 cursor-pointer hover:bg-amber-500/10 group">
-            <div class="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center mb-3 group-hover:bg-amber-500 group-hover:text-black">
-                <i class="fa-solid fa-star-and-crescent"></i>
+        <!-- Card 3: Emrat -->
+        <div onclick="openLibrary('emrat')" class="glass-card p-5 relative overflow-hidden group cursor-pointer border-amber-500/10 hover:border-amber-500/40 transition-all duration-500">
+            <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-20 transition-opacity">
+                <i class="fa-solid fa-star-and-crescent text-6xl rotate-12"></i>
             </div>
-            <h5 class="text-sm font-bold italic">99 Emrat</h5>
-            <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1 font-bold">Dija</p>
+            <div class="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center mb-4 text-amber-500 group-hover:bg-amber-500 group-hover:text-black transition-all">
+                <i class="fa-solid fa-star-and-crescent text-xl"></i>
+            </div>
+            <h5 class="font-black italic text-white tracking-tight">99 Emrat</h5>
+            <p class="text-[9px] text-amber-500 uppercase font-black tracking-widest mt-1">Njohja</p>
         </div>
 
-        <div onclick="openLibrary('hadithe')" class="bg-white/5 border border-white/5 rounded-2xl p-4 transition-all active:scale-95 cursor-pointer hover:bg-purple-500/10 group">
-            <div class="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center mb-3 group-hover:bg-purple-500 group-hover:text-black">
-                <i class="fa-solid fa-quote-left"></i>
+        <!-- Card 4: Hadithe -->
+        <div onclick="openLibrary('hadithe')" class="glass-card p-5 relative overflow-hidden group cursor-pointer border-purple-500/10 hover:border-purple-500/40 transition-all duration-500">
+            <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-20 transition-opacity">
+                <i class="fa-solid fa-quote-left text-6xl rotate-12"></i>
             </div>
-            <h5 class="text-sm font-bold italic">Hadithe</h5>
-            <p class="text-[9px] text-gray-500 uppercase tracking-widest mt-1 font-bold">Thënie</p>
+            <div class="w-12 h-12 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-4 text-purple-500 group-hover:bg-purple-500 group-hover:text-black transition-all">
+                <i class="fa-solid fa-quote-left text-xl"></i>
+            </div>
+            <h5 class="font-black italic text-white tracking-tight">Hadithe</h5>
+            <p class="text-[9px] text-purple-500 uppercase font-black tracking-widest mt-1">Urtësi</p>
         </div>
     </div>
 </section>
