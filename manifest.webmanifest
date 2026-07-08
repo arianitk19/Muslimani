@@ -1,0 +1,26 @@
+{
+  "name": "Vakti — Kohët e Namazit për Kosovën",
+  "short_name": "Vakti",
+  "description": "Kohët e namazit sipas Takvimit zyrtar të BIK-ut, Kurani, lutjet, Kibla dhe kalendari islam. Offline & privat.",
+  "id": "/",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#060b14",
+  "theme_color": "#060b14",
+  "lang": "sq",
+  "dir": "ltr",
+  "categories": ["lifestyle", "education"],
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Kohët e Namazit", "url": "./index.html#/kohet", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Kurani", "url": "./index.html#/kurani", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Kibla", "url": "./index.html#/kibla", "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

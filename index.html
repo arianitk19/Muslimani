@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Vakti — Kohët e Namazit për Kosovën</title>
+  <meta name="description" content="Platforma islame më moderne për Kosovën. Kohët e namazit sipas Takvimit zyrtar të BIK-ut, Kurani me përkthim shqip, lutjet, Kibla, ligjëratat dhe kalendari islam. Funksionon offline.">
+  <meta name="theme-color" content="#060b14">
+  <link rel="canonical" href="https://vakti.app/">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Vakti — Kohët e Namazit për Kosovën">
+  <meta property="og:description" content="Kohët e namazit sipas Takvimit zyrtar të BIK-ut, Kurani, lutjet, Kibla dhe kalendari islam. Offline & privat.">
+  <meta property="og:url" content="https://vakti.app/">
+  <meta property="og:image" content="assets/icons/icon-512.png">
+  <meta property="og:locale" content="sq_AL">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Vakti — Kohët e Namazit për Kosovën">
+  <meta name="twitter:description" content="Platforma islame më moderne për Kosovën. Nga BuiltByNiti.">
+
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Vakti">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Noto+Naskh+Arabic:wght@400;600&display=swap">
+
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"Vakti","description":"Kohët e namazit për Kosovën sipas Takvimit zyrtar të BIK-ut","applicationCategory":"LifestyleApplication","operatingSystem":"Any","inLanguage":"sq","offers":{"@type":"Offer","price":"0"}}
+  </script>
+
+  <style>
+/* ============================================================
+   VAKTI — Design System
+   Platforma islame për Kosovën · BuiltByNiti
+   ============================================================ */
+
+/* ---------- Tokens ---------- */
+:root {
+  --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-arabic: 'Noto Naskh Arabic', 'Traditional Arabic', 'Geeza Pro', serif;
+
+  --primary: #10b981;
+  --primary-2: #34d399;
+  --primary-deep: #059669;
+  --gold: #f5b942;
+  --danger: #f43f5e;
+  --info: #38bdf8;
+
+  --grad-primary: linear-gradient(135deg, #10b981 0%, #0d9488 100%);
+  --grad-card: linear-gradient(160deg, rgba(16,185,129,.14), rgba(13,148,136,.05));
+
+  --r-sm: 12px;
+  --r-md: 18px;
+  --r-lg: 24px;
+  --r-xl: 32px;
+
+  --dur-1: .18s;
+  --dur-2: .32s;
+  --dur-3: .5s;
+  --ease: cubic-bezier(.32,.72,.24,1);
+  --spring: cubic-bezier(.34,1.4,.44,1);
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  --content-w: 560px;
+  --nav-h: 64px;
+
+  --fs-quran: 1.65rem; /* dynamic via settings */
+}
+
+/* Dark (default) */
+:root, [data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #060b14;
+  --bg-grad: radial-gradient(1200px 500px at 50% -10%, rgba(16,185,129,.09), transparent 60%);
+  --surface: rgba(255,255,255,.045);
+  --surface-2: rgba(255,255,255,.08);
+  --surface-solid: #0d1524;
+  --border: rgba(255,255,255,.09);
+  --text: #f3f6fa;
+  --text-2: rgba(240,246,252,.62);
+  --text-3: rgba(240,246,252,.38);
+  --shadow-1: 0 2px 16px rgba(0,0,0,.25);
+  --shadow-2: 0 12px 40px rgba(0,0,0,.45);
+  --glow: 0 0 24px rgba(16,185,129,.22);
+  --scrim: rgba(4,8,15,.7);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f7f6;
+  --bg-grad: radial-gradient(1200px 500px at 50% -10%, rgba(16,185,129,.10), transparent 60%);
+  --surface: rgba(255,255,255,.78);
+  --surface-2: rgba(255,255,255,.95);
+  --surface-solid: #ffffff;
+  --border: rgba(10,30,25,.09);
+  --text: #0b1622;
+  --text-2: rgba(11,22,34,.6);
+  --text-3: rgba(11,22,34,.38);
+  --shadow-1: 0 2px 14px rgba(15,40,35,.07);
+  --shadow-2: 0 14px 44px rgba(15,40,35,.14);
+  --glow: 0 0 24px rgba(16,185,129,.14);
+  --scrim: rgba(20,32,30,.45);
+}
+
+[data-theme="oled"] {
+  color-scheme: dark;
+  --bg: #000000;
+  --bg-grad: none;
+  --surface: rgba(255,255,255,.055);
+  --surface-2: rgba(255,255,255,.1);
+  --surface-solid: #0a0a0a;
+  --border: rgba(255,255,255,.1);
+  --text: #f5f5f5;
+  --text-2: rgba(245,245,245,.6);
+  --text-3: rgba(245,245,245,.35);
+  --shadow-1: none;
+  --shadow-2: 0 12px 40px rgba(0,0,0,.7);
+  --glow: 0 0 24px rgba(16,185,129,.25);
+  --scrim: rgba(0,0,0,.78);
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  background-image: var(--bg-grad);
+  background-attachment: fixed;
+  color: var(--text);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+  transition: background-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
+}
+img, svg, video { display: block; max-width: 100%; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+a { color: var(--primary); text-decoration: none; -webkit-tap-highlight-color: transparent; }
+::selection { background: rgba(16,185,129,.32); }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 6px; }
+h1,h2,h3,h4 { margin: 0; letter-spacing: -.02em; }
+p { margin: 0; }
+[hidden] { display: none !important; }
+
+/* ---------- App layout ---------- */
+#app {
+  max-width: var(--content-w);
+  margin: 0 auto;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.page {
+  flex: 1;
+  padding: calc(var(--safe-top) + 14px) 18px calc(var(--nav-h) + var(--safe-bottom) + 28px);
+  animation: page-in var(--dur-3) var(--ease) both;
+}
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+.page.leaving { animation: page-out var(--dur-1) var(--ease) both; }
+@keyframes page-out { to { opacity: 0; transform: translateY(-8px); } }
+
+/* ---------- Header ---------- */
+.app-header {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 18px;
+}
+.app-header .brand { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.app-header .brand h1 { font-size: 1.35rem; font-weight: 800; }
+.app-header .brand .sub { font-size: .78rem; color: var(--text-2); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.header-actions { display: flex; gap: 10px; align-items: center; }
+.icon-btn {
+  width: 42px; height: 42px; border-radius: 14px;
+  display: grid; place-items: center;
+  background: var(--surface); border: 1px solid var(--border);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  color: var(--text-2);
+  transition: transform var(--dur-1) var(--spring), background var(--dur-1), color var(--dur-1);
+}
+.icon-btn:active { transform: scale(.9); }
+.icon-btn svg { width: 20px; height: 20px; }
+.avatar-btn {
+  width: 42px; height: 42px; border-radius: 14px; overflow: hidden;
+  background: var(--grad-primary); color: #fff;
+  display: grid; place-items: center; font-weight: 800; font-size: .95rem;
+  border: 1px solid var(--border);
+  transition: transform var(--dur-1) var(--spring);
+}
+.avatar-btn:active { transform: scale(.9); }
+
+/* Page header (inner pages) */
+.page-head { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.page-head h2 { font-size: 1.3rem; font-weight: 800; flex: 1; }
+.back-btn { composes: icon-btn; }
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 18px;
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-1);
+  transition: transform var(--dur-1) var(--spring), box-shadow var(--dur-2), background var(--dur-2), border-color var(--dur-2);
+}
+.card.pressable:active { transform: scale(.975); }
+.card + .card { margin-top: 14px; }
+
+.section { margin-top: 26px; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+.section-head h3 { font-size: 1.02rem; font-weight: 800; }
+.section-head .link { font-size: .82rem; font-weight: 700; color: var(--primary); background: none; }
+
+/* Hero prayer card */
+.hero-card {
+  position: relative; overflow: hidden;
+  border-radius: var(--r-xl);
+  padding: 26px 22px;
+  background: var(--grad-card), var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-2), var(--glow);
+}
+.hero-card::before {
+  content: ''; position: absolute; inset: -40% -20% auto auto;
+  width: 300px; height: 300px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(16,185,129,.22), transparent 65%);
+  pointer-events: none;
+}
+.hero-label { font-size: .78rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--primary-2); }
+.hero-prayer { font-size: 2.5rem; font-weight: 800; letter-spacing: -.03em; margin: 6px 0 2px; }
+.hero-time { font-size: 1.05rem; color: var(--text-2); font-weight: 600; }
+.hero-count {
+  font-variant-numeric: tabular-nums;
+  font-size: 2rem; font-weight: 800; color: var(--primary-2);
+  letter-spacing: .02em;
+}
+.hero-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-top: 18px; }
+.hero-count-label { font-size: .74rem; color: var(--text-3); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 4px; }
+
+/* progress bar */
+.pbar { height: 6px; border-radius: 99px; background: var(--surface-2); overflow: hidden; margin-top: 18px; }
+.pbar > i { display: block; height: 100%; border-radius: 99px; background: var(--grad-primary); transition: width 1s linear; }
+
+/* ---------- Prayer timeline list ---------- */
+.prayer-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; border-radius: var(--r-md);
+  background: var(--surface); border: 1px solid var(--border);
+  transition: all var(--dur-2) var(--ease);
+}
+.prayer-row + .prayer-row { margin-top: 10px; }
+.prayer-row .p-icon {
+  width: 40px; height: 40px; border-radius: 13px; display: grid; place-items: center;
+  background: var(--surface-2); color: var(--text-2); flex-shrink: 0;
+}
+.prayer-row .p-icon svg { width: 20px; height: 20px; }
+.prayer-row .p-name { font-weight: 700; flex: 1; }
+.prayer-row .p-time { font-weight: 800; font-variant-numeric: tabular-nums; color: var(--text-2); }
+.prayer-row.done { opacity: .55; }
+.prayer-row.active {
+  background: var(--grad-card), var(--surface);
+  border-color: rgba(16,185,129,.4);
+  box-shadow: var(--glow);
+}
+.prayer-row.active .p-icon { background: var(--grad-primary); color: #fff; }
+.prayer-row.active .p-time { color: var(--primary-2); }
+.p-check {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 2px solid var(--border); display: grid; place-items: center;
+  color: transparent; transition: all var(--dur-1) var(--spring);
+  flex-shrink: 0;
+}
+.p-check svg { width: 14px; height: 14px; }
+.p-check.on { background: var(--grad-primary); border-color: transparent; color: #fff; transform: scale(1.05); }
+
+/* ---------- Quick actions grid ---------- */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.quick {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 14px 6px; border-radius: var(--r-md);
+  background: var(--surface); border: 1px solid var(--border);
+  transition: transform var(--dur-1) var(--spring), background var(--dur-1);
+}
+.quick:active { transform: scale(.92); }
+.quick .q-icon {
+  width: 44px; height: 44px; border-radius: 15px;
+  display: grid; place-items: center; color: #fff;
+  background: var(--grad-primary);
+  box-shadow: 0 6px 16px rgba(16,185,129,.3);
+}
+.quick .q-icon svg { width: 21px; height: 21px; }
+.quick span { font-size: .72rem; font-weight: 700; color: var(--text-2); }
+
+/* ---------- Daily content card ---------- */
+.daily-card { position: relative; }
+.daily-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--primary-2); margin-bottom: 10px;
+}
+.daily-ar {
+  font-family: var(--font-arabic);
+  font-size: 1.5rem; line-height: 2; direction: rtl; text-align: right;
+  margin-bottom: 10px;
+}
+.daily-sq { color: var(--text-2); line-height: 1.65; font-size: .95rem; }
+.daily-src { margin-top: 10px; font-size: .78rem; font-weight: 700; color: var(--text-3); }
+
+/* ---------- Chips ---------- */
+.chips { display: flex; gap: 8px; overflow-x: auto; padding: 2px; margin: 0 -2px 14px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex-shrink: 0; padding: 8px 15px; border-radius: 99px;
+  background: var(--surface); border: 1px solid var(--border);
+  font-size: .82rem; font-weight: 700; color: var(--text-2);
+  transition: all var(--dur-1) var(--ease);
+}
+.chip.on { background: var(--grad-primary); color: #fff; border-color: transparent; box-shadow: 0 4px 14px rgba(16,185,129,.35); }
+.chip:active { transform: scale(.94); }
+
+/* ---------- List items ---------- */
+.list-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; border-radius: var(--r-md);
+  background: var(--surface); border: 1px solid var(--border);
+  transition: transform var(--dur-1) var(--spring);
+  width: 100%; text-align: left;
+}
+.list-item:active { transform: scale(.975); }
+.list-item + .list-item { margin-top: 10px; }
+.li-icon {
+  width: 44px; height: 44px; border-radius: 14px; flex-shrink: 0;
+  display: grid; place-items: center;
+  background: var(--surface-2); color: var(--primary);
+}
+.li-icon svg { width: 20px; height: 20px; }
+.li-body { flex: 1; min-width: 0; }
+.li-title { font-weight: 700; font-size: .95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.li-sub { font-size: .8rem; color: var(--text-3); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.li-end { color: var(--text-3); font-size: .8rem; font-weight: 700; flex-shrink: 0; display: flex; align-items: center; gap: 8px; }
+.li-end svg { width: 16px; height: 16px; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 14px 22px; border-radius: 16px;
+  font-weight: 800; font-size: .95rem;
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border);
+  transition: transform var(--dur-1) var(--spring), box-shadow var(--dur-1), opacity var(--dur-1);
+  width: 100%;
+}
+.btn:active { transform: scale(.96); }
+.btn svg { width: 18px; height: 18px; }
+.btn-primary {
+  background: var(--grad-primary); color: #fff; border: 0;
+  box-shadow: 0 8px 24px rgba(16,185,129,.35);
+}
+.btn-ghost { background: transparent; border: 0; color: var(--primary); width: auto; padding: 10px 14px; }
+.btn-sm { padding: 9px 16px; font-size: .82rem; border-radius: 12px; width: auto; }
+.btn:disabled { opacity: .5; pointer-events: none; }
+
+/* ---------- Inputs ---------- */
+.input, select.input {
+  width: 100%; padding: 14px 16px; border-radius: 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text); font-weight: 600;
+  transition: border-color var(--dur-1);
+  appearance: none; -webkit-appearance: none;
+}
+.input::placeholder { color: var(--text-3); }
+.input:focus { outline: none; border-color: var(--primary); }
+.field { margin-bottom: 14px; }
+.field label { display: block; font-size: .8rem; font-weight: 800; color: var(--text-2); margin-bottom: 8px; }
+.search-wrap { position: relative; margin-bottom: 16px; }
+.search-wrap svg { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--text-3); pointer-events: none; }
+.search-wrap .input { padding-left: 44px; }
+
+/* toggle switch */
+.switch { position: relative; width: 50px; height: 30px; flex-shrink: 0; }
+.switch input { opacity: 0; width: 100%; height: 100%; position: absolute; margin: 0; cursor: pointer; z-index: 1; }
+.switch i {
+  position: absolute; inset: 0; border-radius: 99px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  transition: background var(--dur-2) var(--ease);
+}
+.switch i::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 22px; height: 22px; border-radius: 50%; background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.3);
+  transition: transform var(--dur-2) var(--spring);
+}
+.switch input:checked + i { background: var(--primary); border-color: transparent; }
+.switch input:checked + i::after { transform: translateX(20px); }
+
+/* settings row */
+.set-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 15px 16px; width: 100%; text-align: left;
+  background: var(--surface); border: 1px solid var(--border);
+  transition: background var(--dur-1);
+}
+.set-group { border-radius: var(--r-lg); overflow: hidden; }
+.set-group .set-row { border-radius: 0; border-bottom-width: 0; }
+.set-group .set-row:first-child { border-radius: var(--r-lg) var(--r-lg) 0 0; }
+.set-group .set-row:last-child { border-radius: 0 0 var(--r-lg) var(--r-lg); border-bottom-width: 1px; }
+.set-group .set-row:only-child { border-radius: var(--r-lg); }
+
+/* ---------- Tab bar ---------- */
+.tab-bar {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: var(--content-w);
+  height: calc(var(--nav-h) + var(--safe-bottom));
+  padding-bottom: var(--safe-bottom);
+  display: flex;
+  background: color-mix(in srgb, var(--surface-solid) 82%, transparent);
+  backdrop-filter: blur(24px) saturate(160%); -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border-top: 1px solid var(--border);
+  z-index: 100;
+}
+.tab {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px; color: var(--text-3); position: relative;
+  transition: color var(--dur-1);
+}
+.tab svg { width: 23px; height: 23px; transition: transform var(--dur-1) var(--spring); }
+.tab span { font-size: .64rem; font-weight: 800; letter-spacing: .02em; }
+.tab.on { color: var(--primary); }
+.tab.on svg { transform: translateY(-2px) scale(1.08); }
+.tab.on::before {
+  content: ''; position: absolute; top: 0; width: 32px; height: 3px;
+  border-radius: 0 0 4px 4px; background: var(--grad-primary);
+}
+
+/* ---------- Sheet (bottom modal) ---------- */
+.sheet-scrim {
+  position: fixed; inset: 0; background: var(--scrim); z-index: 200;
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  animation: fade-in var(--dur-2) var(--ease);
+}
+@keyframes fade-in { from { opacity: 0; } }
+.sheet {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: var(--content-w);
+  max-height: 88dvh; overflow-y: auto;
+  background: var(--surface-solid);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  border: 1px solid var(--border); border-bottom: 0;
+  padding: 10px 20px calc(24px + var(--safe-bottom));
+  z-index: 201;
+  animation: sheet-up var(--dur-3) var(--spring);
+}
+@keyframes sheet-up { from { transform: translate(-50%, 100%); } }
+.sheet.closing { animation: sheet-down var(--dur-2) var(--ease) forwards; }
+.sheet-scrim.closing { animation: fade-out var(--dur-2) var(--ease) forwards; }
+@keyframes sheet-down { to { transform: translate(-50%, 105%); } }
+@keyframes fade-out { to { opacity: 0; } }
+.sheet-handle { width: 40px; height: 4px; border-radius: 99px; background: var(--border); margin: 6px auto 16px; }
+.sheet h3 { font-size: 1.15rem; font-weight: 800; margin-bottom: 14px; }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; bottom: calc(var(--nav-h) + var(--safe-bottom) + 16px);
+  left: 50%; transform: translateX(-50%);
+  padding: 12px 20px; border-radius: 16px;
+  background: var(--surface-solid); border: 1px solid var(--border);
+  box-shadow: var(--shadow-2);
+  font-weight: 700; font-size: .88rem; color: var(--text);
+  z-index: 300; display: flex; align-items: center; gap: 10px;
+  animation: toast-in var(--dur-3) var(--spring), fade-out var(--dur-2) var(--ease) 2.4s forwards;
+  max-width: calc(100% - 40px); white-space: nowrap;
+}
+.toast svg { width: 18px; height: 18px; color: var(--primary); flex-shrink: 0; }
+@keyframes toast-in { from { transform: translate(-50%, 30px); opacity: 0; } }
+
+/* ---------- Skeleton ---------- */
+.skeleton {
+  border-radius: var(--r-md);
+  background: var(--surface);
+  position: relative; overflow: hidden;
+}
+.skeleton::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, var(--surface-2), transparent);
+  animation: shimmer 1.4s infinite;
+  transform: translateX(-100%);
+}
+@keyframes shimmer { to { transform: translateX(100%); } }
+
+/* ---------- Quran reader ---------- */
+.ayah-card { padding: 18px; border-radius: var(--r-lg); background: var(--surface); border: 1px solid var(--border); }
+.ayah-card + .ayah-card { margin-top: 12px; }
+.ayah-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.ayah-num {
+  width: 34px; height: 34px; border-radius: 12px;
+  display: grid; place-items: center;
+  background: var(--surface-2); color: var(--primary);
+  font-weight: 800; font-size: .78rem;
+}
+.ayah-actions { display: flex; gap: 4px; }
+.ayah-actions button { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; color: var(--text-3); transition: color var(--dur-1), transform var(--dur-1) var(--spring); }
+.ayah-actions button:active { transform: scale(.85); }
+.ayah-actions button.on { color: var(--gold); }
+.ayah-actions svg { width: 17px; height: 17px; }
+.ayah-ar { font-family: var(--font-arabic); font-size: var(--fs-quran); line-height: 2.1; direction: rtl; text-align: right; }
+.ayah-sq { margin-top: 12px; color: var(--text-2); line-height: 1.7; font-size: .93rem; }
+.ayah-card.highlight { border-color: rgba(16,185,129,.5); box-shadow: var(--glow); }
+
+.surah-head {
+  text-align: center; padding: 26px 18px; border-radius: var(--r-xl);
+  background: var(--grad-card), var(--surface); border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.surah-head .s-ar { font-family: var(--font-arabic); font-size: 2rem; color: var(--primary-2); }
+.surah-head .s-name { font-size: 1.25rem; font-weight: 800; margin-top: 4px; }
+.surah-head .s-meta { font-size: .8rem; color: var(--text-3); font-weight: 700; margin-top: 6px; }
+.bismillah { font-family: var(--font-arabic); font-size: 1.5rem; text-align: center; margin: 18px 0; color: var(--text-2); }
+
+/* ---------- Kibla compass ---------- */
+.compass-wrap { display: grid; place-items: center; padding: 30px 0 10px; }
+.compass {
+  width: min(78vw, 320px); height: min(78vw, 320px);
+  position: relative; border-radius: 50%;
+  background: var(--surface); border: 1px solid var(--border);
+  box-shadow: var(--shadow-2), inset 0 0 60px rgba(16,185,129,.05);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+}
+.compass-dial { position: absolute; inset: 0; transition: transform .12s linear; will-change: transform; }
+.kaaba-marker {
+  position: absolute; top: 6px; left: 50%; transform: translateX(-50%);
+  display: grid; place-items: center;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--grad-primary); color: #fff;
+  box-shadow: 0 4px 18px rgba(16,185,129,.5);
+  font-size: 1.2rem;
+}
+.compass-needle {
+  position: absolute; top: 50%; left: 50%;
+  width: 4px; height: 42%; transform-origin: 50% 0;
+  transform: translate(-50%, -100%);
+}
+.compass-center {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  text-align: center;
+}
+.compass-center .deg { font-size: 2.2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.compass-center .lbl { font-size: .72rem; font-weight: 800; letter-spacing: .1em; color: var(--text-3); text-transform: uppercase; }
+.compass.aligned { border-color: rgba(16,185,129,.6); box-shadow: var(--glow), var(--shadow-2); }
+
+/* ---------- Calendar ---------- */
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-dow { text-align: center; font-size: .68rem; font-weight: 800; color: var(--text-3); padding: 6px 0; text-transform: uppercase; }
+.cal-day {
+  aspect-ratio: 1; border-radius: 12px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 1px;
+  font-size: .88rem; font-weight: 700;
+  transition: background var(--dur-1);
+  position: relative;
+}
+.cal-day .hij { font-size: .58rem; color: var(--text-3); font-weight: 700; }
+.cal-day.other { opacity: .25; }
+.cal-day.today { background: var(--grad-primary); color: #fff; box-shadow: 0 4px 14px rgba(16,185,129,.4); }
+.cal-day.today .hij { color: rgba(255,255,255,.75); }
+.cal-day.event::after {
+  content: ''; position: absolute; bottom: 5px;
+  width: 5px; height: 5px; border-radius: 50%; background: var(--gold);
+}
+.cal-day.today.event::after { background: #fff; }
+
+/* ---------- Video card ---------- */
+.video-card {
+  border-radius: var(--r-lg); overflow: hidden;
+  background: var(--surface); border: 1px solid var(--border);
+  transition: transform var(--dur-1) var(--spring);
+  width: 100%; text-align: left;
+}
+.video-card:active { transform: scale(.975); }
+.video-card + .video-card { margin-top: 14px; }
+.video-thumb { position: relative; aspect-ratio: 16/9; background: var(--surface-2); }
+.video-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.video-thumb .play {
+  position: absolute; inset: 0; display: grid; place-items: center;
+}
+.video-thumb .play i {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(6,11,20,.55); backdrop-filter: blur(8px);
+  display: grid; place-items: center; color: #fff;
+  border: 1px solid rgba(255,255,255,.25);
+  transition: transform var(--dur-1) var(--spring);
+}
+.video-card:active .play i { transform: scale(1.1); }
+.video-thumb .play svg { width: 20px; height: 20px; margin-left: 3px; }
+.video-body { padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
+.video-body .li-body { flex: 1; }
+.video-frame { aspect-ratio: 16/9; border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--border); margin-bottom: 16px; }
+.video-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+/* ---------- Stats / profile ---------- */
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.stat {
+  padding: 16px 10px; border-radius: var(--r-md); text-align: center;
+  background: var(--surface); border: 1px solid var(--border);
+}
+.stat .v { font-size: 1.5rem; font-weight: 800; color: var(--primary-2); }
+.stat .k { font-size: .68rem; font-weight: 800; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; margin-top: 3px; }
+.profile-hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 24px 0 8px; }
+.profile-avatar {
+  width: 92px; height: 92px; border-radius: 30px;
+  background: var(--grad-primary); color: #fff;
+  display: grid; place-items: center; font-size: 2.2rem; font-weight: 800;
+  box-shadow: 0 12px 32px rgba(16,185,129,.4);
+  margin-bottom: 14px;
+}
+.badge-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.badge {
+  padding: 16px 8px; border-radius: var(--r-md); text-align: center;
+  background: var(--surface); border: 1px solid var(--border);
+  opacity: .38; filter: grayscale(.8);
+  transition: all var(--dur-2);
+}
+.badge.earned { opacity: 1; filter: none; border-color: rgba(245,185,66,.35); box-shadow: 0 0 20px rgba(245,185,66,.12); }
+.badge .b-icon { font-size: 1.7rem; }
+.badge .b-name { font-size: .68rem; font-weight: 800; margin-top: 6px; }
+
+/* ---------- Onboarding ---------- */
+.onboard {
+  position: fixed; inset: 0; z-index: 500;
+  background: var(--bg); background-image: var(--bg-grad);
+  display: flex; flex-direction: column;
+  max-width: var(--content-w); margin: 0 auto;
+  padding: calc(var(--safe-top) + 30px) 26px calc(var(--safe-bottom) + 26px);
+}
+.onboard-body { flex: 1; display: flex; flex-direction: column; justify-content: center; animation: page-in var(--dur-3) var(--ease); }
+.onboard-logo {
+  width: 84px; height: 84px; border-radius: 26px;
+  background: var(--grad-primary); display: grid; place-items: center;
+  box-shadow: 0 16px 40px rgba(16,185,129,.45);
+  margin-bottom: 26px;
+}
+.onboard-logo svg { width: 44px; height: 44px; color: #fff; }
+.onboard h1 { font-size: 2rem; font-weight: 800; letter-spacing: -.03em; line-height: 1.15; }
+.onboard .lead { color: var(--text-2); margin-top: 12px; line-height: 1.65; }
+.onboard-dots { display: flex; gap: 6px; margin-bottom: 24px; }
+.onboard-dots i { width: 8px; height: 8px; border-radius: 99px; background: var(--surface-2); transition: all var(--dur-2) var(--ease); }
+.onboard-dots i.on { width: 24px; background: var(--primary); }
+.opt-list { display: flex; flex-direction: column; gap: 10px; margin-top: 24px; max-height: 46dvh; overflow-y: auto; padding: 2px; }
+.opt {
+  padding: 16px 18px; border-radius: var(--r-md);
+  background: var(--surface); border: 1.5px solid var(--border);
+  font-weight: 700; text-align: left; display: flex; align-items: center; gap: 12px;
+  transition: all var(--dur-1) var(--ease);
+}
+.opt.on { border-color: var(--primary); background: var(--grad-card), var(--surface); }
+.opt .o-check { margin-left: auto; width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); display: grid; place-items: center; color: transparent; flex-shrink: 0; }
+.opt.on .o-check { background: var(--primary); border-color: var(--primary); color: #fff; }
+.opt .o-check svg { width: 12px; height: 12px; }
+
+/* ---------- Splash ---------- */
+#splash {
+  position: fixed; inset: 0; z-index: 1000;
+  background: #060b14;
+  display: grid; place-items: center;
+  transition: opacity .45s var(--ease), visibility .45s;
+}
+#splash.hide { opacity: 0; visibility: hidden; }
+#splash .s-logo {
+  width: 96px; height: 96px; border-radius: 30px;
+  background: linear-gradient(135deg, #10b981, #0d9488);
+  display: grid; place-items: center;
+  box-shadow: 0 20px 60px rgba(16,185,129,.5);
+  animation: splash-pop .7s var(--spring);
+}
+#splash .s-logo svg { width: 52px; height: 52px; color: #fff; }
+@keyframes splash-pop { from { transform: scale(.6); opacity: 0; } }
+
+/* ---------- Utility ---------- */
+.stagger > * { animation: page-in var(--dur-3) var(--ease) both; }
+.stagger > *:nth-child(1) { animation-delay: .02s; }
+.stagger > *:nth-child(2) { animation-delay: .06s; }
+.stagger > *:nth-child(3) { animation-delay: .1s; }
+.stagger > *:nth-child(4) { animation-delay: .14s; }
+.stagger > *:nth-child(5) { animation-delay: .18s; }
+.stagger > *:nth-child(6) { animation-delay: .22s; }
+.empty-state { text-align: center; padding: 44px 20px; color: var(--text-3); }
+.empty-state svg { width: 44px; height: 44px; margin: 0 auto 12px; opacity: .5; }
+.empty-state p { font-weight: 700; font-size: .92rem; }
+.muted { color: var(--text-3); font-size: .8rem; }
+.row { display: flex; align-items: center; gap: 12px; }
+.spacer { flex: 1; }
+.mt-1 { margin-top: 8px; } .mt-2 { margin-top: 14px; } .mt-3 { margin-top: 22px; }
+.center { text-align: center; }
+
+/* fav heart pulse */
+@keyframes heart-pop { 0% { transform: scale(1); } 40% { transform: scale(1.35); } 100% { transform: scale(1); } }
+.heart-pop { animation: heart-pop .4s var(--spring); }
+
+/* ---------- Desktop ---------- */
+@media (min-width: 640px) {
+  body { padding: 0 16px; }
+  #app { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+}
+
+/* ---------- Accessibility ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+@media (prefers-contrast: more) {
+  :root { --border: rgba(255,255,255,.3); --text-2: rgba(240,246,252,.85); }
+  [data-theme="light"] { --border: rgba(10,30,25,.35); --text-2: rgba(11,22,34,.85); }
+}
+
+  </style>
+</head>
+<body>
+  <div id="splash" aria-hidden="true">
+    <div class="s-logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c-2.8 2.2-4.5 5-4.5 8.5a4.5 4.5 0 0 0 9 0c0-3.5-1.7-6.3-4.5-8.5z"/><path d="M5 21.5h14"/><path d="M7.5 21.5v-3.2a4.5 4.5 0 0 1 9 0v3.2"/></svg>
+    </div>
+  </div>
+  <div id="app"></div>
+  <noscript><p style="text-align:center;padding:40px;font-family:sans-serif">Vakti kërkon JavaScript të aktivizuar.</p></noscript>
+  <script>
+'use strict';
+// Takvimi zyrtar i Bashkësisë Islame të Kosovës (BIK)
+// Burimi: github.com/drilonjaha/kohet-e-namazit-kosove-json (Licencë MIT)
+// Kohët të normalizuara në orën standarde (UTC+1); DST shtohet në runtime.
+// Rendi: [imsaku, sabahu, lindja, dreka, ikindia, akshami, jacia] në minuta.
+const TAKVIMI = [[321,341,423,704,845,981,1080],[321,341,423,705,846,981,1080],[320,340,422,705,846,982,1080],[320,340,422,705,846,983,1081],[320,340,422,705,847,984,1082],[320,340,422,706,848,985,1083],[320,340,421,706,848,986,1084],[320,340,421,706,849,987,1085],[320,340,421,707,850,988,1086],[319,339,420,707,851,989,1087],[319,339,420,707,852,990,1088],[319,339,420,708,853,991,1089],[319,339,420,708,854,993,1090],[319,339,420,709,855,994,1091],[319,339,420,710,856,995,1092],[319,339,419,710,857,996,1093],[318,338,419,710,858,997,1094],[318,338,419,711,859,999,1095],[318,338,418,711,860,1000,1096],[318,338,418,712,861,1001,1097],[317,337,417,712,862,1002,1098],[317,337,416,712,863,1004,1099],[317,337,415,712,864,1005,1100],[316,336,414,713,865,1006,1101],[315,335,413,713,866,1007,1102],[314,334,412,713,867,1009,1103],[314,334,411,714,869,1010,1104],[313,333,410,714,870,1011,1105],[312,332,409,714,871,1013,1107],[312,332,408,714,872,1014,1108],[311,331,407,714,873,1015,1109],[310,330,406,714,874,1017,1110],[309,329,405,714,875,1018,1111],[308,328,404,714,876,1019,1112],[307,327,403,714,877,1020,1113],[306,326,402,714,878,1022,1114],[305,325,401,714,879,1023,1115],[303,323,399,714,880,1024,1116],[302,322,398,714,881,1025,1117],[301,321,397,714,882,1027,1119],[299,319,396,714,883,1028,1120],[298,318,395,714,884,1030,1122],[297,317,393,714,885,1031,1123],[296,316,392,714,886,1033,1125],[295,315,391,715,888,1034,1126],[294,314,389,715,889,1036,1128],[293,313,388,715,890,1037,1129],[291,311,387,715,891,1038,1130],[290,310,385,714,891,1039,1131],[289,309,383,714,892,1041,1132],[288,308,382,714,893,1042,1133],[286,306,380,714,894,1043,1134],[284,304,378,714,895,1045,1136],[283,303,377,714,896,1046,1137],[281,301,375,713,897,1047,1138],[280,300,373,713,897,1048,1138],[279,299,371,712,898,1049,1139],[277,297,368,711,898,1050,1140],[276,296,366,711,899,1051,1141],[274,294,364,711,899,1053,1143],[273,293,363,710,900,1054,1145],[271,291,362,710,901,1056,1147],[269,289,361,710,902,1057,1148],[267,287,360,710,902,1058,1149],[265,285,358,710,903,1059,1150],[263,283,356,710,903,1060,1151],[261,281,355,710,904,1062,1153],[260,280,353,710,905,1063,1154],[258,278,351,710,906,1064,1155],[256,276,349,710,906,1065,1156],[255,275,347,709,907,1067,1158],[254,274,346,709,908,1068,1159],[253,273,344,709,908,1069,1160],[251,271,342,709,908,1070,1161],[249,269,340,709,908,1071,1162],[248,268,338,708,909,1072,1163],[246,266,336,708,909,1073,1165],[244,264,335,708,910,1075,1166],[242,262,333,708,911,1076,1167],[240,260,331,708,912,1077,1168],[237,257,329,707,912,1078,1170],[235,255,327,707,913,1079,1171],[233,253,325,706,913,1080,1172],[231,251,324,705,914,1082,1174],[229,249,322,705,915,1083,1175],[226,246,320,705,915,1084,1176],[224,244,318,705,916,1085,1177],[221,241,316,704,916,1086,1178],[219,239,314,704,917,1087,1180],[217,237,313,703,917,1088,1181],[215,235,311,703,917,1089,1182],[214,234,309,703,918,1090,1184],[212,232,307,702,918,1092,1186],[211,231,306,702,919,1093,1187],[209,229,304,702,919,1094,1188],[207,227,302,702,920,1095,1190],[205,225,301,701,920,1096,1191],[202,222,299,701,920,1097,1192],[200,220,297,700,921,1098,1194],[198,218,296,700,921,1100,1196],[196,216,294,700,922,1101,1197],[194,214,292,700,922,1102,1198],[192,212,291,699,922,1103,1200],[190,210,289,699,922,1104,1201],[188,208,288,699,922,1105,1202],[186,206,286,698,922,1106,1203],[185,205,284,698,922,1107,1205],[183,203,282,698,922,1108,1206],[181,201,280,697,922,1109,1208],[179,199,279,697,923,1111,1210],[177,197,278,697,924,1112,1212],[175,195,276,697,924,1113,1213],[172,192,275,697,925,1114,1215],[170,190,273,696,925,1115,1217],[167,187,271,696,925,1116,1218],[165,185,270,696,926,1117,1220],[163,183,269,696,926,1118,1222],[161,181,268,696,927,1120,1224],[159,179,267,696,928,1121,1225],[157,177,266,696,929,1122,1227],[155,175,265,696,929,1123,1228],[153,173,264,696,930,1124,1230],[151,171,262,696,930,1125,1231],[149,169,260,695,930,1126,1232],[147,167,258,695,930,1127,1233],[145,165,257,695,931,1128,1235],[143,163,255,695,931,1129,1236],[141,161,254,695,931,1130,1237],[139,159,253,695,931,1131,1238],[137,157,252,695,931,1132,1240],[135,155,250,694,931,1133,1241],[133,153,249,694,932,1134,1243],[131,151,248,694,932,1135,1245],[129,149,247,694,932,1136,1246],[127,147,246,694,932,1137,1248],[126,146,245,694,933,1138,1250],[124,144,244,694,933,1139,1251],[122,142,243,694,934,1140,1253],[121,141,242,694,934,1142,1255],[120,140,241,695,935,1143,1257],[119,139,240,695,936,1144,1258],[117,137,239,695,936,1145,1260],[116,136,238,695,936,1146,1262],[115,135,237,695,937,1147,1263],[114,134,237,695,938,1148,1265],[112,132,236,695,938,1148,1266],[110,130,235,695,938,1149,1267],[108,128,235,695,938,1150,1269],[107,127,234,695,939,1151,1270],[105,125,234,696,939,1152,1272],[104,124,233,696,940,1153,1273],[103,123,233,696,940,1153,1274],[102,122,232,696,940,1154,1275],[101,121,232,696,940,1155,1276],[100,120,231,696,940,1155,1277],[98,118,231,696,940,1156,1278],[97,117,230,696,940,1156,1279],[96,116,230,696,940,1157,1280],[95,115,229,697,940,1157,1281],[94,114,229,697,940,1158,1282],[94,114,228,697,941,1158,1283],[93,113,228,697,941,1159,1284],[93,113,228,697,941,1159,1284],[92,112,228,697,941,1160,1285],[92,112,228,698,942,1161,1285],[92,112,229,698,943,1162,1286],[92,112,229,699,944,1163,1287],[92,112,229,699,944,1163,1288],[92,112,230,700,944,1164,1289],[93,113,230,700,945,1164,1290],[93,113,230,700,945,1165,1291],[93,113,231,700,946,1165,1292],[93,113,231,701,946,1165,1292],[93,113,231,701,946,1165,1292],[94,114,231,701,946,1165,1292],[94,114,232,702,946,1166,1293],[95,115,232,703,947,1166,1292],[96,116,232,703,947,1166,1292],[96,116,233,703,947,1165,1291],[96,116,233,703,947,1165,1291],[97,117,233,703,947,1165,1291],[98,118,234,703,947,1165,1290],[99,119,234,703,947,1164,1289],[99,119,234,703,947,1164,1289],[100,120,235,703,947,1164,1288],[101,121,235,703,947,1163,1287],[102,122,236,703,947,1163,1287],[103,123,237,703,947,1163,1286],[104,124,237,703,947,1162,1285],[105,125,238,703,947,1162,1285],[107,127,239,704,947,1162,1284],[109,129,240,704,948,1161,1283],[110,130,240,704,948,1161,1282],[111,131,241,704,948,1160,1281],[112,132,241,704,948,1159,1279],[113,133,241,704,947,1158,1278],[115,135,242,704,947,1158,1277],[117,137,243,704,947,1157,1276],[119,139,244,704,947,1156,1274],[120,140,245,704,946,1156,1273],[122,142,246,704,946,1155,1272],[124,144,246,704,946,1154,1270],[125,145,247,704,945,1153,1269],[126,146,248,704,945,1152,1267],[128,148,249,704,945,1151,1265],[129,149,250,704,944,1150,1264],[131,151,252,704,944,1149,1262],[132,152,253,704,944,1149,1261],[134,154,255,705,944,1148,1260],[136,156,256,705,944,1147,1258],[138,158,257,705,944,1146,1257],[140,160,258,705,943,1145,1255],[142,162,259,705,943,1144,1254],[144,164,260,705,943,1143,1252],[146,166,261,705,942,1142,1250],[148,168,263,705,942,1141,1249],[150,170,264,705,942,1140,1247],[152,172,265,705,942,1138,1245],[153,173,266,705,941,1137,1244],[155,175,267,705,941,1136,1243],[157,177,268,705,940,1135,1241],[159,179,269,705,940,1133,1239],[160,180,270,705,939,1132,1238],[162,182,271,705,939,1130,1236],[163,183,272,705,938,1129,1234],[165,185,273,705,937,1127,1232],[167,187,274,704,936,1126,1230],[169,189,275,704,935,1124,1228],[170,190,276,703,934,1123,1226],[172,192,277,703,933,1121,1224],[173,193,278,702,932,1120,1222],[175,195,279,702,931,1118,1220],[177,197,280,702,930,1116,1217],[179,199,281,701,929,1115,1215],[181,201,282,701,928,1113,1213],[183,203,283,701,927,1112,1211],[185,205,284,701,927,1110,1209],[186,206,285,701,926,1108,1207],[187,207,286,701,925,1107,1205],[189,209,288,701,925,1105,1203],[190,210,289,700,924,1104,1201],[191,211,290,700,924,1102,1199],[192,212,291,700,923,1101,1198],[194,214,292,700,923,1099,1196],[196,216,293,700,922,1098,1194],[198,218,295,700,921,1096,1192],[199,219,296,700,920,1094,1190],[200,220,297,699,919,1092,1187],[201,221,298,698,918,1090,1185],[203,223,299,698,917,1088,1183],[204,224,300,697,916,1087,1181],[206,226,301,697,915,1085,1179],[207,227,302,697,914,1083,1177],[208,228,303,697,912,1081,1175],[209,229,304,696,911,1080,1173],[210,230,305,696,910,1078,1171],[211,231,306,696,909,1076,1169],[212,232,307,695,908,1074,1167],[214,234,308,695,907,1073,1165],[216,236,309,695,906,1071,1163],[218,238,310,694,905,1069,1161],[220,240,311,694,903,1067,1159],[221,241,312,693,902,1065,1157],[222,242,313,693,900,1064,1156],[224,244,314,693,899,1062,1154],[225,245,315,692,898,1060,1152],[226,246,316,691,896,1058,1150],[227,247,317,691,895,1056,1148],[228,248,318,690,893,1055,1146],[229,249,320,690,892,1053,1144],[230,250,321,690,891,1051,1142],[231,251,322,689,890,1049,1140],[232,252,323,688,888,1047,1138],[232,252,324,688,887,1045,1136],[233,253,325,688,886,1043,1134],[233,253,326,688,885,1042,1132],[234,254,328,688,884,1040,1130],[235,255,329,687,883,1038,1128],[236,256,330,687,882,1037,1127],[238,258,332,687,881,1036,1126],[240,260,333,687,881,1034,1124],[241,261,334,686,880,1032,1122],[243,263,335,686,879,1031,1121],[245,265,336,686,878,1029,1120],[246,266,337,686,877,1028,1118],[248,268,338,686,876,1026,1116],[249,269,339,686,875,1025,1115],[250,270,341,686,874,1023,1113],[251,271,342,685,872,1021,1111],[252,272,343,685,871,1019,1109],[253,273,345,685,869,1018,1108],[254,274,347,685,868,1016,1106],[255,275,348,685,867,1015,1105],[256,276,350,685,866,1013,1103],[257,277,351,685,865,1011,1102],[258,278,352,685,864,1009,1100],[259,279,353,684,862,1008,1099],[260,280,355,684,861,1006,1097],[261,281,356,684,860,1005,1096],[263,283,357,684,859,1003,1095],[264,284,358,684,858,1002,1094],[265,285,360,684,857,1001,1093],[266,286,361,684,856,999,1091],[267,287,362,684,855,998,1090],[268,288,364,684,854,996,1088],[269,289,365,684,853,995,1087],[270,290,367,684,852,994,1086],[271,291,368,684,851,993,1085],[273,293,369,684,850,991,1084],[274,294,370,684,849,990,1083],[276,296,371,684,848,989,1082],[277,297,373,684,847,988,1081],[278,298,374,684,846,986,1079],[279,299,375,684,845,985,1078],[280,300,376,684,844,984,1077],[281,301,377,684,843,983,1077],[282,302,378,685,842,982,1076],[283,303,380,685,842,981,1075],[284,304,382,685,841,980,1074],[285,305,384,685,840,980,1074],[287,307,386,686,840,979,1073],[288,308,387,686,839,978,1073],[289,309,388,686,838,977,1072],[290,310,389,686,838,976,1071],[291,311,390,686,837,976,1071],[292,312,392,687,837,975,1071],[293,313,393,687,836,975,1071],[294,314,394,687,836,974,1070],[295,315,395,687,835,974,1070],[296,316,397,688,835,973,1069],[297,317,398,688,835,973,1069],[298,318,399,689,835,973,1069],[299,319,400,689,835,972,1069],[300,320,401,689,834,972,1069],[301,321,402,690,834,972,1069],[302,322,403,690,834,972,1069],[303,323,404,691,834,971,1069],[304,324,405,691,834,971,1069],[305,325,406,691,834,971,1069],[306,326,407,692,834,970,1068],[306,326,408,692,834,970,1068],[307,327,409,692,834,970,1068],[308,328,410,693,834,970,1068],[309,329,411,693,834,970,1068],[310,330,412,694,835,971,1069],[311,331,413,695,836,971,1069],[312,332,414,695,836,971,1070],[312,332,414,696,836,971,1070],[313,333,415,696,836,972,1071],[314,334,416,697,837,972,1071],[315,335,416,697,837,972,1071],[315,335,417,698,838,973,1072],[316,336,418,699,839,973,1072],[317,337,419,699,839,974,1072],[318,338,420,700,840,974,1073],[318,338,420,700,840,974,1073],[318,338,420,700,840,975,1074],[319,339,421,701,841,976,1075],[319,339,421,702,842,976,1075],[319,339,421,702,842,977,1076],[319,339,421,702,842,977,1076],[319,339,421,702,842,978,1077],[320,340,422,703,843,979,1078],[320,340,422,704,844,979,1078],[320,340,422,704,844,980,1079]];
+
+// Metadata e 114 sureve: [emri, nr. ajeteve, vendi (M=Mekase, D=Medinase)]
+const SURAHS = [
+["El-Fatiha",7,"M"],["El-Bekare",286,"D"],["Ali Imran",200,"D"],["En-Nisa",176,"D"],["El-Maide",120,"D"],["El-En'am",165,"M"],["El-A'raf",206,"M"],["El-Enfal",75,"D"],["Et-Tevbe",129,"D"],["Junus",109,"M"],
+["Hud",123,"M"],["Jusuf",111,"M"],["Er-Ra'd",43,"D"],["Ibrahim",52,"M"],["El-Hixhr",99,"M"],["En-Nahl",128,"M"],["El-Isra",111,"M"],["El-Kehf",110,"M"],["Merjem",98,"M"],["Ta-Ha",135,"M"],
+["El-Enbija",112,"M"],["El-Haxh",78,"D"],["El-Mu'minun",118,"M"],["En-Nur",64,"D"],["El-Furkan",77,"M"],["Esh-Shu'ara",227,"M"],["En-Neml",93,"M"],["El-Kasas",88,"M"],["El-Ankebut",69,"M"],["Er-Rum",60,"M"],
+["Lukman",34,"M"],["Es-Sexhde",30,"M"],["El-Ahzab",73,"D"],["Sebe'",54,"M"],["Fatir",45,"M"],["Ja-Sin",83,"M"],["Es-Saffat",182,"M"],["Sad",88,"M"],["Ez-Zumer",75,"M"],["Gafir",85,"M"],
+["Fussilet",54,"M"],["Esh-Shura",53,"M"],["Ez-Zuhruf",89,"M"],["Ed-Duhan",59,"M"],["El-Xhathije",37,"M"],["El-Ahkaf",35,"M"],["Muhammed",38,"D"],["El-Fet'h",29,"D"],["El-Huxhurat",18,"D"],["Kaf",45,"M"],
+["Edh-Dharijat",60,"M"],["Et-Tur",49,"M"],["En-Nexhm",62,"M"],["El-Kamer",55,"M"],["Er-Rrahman",78,"D"],["El-Vakia",96,"M"],["El-Hadid",29,"D"],["El-Muxhadele",22,"D"],["El-Hashr",24,"D"],["El-Mumtehine",13,"D"],
+["Es-Saff",14,"D"],["El-Xhumua",11,"D"],["El-Munafikun",11,"D"],["Et-Tegabun",18,"D"],["Et-Talak",12,"D"],["Et-Tahrim",12,"D"],["El-Mulk",30,"M"],["El-Kalem",52,"M"],["El-Hakka",52,"M"],["El-Mearixh",44,"M"],
+["Nuh",28,"M"],["El-Xhinn",28,"M"],["El-Muzzemmil",20,"M"],["El-Muddeththir",56,"M"],["El-Kijame",40,"M"],["El-Insan",31,"D"],["El-Murselat",50,"M"],["En-Nebe'",40,"M"],["En-Naziat",46,"M"],["Abese",42,"M"],
+["Et-Tekvir",29,"M"],["El-Infitar",19,"M"],["El-Mutaffifin",36,"M"],["El-Inshikak",25,"M"],["El-Buruxh",22,"M"],["Et-Tarik",17,"M"],["El-A'la",19,"M"],["El-Gashije",26,"M"],["El-Fexhr",30,"M"],["El-Beled",20,"M"],
+["Esh-Shems",15,"M"],["El-Lejl",21,"M"],["Ed-Duha",11,"M"],["Esh-Sherh",8,"M"],["Et-Tin",8,"M"],["El-Alak",19,"M"],["El-Kadr",5,"M"],["El-Bejjine",8,"D"],["Ez-Zelzele",8,"D"],["El-Adijat",11,"M"],
+["El-Karia",11,"M"],["Et-Tekathur",8,"M"],["El-Asr",3,"M"],["El-Humeze",9,"M"],["El-Fil",5,"M"],["Kurejsh",4,"M"],["El-Maun",7,"M"],["El-Kevther",3,"M"],["El-Kafirun",6,"M"],["En-Nasr",3,"D"],
+["El-Mesed",5,"M"],["El-Ihlas",4,"M"],["El-Felek",5,"M"],["En-Nas",6,"M"]
+];
+
+// Përmbajtja statike e aplikacionit — Vakti
+// Qytetet sipas tabelës zyrtare të diferencave të Takvimit të BIK-ut
+// (baza: Deçani, pika më perëndimore). Qytetet e palistuara në tabelën
+// zyrtare marrin 0 ose -1 sipas pozitës gjeografike.
+
+const CITIES = [
+  { id: 'prishtine',  name: 'Prishtinë',   off: -1, official: true },
+  { id: 'prizren',    name: 'Prizren',     off: 0 },
+  { id: 'peje',       name: 'Pejë',        off: 0 },
+  { id: 'gjakove',    name: 'Gjakovë',     off: 0 },
+  { id: 'ferizaj',    name: 'Ferizaj',     off: -1, official: true },
+  { id: 'gjilan',     name: 'Gjilan',      off: -1, official: true },
+  { id: 'mitrovice',  name: 'Mitrovicë',   off: -1 },
+  { id: 'podujeve',   name: 'Podujevë',    off: -1, official: true },
+  { id: 'vushtrri',   name: 'Vushtrri',    off: -1, official: true },
+  { id: 'decan',      name: 'Deçan',       off: 0 },
+  { id: 'istog',      name: 'Istog',       off: 0 },
+  { id: 'kline',      name: 'Klinë',       off: 0 },
+  { id: 'skenderaj',  name: 'Skenderaj',   off: 0 },
+  { id: 'drenas',     name: 'Drenas',      off: -1 },
+  { id: 'rahovec',    name: 'Rahovec',     off: 0 },
+  { id: 'suhareke',   name: 'Suharekë',    off: 0 },
+  { id: 'malisheve',  name: 'Malishevë',   off: 0 },
+  { id: 'lipjan',     name: 'Lipjan',      off: -1 },
+  { id: 'shtime',     name: 'Shtime',      off: -1 },
+  { id: 'kamenice',   name: 'Kamenicë',    off: -1 },
+  { id: 'viti',       name: 'Viti',        off: -1 },
+  { id: 'kacanik',    name: 'Kaçanik',     off: -1 },
+  { id: 'fushekosove',name: 'Fushë Kosovë',off: -1 },
+  { id: 'obiliq',     name: 'Obiliq',      off: -1 },
+  { id: 'sharr',      name: 'Sharr (Dragash)', off: 2, official: true },
+  { id: 'presheve',   name: 'Preshevë',    off: -2, official: true },
+];
+
+const PRAYER_NAMES = ['Imsaku', 'Sabahu', 'Lindja', 'Dreka', 'Ikindia', 'Akshami', 'Jacia'];
+const PRAYER_KEYS  = ['imsak', 'fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
+// Namazet e detyrueshme (për shënimin e faljes): indekset në TAKVIMI
+const FARD_INDEXES = [1, 3, 4, 5, 6];
+const FARD_NAMES = ['Sabahu', 'Dreka', 'Ikindia', 'Akshami', 'Jacia'];
+
+// ── Ajeti i Ditës ──────────────────────────────────────────
+const DAILY_AYAT = [
+  { ar: 'فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ', sq: 'Më kujtoni Mua, Unë ju kujtoj juve. Më falënderoni e mos i mohoni dhuntitë e Mia!', src: 'El-Bekare, 152' },
+  { ar: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا', sq: 'Vërtet, pas vështirësisë vjen lehtësimi.', src: 'Esh-Sherh, 6' },
+  { ar: 'وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ', sq: 'Kush mbështetet tek Allahu, Ai i mjafton atij.', src: 'Et-Talak, 3' },
+  { ar: 'أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ', sq: 'Vërtet, me përmendjen e Allahut qetësohen zemrat.', src: 'Er-Ra’d, 28' },
+  { ar: 'وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ', sq: 'Zoti juaj tha: "Më lutni Mua, Unë do t’ju përgjigjem!"', src: 'Gafir, 60' },
+  { ar: 'إِنَّ اللَّهَ مَعَ الصَّابِرِينَ', sq: 'Vërtet, Allahu është me durimtarët.', src: 'El-Bekare, 153' },
+  { ar: 'وَهُوَ مَعَكُمْ أَيْنَ مَا كُنتُمْ', sq: 'Ai është me ju kudo që të jeni.', src: 'El-Hadid, 4' },
+  { ar: 'قُلْ يَا عِبَادِيَ الَّذِينَ أَسْرَفُوا عَلَىٰ أَنفُسِهِمْ لَا تَقْنَطُوا مِن رَّحْمَةِ اللَّهِ', sq: 'Thuaj: "O robërit e Mi që i keni bërë padrejtësi vetes, mos e humbni shpresën në mëshirën e Allahut!"', src: 'Ez-Zumer, 53' },
+  { ar: 'وَاصْبِرْ فَإِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ الْمُحْسِنِينَ', sq: 'Duro, se Allahu nuk ua humb shpërblimin punëmirëve.', src: 'Hud, 115' },
+  { ar: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ', sq: 'Zoti ynë, na jep të mira në këtë botë dhe të mira në botën tjetër, dhe na ruaj nga dënimi i zjarrit!', src: 'El-Bekare, 201' },
+  { ar: 'إِنَّ اللَّهَ لَا يُغَيِّرُ مَا بِقَوْمٍ حَتَّىٰ يُغَيِّرُوا مَا بِأَنفُسِهِمْ', sq: 'Allahu nuk e ndryshon gjendjen e një populli derisa ata të ndryshojnë veten e tyre.', src: 'Er-Ra’d, 11' },
+  { ar: 'فَإِذَا عَزَمْتَ فَتَوَكَّلْ عَلَى اللَّهِ', sq: 'Kur të vendosësh, mbështetu tek Allahu.', src: 'Ali Imran, 159' },
+  { ar: 'وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ', sq: 'Dhe Zoti yt do të të japë ty, e ti do të jesh i kënaqur.', src: 'Ed-Duha, 5' },
+  { ar: 'حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ', sq: 'Neve na mjafton Allahu, Ai është mbrojtësi më i mirë!', src: 'Ali Imran, 173' },
+  { ar: 'وَبَشِّرِ الصَّابِرِينَ', sq: 'Dhe përgëzoji durimtarët!', src: 'El-Bekare, 155' },
+];
+
+// ── Hadithi i Ditës ────────────────────────────────────────
+const DAILY_HADITHS = [
+  { sq: 'Veprat vlerësohen sipas qëllimeve dhe çdokujt i takon ajo që e ka synuar.', src: 'Buhariu & Muslimi' },
+  { sq: 'Kush beson në Allahun dhe në Ditën e Fundit, le të flasë mirë ose le të heshtë.', src: 'Buhariu & Muslimi' },
+  { sq: 'Askush prej jush nuk beson vërtet derisa të dojë për vëllanë e tij atë që do për veten.', src: 'Buhariu & Muslimi' },
+  { sq: 'Allahu nuk shikon trupat dhe pamjet tuaja, por shikon zemrat dhe veprat tuaja.', src: 'Muslimi' },
+  { sq: 'Fjala e mirë është sadaka.', src: 'Buhariu & Muslimi' },
+  { sq: 'Kush ecën një rruge për të kërkuar dituri, Allahu ia lehtëson rrugën për në Xhenet.', src: 'Muslimi' },
+  { sq: 'Më i miri prej jush është ai që mëson Kuranin dhe ua mëson të tjerëve.', src: 'Buhariu' },
+  { sq: 'Pastërtia është gjysma e besimit.', src: 'Muslimi' },
+  { sq: 'Buzëqeshja ndaj vëllait tënd është sadaka.', src: 'Tirmidhiu' },
+  { sq: 'I fuqishëm nuk është ai që i mund të tjerët, por ai që e përmban veten në zemërim.', src: 'Buhariu & Muslimi' },
+  { sq: 'Namazi është drita e syve të mi.', src: 'Nesaiu' },
+  { sq: 'Lehtësoni e mos vështirësoni, përgëzoni e mos largoni.', src: 'Buhariu & Muslimi' },
+  { sq: 'Kush nuk falënderon njerëzit, nuk e falënderon Allahun.', src: 'Ebu Davudi & Tirmidhiu' },
+  { sq: 'Duaja është adhurim.', src: 'Tirmidhiu' },
+  { sq: 'Më e dashura vepër tek Allahu është ajo më e vazhdueshmja, edhe nëse është e vogël.', src: 'Buhariu & Muslimi' },
+];
+
+// ── Dua e Ditës ────────────────────────────────────────────
+const DAILY_DUAS = [
+  { ar: 'رَبِّ اشْرَحْ لِي صَدْرِي وَيَسِّرْ لِي أَمْرِي', sq: 'Zoti im, zgjeroma gjoksin tim dhe lehtësoma punën time!', src: 'Ta-Ha, 25-26' },
+  { ar: 'اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى', sq: 'O Allah, të kërkoj udhëzim, devotshmëri, ndershmëri dhe pasuri shpirtërore.', src: 'Muslimi' },
+  { ar: 'اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ', sq: 'O Allah, më ndihmo të të përmend, të të falënderoj dhe të të adhuroj sa më mirë.', src: 'Ebu Davudi' },
+  { ar: 'رَبَّنَا لَا تُزِغْ قُلُوبَنَا بَعْدَ إِذْ هَدَيْتَنَا', sq: 'Zoti ynë, mos i lako zemrat tona pasi na udhëzove!', src: 'Ali Imran, 8' },
+  { ar: 'اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ', sq: 'O Allah, kërkoj mbrojtjen Tënde nga brengat dhe pikëllimi.', src: 'Buhariu' },
+  { ar: 'يَا مُقَلِّبَ الْقُلُوبِ ثَبِّتْ قَلْبِي عَلَى دِينِكَ', sq: 'O Rrotullues i zemrave, forcoje zemrën time në fenë Tënde!', src: 'Tirmidhiu' },
+  { ar: 'رَبِّ زِدْنِي عِلْمًا', sq: 'Zoti im, ma shto diturinë!', src: 'Ta-Ha, 114' },
+  { ar: 'اللَّهُمَّ اغْفِرْ لِي وَارْحَمْنِي وَاهْدِنِي وَعَافِنِي وَارْزُقْنِي', sq: 'O Allah, më fal, më mëshiro, më udhëzo, më jep shëndet dhe më furnizo!', src: 'Muslimi' },
+  { ar: 'رَبَّنَا هَبْ لَنَا مِنْ أَزْوَاجِنَا وَذُرِّيَّاتِنَا قُرَّةَ أَعْيُنٍ', sq: 'Zoti ynë, na dhuro nga bashkëshortët dhe pasardhësit tanë gëzim për sytë tanë!', src: 'El-Furkan, 74' },
+  { ar: 'اللَّهُمَّ إِنَّكَ عَفُوٌّ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي', sq: 'O Allah, Ti je Falës dhe e do faljen, andaj më fal mua!', src: 'Tirmidhiu' },
+];
+
+// ── Lutjet sipas kategorive ────────────────────────────────
+const DUA_CATEGORIES = [
+  { id: 'mengjes',  name: 'Mëngjesi',  icon: 'sun' },
+  { id: 'mbremje',  name: 'Mbrëmja',   icon: 'moon' },
+  { id: 'gjumi',    name: 'Gjumi',     icon: 'bed' },
+  { id: 'udhetim',  name: 'Udhëtimi',  icon: 'map' },
+  { id: 'ushqim',   name: 'Ushqimi',   icon: 'utensils' },
+  { id: 'prinder',  name: 'Prindërit', icon: 'users' },
+  { id: 'femije',   name: 'Fëmijët',   icon: 'child' },
+  { id: 'mbrojtje', name: 'Mbrojtja',  icon: 'shield' },
+  { id: 'falje',    name: 'Falja',     icon: 'heart' },
+  { id: 'semundje', name: 'Sëmundja',  icon: 'pulse' },
+  { id: 'shi',      name: 'Shiu',      icon: 'cloud' },
+  { id: 'istikhare',name: 'Istikhare', icon: 'compass' },
+];
+
+const DUAS = [
+  { cat: 'mengjes', t: 'Duaja e mëngjesit', ar: 'أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ', lat: 'Asbahna ve asbahal-mulku lil-lahi Rabbil-alemin', sq: 'E arritëm mëngjesin dhe i tërë sundimi i takon Allahut, Zotit të botëve.', src: 'Ebu Davudi' },
+  { cat: 'mengjes', t: 'Sejjidul-Istigfar', ar: 'اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ', lat: 'All-llahumme Ente Rabbi, la ilahe il-la Ente, halekteni ve ene abduke', sq: 'O Allah, Ti je Zoti im, s’ka të adhuruar tjetër përveç Teje. Ti më krijove dhe unë jam robi Yt.', src: 'Buhariu' },
+  { cat: 'mengjes', t: 'Mbrojtje për ditën', ar: 'بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ', lat: 'Bismil-lahil-ledhi la jedurru me’asmihi shej’un fil-erdi ve la fis-sema', sq: 'Me emrin e Allahut, me emrin e të Cilit nuk dëmton asgjë në tokë e as në qiell.', src: 'Ebu Davudi & Tirmidhiu' },
+  { cat: 'mbremje', t: 'Duaja e mbrëmjes', ar: 'أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ رَبِّ الْعَالَمِينَ', lat: 'Emsejna ve emsal-mulku lil-lahi Rabbil-alemin', sq: 'E arritëm mbrëmjen dhe i tërë sundimi i takon Allahut, Zotit të botëve.', src: 'Ebu Davudi' },
+  { cat: 'mbremje', t: 'Ajetul-Kursija', ar: 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ', lat: 'All-llahu la ilahe il-la huvel-Hajjul-Kajjum…', sq: 'Allahu — s’ka të adhuruar tjetër përveç Tij, të Gjallit, Mbajtësit të gjithçkaje. (Lexohet e plotë para gjumit dhe pas çdo namazi.)', src: 'El-Bekare, 255' },
+  { cat: 'gjumi', t: 'Para gjumit', ar: 'بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا', lat: 'Bismike All-llahumme emutu ve ahja', sq: 'Me emrin Tënd, o Allah, vdes dhe jetoj.', src: 'Buhariu' },
+  { cat: 'gjumi', t: 'Kur zgjohesh', ar: 'الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ', lat: 'El-hamdu lil-lahil-ledhi ahjana ba’de ma ematena ve ilejhin-nushur', sq: 'Falënderimi i takon Allahut që na ngjalli pas vdekjes (gjumit) dhe tek Ai është ringjallja.', src: 'Buhariu' },
+  { cat: 'udhetim', t: 'Duaja e udhëtimit', ar: 'سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ', lat: 'Subhanel-ledhi sehhare lena hadha ve ma kunna lehu mukrinin', sq: 'I lartësuar është Ai që na e nënshtroi këtë (mjet) dhe ne nuk do të kishim mundësi ta bënim vetë.', src: 'Ez-Zuhruf, 13' },
+  { cat: 'udhetim', t: 'Dalja nga shtëpia', ar: 'بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ', lat: 'Bismil-lahi tevekkeltu alall-llah, ve la havle ve la kuvvete il-la bil-lah', sq: 'Me emrin e Allahut, u mbështeta tek Allahu; s’ka forcë e as fuqi pa Allahun.', src: 'Ebu Davudi & Tirmidhiu' },
+  { cat: 'ushqim', t: 'Para ushqimit', ar: 'بِسْمِ اللَّهِ', lat: 'Bismil-lah', sq: 'Me emrin e Allahut. (Nëse harron në fillim: Bismil-lahi fi evvelihi ve ahirihi.)', src: 'Ebu Davudi & Tirmidhiu' },
+  { cat: 'ushqim', t: 'Pas ushqimit', ar: 'الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنِي هَذَا وَرَزَقَنِيهِ مِنْ غَيْرِ حَوْلٍ مِنِّي وَلَا قُوَّةٍ', lat: 'El-hamdu lil-lahil-ledhi at’ameni hadha ve rezekanihi min gajri havlin minni ve la kuvveh', sq: 'Falënderimi i takon Allahut që më ushqeu me këtë dhe ma dha pa fuqinë dhe forcën time.', src: 'Ebu Davudi & Tirmidhiu' },
+  { cat: 'prinder', t: 'Për prindërit', ar: 'رَبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا', lat: 'Rabbir-hamhuma kema rabbejani sagira', sq: 'Zoti im, mëshiroji ata (prindërit) ashtu siç më rritën mua kur isha i vogël!', src: 'El-Isra, 24' },
+  { cat: 'femije', t: 'Për fëmijët', ar: 'رَبِّ هَبْ لِي مِنَ الصَّالِحِينَ', lat: 'Rabbi heb li mines-salihin', sq: 'Zoti im, më dhuro pasardhës të mirë!', src: 'Es-Saffat, 100' },
+  { cat: 'femije', t: 'Mbrojtja e fëmijëve', ar: 'أُعِيذُكُمَا بِكَلِمَاتِ اللَّهِ التَّامَّةِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ', lat: 'U’idhukuma bi kelimatil-lahit-tammeti min kul-li shejtanin ve hammeh', sq: 'Ju vë nën mbrojtjen e fjalëve të përsosura të Allahut nga çdo shejtan dhe krijesë e dëmshme.', src: 'Buhariu' },
+  { cat: 'mbrojtje', t: 'Mbrojtje nga çdo e keqe', ar: 'أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ', lat: 'E’udhu bi kelimatil-lahit-tammati min sherri ma halek', sq: 'Kërkoj mbrojtje me fjalët e përsosura të Allahut nga sherri i asaj që ka krijuar.', src: 'Muslimi' },
+  { cat: 'mbrojtje', t: 'Tri Kul-et', ar: 'قُلْ هُوَ اللَّهُ أَحَدٌ ۝ قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ قُلْ أَعُوذُ بِرَبِّ النَّاسِ', lat: 'Kul huvall-llahu ehad · Kul e’udhu bi Rabbil-felek · Kul e’udhu bi Rabbin-nas', sq: 'Ihlasi, Feleku dhe Nasi — lexohen nga tri herë në mëngjes e mbrëmje për mbrojtje të plotë.', src: 'Ebu Davudi & Tirmidhiu' },
+  { cat: 'falje', t: 'Lutja e Junusit (a.s.)', ar: 'لَا إِلَهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ', lat: 'La ilahe il-la Ente, subhaneke, inni kuntu minedh-dhalimin', sq: 'S’ka të adhuruar tjetër përveç Teje! I lartësuar je Ti, unë i bëra padrejtësi vetes.', src: 'El-Enbija, 87' },
+  { cat: 'falje', t: 'Istigfari', ar: 'أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ الَّذِي لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ وَأَتُوبُ إِلَيْهِ', lat: 'Estagfirull-llahel-adhim el-ledhi la ilahe il-la huvel-Hajjul-Kajjumu ve etubu ilejh', sq: 'Kërkoj falje nga Allahu i Madhërishëm, s’ka të adhuruar tjetër përveç Tij, të Gjallit, Mbajtësit, dhe tek Ai pendohem.', src: 'Ebu Davudi & Tirmidhiu' },
+  { cat: 'semundje', t: 'Për të sëmurin', ar: 'اللَّهُمَّ رَبَّ النَّاسِ أَذْهِبِ الْبَأْسَ اشْفِ وَأَنْتَ الشَّافِي', lat: 'All-llahumme Rabben-nas, edhhibil-be’s, ishfi ve Entesh-Shafi', sq: 'O Allah, Zoti i njerëzve, largoje të keqen dhe shëro, se Ti je Shëruesi.', src: 'Buhariu & Muslimi' },
+  { cat: 'semundje', t: 'Kur ndien dhimbje', ar: 'أَعُوذُ بِاللَّهِ وَقُدْرَتِهِ مِنْ شَرِّ مَا أَجِدُ وَأُحَاذِرُ', lat: 'E’udhu bil-lahi ve kudretihi min sherri ma exhidu ve uhadhir', sq: 'Kërkoj mbrojtje tek Allahu dhe fuqia e Tij nga e keqja që ndiej dhe që i frikësohem. (Thuhet 7 herë me dorën mbi vendin e dhimbjes.)', src: 'Muslimi' },
+  { cat: 'shi', t: 'Kërkimi i shiut', ar: 'اللَّهُمَّ أَغِثْنَا اللَّهُمَّ أَغِثْنَا', lat: 'All-llahumme egithna, All-llahumme egithna', sq: 'O Allah, na dhuro shi! O Allah, na dhuro shi!', src: 'Buhariu & Muslimi' },
+  { cat: 'shi', t: 'Kur bie shi', ar: 'اللَّهُمَّ صَيِّبًا نَافِعًا', lat: 'All-llahumme sajjiben nafi’a', sq: 'O Allah, bëje shi të dobishëm!', src: 'Buhariu' },
+  { cat: 'istikhare', t: 'Duaja e Istikhares', ar: 'اللَّهُمَّ إِنِّي أَسْتَخِيرُكَ بِعِلْمِكَ وَأَسْتَقْدِرُكَ بِقُدْرَتِكَ', lat: 'All-llahumme inni estehiruke bi ilmike ve estakdiruke bi kudretike…', sq: 'O Allah, kërkoj zgjedhjen më të mirë me diturinë Tënde dhe kërkoj fuqi me fuqinë Tënde. (Falet pas dy rekateve vullnetare kur duhet marrë një vendim.)', src: 'Buhariu' },
+];
+
+// ── Ligjëratat ─────────────────────────────────────────────
+const LECTURE_CATEGORIES = [
+  { id: 'imani',    name: 'Imani' },
+  { id: 'keshilla', name: 'Këshilla' },
+  { id: 'shpresa',  name: 'Shpresa' },
+  { id: 'ligjerata',name: 'Ligjërata' },
+];
+
+const LECTURES = [
+  { hoxha: 'Hoxhë Ahmed Kalaja', t: 'Mos u dorëzo para sprovave', cat: 'shpresa', yt: 'KPsSu8ZqUh4' },
+  { hoxha: 'Hoxhë Elvis Naçi', t: 'Lotët e pendimit', cat: 'imani', yt: 'C7-N_ttTkU8' },
+  { hoxha: 'Hoxhë Ardian Sejdiu', t: 'Mërzitja nga sprovat', cat: 'keshilla', yt: 'WXU0ermHf8A' },
+  { hoxha: 'Hoxhë Elvis Naçi', t: 'Ligjërata për udhëtim', cat: 'ligjerata', yt: 'BSG9sBOTowg' },
+  { hoxha: 'Hoxhë Elvis Naçi', t: 'Rrisku', cat: 'keshilla', yt: 'EvKJ_Ipgbgs' },
+  { hoxha: 'Hoxhë Shefqet Krasniqi', t: 'Falja e mëkateve', cat: 'keshilla', yt: '7r9LQy2DpU0' },
+  { hoxha: 'Hoxhë Enis Rama', t: 'Qetësia e zemrës', cat: 'keshilla', yt: 'FgrPhJVEJgo' },
+  { hoxha: 'Hoxhë Enis Rama', t: 'Kështu mposhtet epshi', cat: 'imani', yt: 'bY3v0ctcAp8' },
+  { hoxha: 'Hoxhë Elvis Naçi', t: 'Pse duhet të falemi?', cat: 'keshilla', yt: 'ETK4qTqjPxo' },
+  { hoxha: 'Hoxhë Elvis Naçi', t: '5 kohët e namazit', cat: 'imani', yt: 'IlJXIoJlKGE' },
+  { hoxha: 'Hoxhë Sadullah Bajrami', t: 'Pse të pajtohemi me caktimin e Allahut?', cat: 'imani', yt: 'RUHZ5AmvDVc' },
+  { hoxha: 'Hoxhë Enis Rama', t: 'Kthehu tek Allahu', cat: 'shpresa', yt: 'yEZTY_44g-o' },
+  { hoxha: 'Hoxhë Ardian Sejdiu', t: 'Allahu të flet drejtpërdrejt në namaz', cat: 'imani', yt: '10OlyzMnHP4' },
+  { hoxha: 'Hoxhë Ardian Sejdiu', t: 'Shfrytëzimi i rinisë', cat: 'imani', yt: 'wJR_IuKbEYw' },
+  { hoxha: 'Hoxhë Ardian Sejdiu', t: '8 sfidat që na presin gjatë jetës', cat: 'keshilla', yt: 'n-BXvbr_zZ0' },
+  { hoxha: 'Hoxhë Elvis Naçi', t: 'Allahu i Madhërishëm fal shumë!', cat: 'shpresa', yt: 'i-zTw-75tE0' },
+  { hoxha: 'Hoxhë Elvis Naçi', t: 'Shenjat që tregojnë se do të shkosh në Xhenet', cat: 'shpresa', yt: 'N9iENIoeuKI' },
+  { hoxha: 'Hoxhë Elvis Naçi', t: 'Shenja që tregon se Krijuesi ju do', cat: 'shpresa', yt: 'CTIW0VIqFtQ' },
+  { hoxha: 'Hoxhë Ahmed Kalaja', t: 'Nëse i ke hyrë dikujt në hak?!', cat: 'keshilla', yt: 'pOQLDq-br7M' },
+];
+
+// ── Festat dhe ngjarjet islame 2026 (sipas Takvimit të BIK-ut) ──
+const ISLAMIC_EVENTS = [
+  { date: '2026-01-15', name: 'Nata e Miraxhit', desc: 'Ngjitja e Profetit ﷺ në qiell' },
+  { date: '2026-02-02', name: 'Nata e Beratit', desc: 'Nata e faljes' },
+  { date: '2026-02-19', name: 'Fillimi i Ramazanit', desc: 'Dita e parë e agjërimit' },
+  { date: '2026-03-16', name: 'Nata e Kadrit', desc: 'Nata më e vlefshme e vitit' },
+  { date: '2026-03-20', name: 'Fitër Bajrami', desc: 'Festa e përfundimit të Ramazanit' },
+  { date: '2026-05-26', name: 'Dita e Arafatit', desc: 'Dita e nëntë e Dhul-Hixhes' },
+  { date: '2026-05-27', name: 'Kurban Bajrami', desc: 'Festa e Kurbanit' },
+  { date: '2026-06-16', name: 'Viti i Ri Hixhri 1448', desc: 'Fillimi i vitit të ri islam' },
+  { date: '2026-06-25', name: 'Dita e Ashures', desc: 'Dita e dhjetë e Muharremit' },
+  { date: '2026-08-24', name: 'Mevludi', desc: 'Ditëlindja e Profetit ﷺ' },
+];
+
+// ── Arritjet (Achievements) ────────────────────────────────
+const ACHIEVEMENTS = [
+  { id: 'first-prayer',  icon: '🕌', name: 'Namazi i parë',   desc: 'Shëno namazin e parë si të falur', check: s => s.totalPrayers >= 1 },
+  { id: 'full-day',      icon: '🌙', name: 'Dita e plotë',    desc: 'Fali të 5 namazet në një ditë', check: s => s.fullDays >= 1 },
+  { id: 'streak-3',      icon: '🔥', name: '3 ditë radhazi',  desc: 'Mbaj serinë 3 ditë', check: s => s.bestStreak >= 3 },
+  { id: 'streak-7',      icon: '⚡', name: 'Java e artë',     desc: 'Mbaj serinë 7 ditë', check: s => s.bestStreak >= 7 },
+  { id: 'streak-30',     icon: '🏆', name: 'Muaji i plotë',   desc: 'Mbaj serinë 30 ditë', check: s => s.bestStreak >= 30 },
+  { id: 'reader-1',      icon: '📖', name: 'Lexuesi',         desc: 'Lexo suren e parë', check: s => s.surahsRead >= 1 },
+  { id: 'reader-10',     icon: '📚', name: 'Dijetari i ri',   desc: 'Lexo 10 sure', check: s => s.surahsRead >= 10 },
+  { id: 'fav-5',         icon: '⭐', name: 'Koleksionisti',   desc: 'Ruaj 5 të preferuara', check: s => s.favorites >= 5 },
+  { id: 'dua-10',        icon: '🤲', name: 'Lutësi',          desc: 'Lexo 10 lutje', check: s => s.duasRead >= 10 },
+];
+
+/* ============================================================
+   VAKTI — Platforma islame për Kosovën
+   SPA · Vanilla JS · Offline-first · BuiltByNiti
+   ============================================================ */
+
+
+
+
+/* ---------- Ikonat (SVG inline — pa varësi të jashtme) ---------- */
+const I = (p, extra = '') => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" ${extra}>${p}</svg>`;
+const ICONS = {
+  home: I('<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9 21v-6h6v6"/>'),
+  clock: I('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+  book: I('<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5z"/><path d="M20 17v5H6.5a2.5 2.5 0 0 1 0-5"/>'),
+  dua: I('<path d="M12 3c-2 3-5 4.5-5 9a5 5 0 0 0 10 0c0-4.5-3-6-5-9z"/><path d="M12 21v-4"/>'),
+  grid: I('<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>'),
+  compass: I('<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>'),
+  video: I('<rect x="2" y="5" width="15" height="14" rx="3"/><path d="m17 10 5-3v10l-5-3"/>'),
+  calendar: I('<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/>'),
+  mosque: I('<path d="M4 21v-8M20 21v-8M4 21h16"/><path d="M12 3c-1.5 2-4 3-4 6h8c0-3-2.5-4-4-6z"/><path d="M6 13c0-2 2-4 6-4s6 2 6 4"/><path d="M10 21v-4a2 2 0 0 1 4 0v4"/>'),
+  search: I('<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>'),
+  settings: I('<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.7l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.7-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.2a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.7.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.7 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.2a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.7l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.7.3h.1a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.2a1.6 1.6 0 0 0 1 1.5h.1a1.6 1.6 0 0 0 1.7-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.7v.1a1.6 1.6 0 0 0 1.5 1h.2a2 2 0 1 1 0 4h-.2a1.6 1.6 0 0 0-1.5 1z"/>'),
+  user: I('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/>'),
+  bell: I('<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>'),
+  sun: I('<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'),
+  moon: I('<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>'),
+  sunrise: I('<path d="M12 9V3m0 0L9 6m3-3 3 3"/><path d="M4 17a8 8 0 0 1 16 0"/><path d="M2 21h20"/>'),
+  sunset: I('<path d="M12 3v6m0 0L9 6m3 3 3-3"/><path d="M4 17a8 8 0 0 1 16 0"/><path d="M2 21h20"/>'),
+  bed: I('<path d="M3 7v11M3 16h18v-5a3 3 0 0 0-3-3H9v5"/><circle cx="6.5" cy="10.5" r="1.5"/>'),
+  map: I('<path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>'),
+  utensils: I('<path d="M5 3v7a2 2 0 0 0 4 0V3M7 13v8"/><path d="M17 3c-2 2-2 6 0 8v10"/>'),
+  users: I('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 21c0-3.5 2.8-5.5 6.5-5.5s6.5 2 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17.5 15.6c2.4.4 4 2 4 4.4"/>'),
+  child: I('<circle cx="12" cy="7" r="3.5"/><path d="M6 21c0-3.3 2.7-5 6-5s6 1.7 6 5"/>'),
+  shield: I('<path d="M12 3 4.5 6v5c0 5 3.2 8.4 7.5 10 4.3-1.6 7.5-5 7.5-10V6z"/>'),
+  heart: I('<path d="M12 20.5C6 16 3.5 12.8 3.5 9.4A4.4 4.4 0 0 1 8 5c1.7 0 3.1.8 4 2.2A4.9 4.9 0 0 1 16 5a4.4 4.4 0 0 1 4.5 4.4c0 3.4-2.5 6.6-8.5 11.1z"/>'),
+  heartFill: `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20.5C6 16 3.5 12.8 3.5 9.4A4.4 4.4 0 0 1 8 5c1.7 0 3.1.8 4 2.2A4.9 4.9 0 0 1 16 5a4.4 4.4 0 0 1 4.5 4.4c0 3.4-2.5 6.6-8.5 11.1z"/></svg>`,
+  pulse: I('<path d="M3 12h4l2-6 4 12 2-6h6"/>'),
+  cloud: I('<path d="M17.5 18a4.5 4.5 0 0 0 0-9 6 6 0 0 0-11.5 2A4 4 0 0 0 7 18z"/>'),
+  star: I('<path d="m12 3 2.7 5.8 6.3.8-4.6 4.3 1.2 6.1L12 17l-5.6 3 1.2-6.1L3 9.6l6.3-.8z"/>'),
+  starFill: `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 3 2.7 5.8 6.3.8-4.6 4.3 1.2 6.1L12 17l-5.6 3 1.2-6.1L3 9.6l6.3-.8z"/></svg>`,
+  check: I('<path d="m4 12.5 5 5L20 6.5"/>'),
+  chevR: I('<path d="m9 5 7 7-7 7"/>'),
+  back: I('<path d="m15 5-7 7 7 7"/>'),
+  play: `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.8v14.4c0 .8.9 1.3 1.6.9l11-7.2a1 1 0 0 0 0-1.8l-11-7.2c-.7-.4-1.6.1-1.6.9z"/></svg>`,
+  share: I('<circle cx="6" cy="12" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="m8.7 10.6 6.6-3.2m-6.6 6 6.6 3.2"/>'),
+  download: I('<path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>'),
+  upload: I('<path d="M12 15V3m0 0L8 7m4-4 4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>'),
+  x: I('<path d="M6 6l12 12M18 6 6 18"/>'),
+  info: I('<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M12 11v5"/>'),
+  logo: I('<path d="M12 2.5c-2.8 2.2-4.5 5-4.5 8.5a4.5 4.5 0 0 0 9 0c0-3.5-1.7-6.3-4.5-8.5z"/><path d="M5 21.5h14"/><path d="M7.5 21.5v-3.2a4.5 4.5 0 0 1 9 0v3.2"/>'),
+  edit: I('<path d="M17 3a2.8 2.8 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/>'),
+  trophy: I('<path d="M8 21h8m-4-4v4M7 4h10v6a5 5 0 0 1-10 0z"/><path d="M7 6H4a3 3 0 0 0 3 5M17 6h3a3 3 0 0 1-3 5"/>'),
+  flame: I('<path d="M12 22c4 0 7-2.7 7-7 0-3-2-5.5-3.5-7C15 10 14 11 12.5 11 14 7 12 4 9.5 2c.5 3.5-1 5-2.5 7A8.4 8.4 0 0 0 5 15c0 4.3 3 7 7 7z"/>'),
+};
+
+/* ---------- Store ---------- */
+const store = {
+  get(k, d = null) { try { const v = localStorage.getItem('vakti:' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('vakti:' + k, JSON.stringify(v)); } catch {} },
+  del(k) { localStorage.removeItem('vakti:' + k); },
+  all() {
+    const o = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k.startsWith('vakti:')) o[k.slice(6)] = JSON.parse(localStorage.getItem(k));
+    }
+    return o;
+  }
+};
+const S = {
+  get theme()      { return store.get('theme', 'dark'); },
+  get cityId()     { return store.get('city', 'prishtine'); },
+  get city()       { return CITIES.find(c => c.id === this.cityId) || CITIES[0]; },
+  get name()       { return store.get('name', ''); },
+  get mosque()     { return store.get('mosque', ''); },
+  get notif()      { return store.get('notif', true); },
+  get fontSize()   { return store.get('fontSize', 'm'); },
+  get onboarded()  { return store.get('onboarded', false); },
+  get prayerLog()  { return store.get('prayerLog', {}); },
+  get quranPos()   { return store.get('quranPos', null); },
+  get favAyat()    { return store.get('favAyat', []); },
+  get favDuas()    { return store.get('favDuas', []); },
+  get favLectures(){ return store.get('favLectures', []); },
+  get readSurahs() { return store.get('readSurahs', []); },
+  get duasRead()   { return store.get('duasRead', []); },
+  get recentLectures() { return store.get('recentLectures', []); },
+};
+
+/* ---------- Ndihmës ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const pad = n => String(n).padStart(2, '0');
+const fmtMin = m => `${pad(Math.floor(((m % 1440) + 1440) % 1440 / 60))}:${pad(m % 60)}`;
+const todayISO = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+
+function toast(msg, icon = 'check') {
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const t = document.createElement('div');
+  t.className = 'toast'; t.setAttribute('role', 'status');
+  t.innerHTML = `${ICONS[icon] || ''}<span>${esc(msg)}</span>`;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+function sheet(html, onOpen) {
+  const scrim = document.createElement('div');
+  scrim.className = 'sheet-scrim';
+  const sh = document.createElement('div');
+  sh.className = 'sheet'; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true');
+  sh.innerHTML = `<div class="sheet-handle"></div>` + html;
+  const close = () => {
+    scrim.classList.add('closing'); sh.classList.add('closing');
+    setTimeout(() => { scrim.remove(); sh.remove(); }, 300);
+  };
+  scrim.onclick = close;
+  document.body.append(scrim, sh);
+  onOpen && onOpen(sh, close);
+  return close;
+}
+
+/* ---------- Tema ---------- */
+function applyTheme() {
+  let t = S.theme;
+  if (t === 'auto') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  document.documentElement.dataset.theme = t;
+  const meta = $('meta[name="theme-color"]');
+  if (meta) meta.content = t === 'light' ? '#f4f7f6' : (t === 'oled' ? '#000000' : '#060b14');
+}
+function applyFontSize() {
+  const sizes = { s: '1.35rem', m: '1.65rem', l: '2rem' };
+  document.documentElement.style.setProperty('--fs-quran', sizes[S.fontSize] || sizes.m);
+}
+
+/* ---------- Motori i Takvimit (BIK) ---------- */
+const Prayer = {
+  dayIndex(d) {
+    const ref = new Date(2026, d.getMonth(), d.getDate() === 29 && d.getMonth() === 1 ? 28 : d.getDate());
+    return Math.round((ref - new Date(2026, 0, 1)) / 864e5);
+  },
+  times(d = new Date(), cityOff = S.city.off) {
+    const dst = d.getTimezoneOffset() < new Date(d.getFullYear(), 0, 1).getTimezoneOffset() ? 60 : 0;
+    return TAKVIMI[this.dayIndex(d)].map(v => v + cityOff + dst);
+  },
+  nowMin() { const n = new Date(); return n.getHours() * 60 + n.getMinutes() + n.getSeconds() / 60; },
+  /** Namazi i radhës: {idx, name, min, isTomorrow, prevMin} */
+  next() {
+    const t = this.times(), now = this.nowMin();
+    for (let i = 0; i < 7; i++) {
+      if (t[i] > now) return { idx: i, name: PRAYER_NAMES[i], min: t[i], isTomorrow: false, prevMin: i ? t[i - 1] : t[0] - 60 };
+    }
+    const tom = new Date(Date.now() + 864e5);
+    return { idx: 0, name: PRAYER_NAMES[0], min: this.times(tom)[0] + 1440, isTomorrow: true, prevMin: t[6] };
+  },
+  countdown(targetMin) {
+    const secs = Math.max(0, Math.round((targetMin - this.nowMin()) * 60));
+    return `${pad(Math.floor(secs / 3600))}:${pad(Math.floor(secs / 60) % 60)}:${pad(secs % 60)}`;
+  }
+};
+
+/* ---------- Data Hixhri ---------- */
+function hijriDate(d = new Date()) {
+  try {
+    const f = new Intl.DateTimeFormat('sq-AL-u-ca-islamic-umalqura', { day: 'numeric', month: 'long', year: 'numeric' });
+    return f.format(d).replace(/\b(AH|H)\b\.?/g, 'H');
+  } catch { return ''; }
+}
+
+/* ---------- Statistikat ---------- */
+function stats() {
+  const log = S.prayerLog;
+  let total = 0, fullDays = 0;
+  Object.values(log).forEach(day => {
+    const c = day.filter(Boolean).length;
+    total += c; if (c === 5) fullDays++;
+  });
+  // seritë
+  let streak = 0, best = 0, d = new Date();
+  const hasAny = iso => (log[iso] || []).some(Boolean);
+  if (!hasAny(todayISO(d))) d = new Date(Date.now() - 864e5);
+  while (hasAny(todayISO(d))) { streak++; d = new Date(d - 864e5); }
+  const days = Object.keys(log).filter(hasAny).sort();
+  let run = 0, prev = null;
+  for (const iso of days) {
+    run = (prev && (new Date(iso) - new Date(prev)) === 864e5) ? run + 1 : 1;
+    best = Math.max(best, run); prev = iso;
+  }
+  best = Math.max(best, streak);
+  return {
+    totalPrayers: total, fullDays, streak, bestStreak: best,
+    surahsRead: S.readSurahs.length,
+    favorites: S.favAyat.length + S.favDuas.length + S.favLectures.length,
+    duasRead: S.duasRead.length,
+  };
+}
+
+/* ---------- Njoftimet ---------- */
+let notifTimer = null;
+function scheduleNotifications() {
+  clearTimeout(notifTimer);
+  if (!S.notif || !('Notification' in window) || Notification.permission !== 'granted') return;
+  const t = Prayer.times(), now = Prayer.nowMin();
+  for (const i of FARD_INDEXES) {
+    if (t[i] > now) {
+      notifTimer = setTimeout(() => {
+        try { new Notification('Vakti — ' + PRAYER_NAMES[i], { body: `Hyri koha e namazit — ${PRAYER_NAMES[i]} (${fmtMin(t[i])}).`, icon: 'assets/icons/icon-192.png', badge: 'assets/icons/icon-192.png' }); } catch {}
+        scheduleNotifications();
+      }, Math.min((t[i] - now) * 60000, 2147000000));
+      return;
+    }
+  }
+}
+
+/* ---------- Cache i Kuranit ---------- */
+const QURAN_CACHE = 'vakti-quran-v1';
+async function fetchSurah(n) {
+  const url = `https://api.alquran.cloud/v1/surah/${n}/editions/quran-uthmani,sq.nahi`;
+  try {
+    const cache = await caches.open(QURAN_CACHE);
+    const hit = await cache.match(url);
+    if (hit) return (await hit.json()).data;
+    const res = await fetch(url);
+    if (!res.ok) throw 0;
+    await cache.put(url, res.clone());
+    return (await res.json()).data;
+  } catch {
+    const res = await fetch(url); // përpjekje pa cache API (p.sh. HTTP)
+    if (!res.ok) throw new Error('offline');
+    return (await res.json()).data;
+  }
+}
+
+/* ============================================================
+   EKRANET
+   ============================================================ */
+const app = $('#app');
+let pageEl = null;
+
+function render(html, { tab = null } = {}) {
+  const old = pageEl;
+  if (old) { old.classList.add('leaving'); setTimeout(() => old.remove(), 160); }
+  pageEl = document.createElement('main');
+  pageEl.className = 'page'; pageEl.id = 'page';
+  pageEl.innerHTML = html;
+  app.appendChild(pageEl);
+  window.scrollTo({ top: 0 });
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.route === tab));
+  return pageEl;
+}
+
+const backBtn = (to = '#/me-shume') =>
+  `<button class="icon-btn" aria-label="Kthehu" onclick="history.length>2?history.back():location.hash='${to}'">${ICONS.back}</button>`;
+
+/* ---------- BALLINA ---------- */
+let heroInterval = null;
+function screenHome() {
+  clearInterval(heroInterval);
+  const doy = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 1)) / 864e5);
+  const ayah = DAILY_AYAT[doy % DAILY_AYAT.length];
+  const hadith = DAILY_HADITHS[doy % DAILY_HADITHS.length];
+  const dua = DAILY_DUAS[doy % DAILY_DUAS.length];
+  const t = Prayer.times();
+  const log = S.prayerLog[todayISO()] || [false, false, false, false, false];
+  const st = stats();
+  const pos = S.quranPos;
+  const hour = new Date().getHours();
+  const greet = hour < 12 ? 'Mirëmëngjesi' : hour < 18 ? 'Mirëdita' : 'Mirëmbrëma';
+  const gregorian = new Date().toLocaleDateString('sq-AL', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  render(`
+    <header class="app-header">
+      <div class="brand">
+        <h1>${greet}${S.name ? ', ' + esc(S.name.split(' ')[0]) : ''} 👋</h1>
+        <span class="sub">${esc(gregorian)} · ${esc(hijriDate())}</span>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" aria-label="Kërko" onclick="location.hash='#/kerko'">${ICONS.search}</button>
+        <button class="avatar-btn" aria-label="Profili" onclick="location.hash='#/profili'">${S.name ? esc(S.name[0].toUpperCase()) : ICONS.user}</button>
+      </div>
+    </header>
+
+    <div class="stagger">
+      <section class="hero-card" aria-live="polite">
+        <span class="hero-label">Namazi i radhës · ${esc(S.city.name)}</span>
+        <h2 class="hero-prayer" id="hero-name">—</h2>
+        <p class="hero-time" id="hero-time"></p>
+        <div class="hero-row">
+          <div><p class="hero-count-label">Koha e mbetur</p><p class="hero-count" id="hero-count">--:--:--</p></div>
+          <button class="btn btn-sm" onclick="location.hash='#/kohet'">Të gjitha ${ICONS.chevR}</button>
+        </div>
+        <div class="pbar"><i id="hero-bar" style="width:0%"></i></div>
+      </section>
+
+      <section class="section">
+        <div class="grid-4">
+          <button class="quick" onclick="location.hash='#/kurani'"><span class="q-icon">${ICONS.book}</span><span>Kurani</span></button>
+          <button class="quick" onclick="location.hash='#/lutjet'"><span class="q-icon">${ICONS.dua}</span><span>Lutjet</span></button>
+          <button class="quick" onclick="location.hash='#/kibla'"><span class="q-icon">${ICONS.compass}</span><span>Kibla</span></button>
+          <button class="quick" onclick="location.hash='#/ligjeratat'"><span class="q-icon">${ICONS.video}</span><span>Ligjërata</span></button>
+        </div>
+      </section>
+
+      ${pos ? `
+      <section class="section">
+        <button class="list-item" onclick="location.hash='#/sure/${pos.s}'">
+          <span class="li-icon">${ICONS.book}</span>
+          <span class="li-body"><span class="li-title">Vazhdo leximin</span>
+          <span class="li-sub">${esc(SURAHS[pos.s - 1][0])} · Ajeti ${pos.a}</span></span>
+          <span class="li-end">${ICONS.chevR}</span>
+        </button>
+      </section>` : ''}
+
+      <section class="section">
+        <div class="section-head"><h3>Namazet e sotme</h3><span class="muted">${log.filter(Boolean).length}/5</span></div>
+        <div class="card" style="display:flex; justify-content:space-between; gap:6px;">
+          ${FARD_INDEXES.map((pi, i) => `
+            <button class="p-check ${log[i] ? 'on' : ''}" style="width:52px;height:52px;border-radius:16px;flex-direction:column;display:flex;align-items:center;justify-content:center;gap:2px"
+              aria-label="${FARD_NAMES[i]}" aria-pressed="${!!log[i]}" data-fard="${i}">
+              <span style="font-size:.6rem;font-weight:800;${log[i] ? '' : 'color:var(--text-3)'}">${FARD_NAMES[i].slice(0, 3)}</span>
+              ${log[i] ? ICONS.check : `<span style="font-size:.72rem;font-weight:700;color:var(--text-3)">${fmtMin(t[pi])}</span>`}
+            </button>`).join('')}
+        </div>
+      </section>
+
+      <section class="section daily-card card">
+        <span class="daily-tag">${ICONS.book} Ajeti i Ditës</span>
+        <p class="daily-ar" lang="ar">${ayah.ar}</p>
+        <p class="daily-sq">"${esc(ayah.sq)}"</p>
+        <p class="daily-src">— ${esc(ayah.src)}</p>
+      </section>
+
+      <section class="daily-card card">
+        <span class="daily-tag">${ICONS.star} Hadithi i Ditës</span>
+        <p class="daily-sq">"${esc(hadith.sq)}"</p>
+        <p class="daily-src">— ${esc(hadith.src)}</p>
+      </section>
+
+      <section class="daily-card card">
+        <span class="daily-tag">${ICONS.dua} Duaja e Ditës</span>
+        <p class="daily-ar" lang="ar">${dua.ar}</p>
+        <p class="daily-sq">"${esc(dua.sq)}"</p>
+        <p class="daily-src">— ${esc(dua.src)}</p>
+      </section>
+
+      ${st.streak > 0 ? `
+      <section class="card" style="display:flex;align-items:center;gap:14px;">
+        <span class="li-icon" style="color:var(--gold)">${ICONS.flame}</span>
+        <div><b>${st.streak} ditë radhazi!</b><p class="muted">Vazhdo kështu — çdo namaz i shënuar e mban serinë gjallë.</p></div>
+      </section>` : ''}
+    </div>
+  `, { tab: '#/' });
+
+  pageEl.querySelectorAll('[data-fard]').forEach(b => b.onclick = () => toggleFard(+b.dataset.fard));
+
+  const tick = () => {
+    const nx = Prayer.next();
+    const el = $('#hero-name'); if (!el) { clearInterval(heroInterval); return; }
+    el.textContent = nx.name;
+    $('#hero-time').textContent = `${nx.isTomorrow ? 'Nesër në ' : 'Sot në '}${fmtMin(nx.min % 1440)}`;
+    $('#hero-count').textContent = Prayer.countdown(nx.min);
+    const span = nx.min - nx.prevMin;
+    $('#hero-bar').style.width = Math.min(100, Math.max(0, (Prayer.nowMin() - nx.prevMin) / span * 100)) + '%';
+  };
+  tick(); heroInterval = setInterval(tick, 1000);
+}
+
+function toggleFard(i) {
+  const iso = todayISO();
+  const log = { ...S.prayerLog };
+  const day = log[iso] ? [...log[iso]] : [false, false, false, false, false];
+  day[i] = !day[i]; log[iso] = day;
+  store.set('prayerLog', log);
+  if (day[i]) { navigator.vibrate?.(18); toast(`${FARD_NAMES[i]} u shënua ✓`); checkAchievements(); }
+  route(); // rifresko
+}
+
+function checkAchievements() {
+  const st = stats();
+  const earned = store.get('achievements', []);
+  let news = false;
+  ACHIEVEMENTS.forEach(a => {
+    if (!earned.includes(a.id) && a.check(st)) { earned.push(a.id); news = true; setTimeout(() => toast(`${a.icon} Arritje e re: ${a.name}!`, 'trophy'), 800); }
+  });
+  if (news) store.set('achievements', earned);
+}
+
+/* ---------- KOHËT E NAMAZIT ---------- */
+let kohetInterval = null;
+function screenKohet() {
+  clearInterval(kohetInterval);
+  const d = new Date();
+  const t = Prayer.times(d);
+  const nx = Prayer.next();
+  const log = S.prayerLog[todayISO()] || [];
+  const icons = ['moon', 'sunrise', 'sun', 'sun', 'sunset', 'sunset', 'moon'];
+
+  render(`
+    <header class="page-head">
+      ${backBtn('#/')}
+      <h2>Kohët e Namazit</h2>
+      <button class="btn btn-sm" id="city-btn">${ICONS.map} ${esc(S.city.name)}</button>
+    </header>
+    <p class="muted" style="margin-bottom:16px">${esc(d.toLocaleDateString('sq-AL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }))} · ${esc(hijriDate())} <br>Sipas Takvimit të Bashkësisë Islame të Kosovës</p>
+    <div class="stagger" id="prayer-list">
+      ${PRAYER_NAMES.map((n, i) => {
+        const fi = FARD_INDEXES.indexOf(i);
+        return `
+        <div class="prayer-row ${t[i] < Prayer.nowMin() && !(nx.idx === i && !nx.isTomorrow) ? 'done' : ''} ${nx.idx === i && !nx.isTomorrow ? 'active' : ''}">
+          <span class="p-icon">${ICONS[icons[i]]}</span>
+          <span class="p-name">${n}${nx.idx === i && !nx.isTomorrow ? `<br><small style="color:var(--primary-2);font-weight:700" id="row-count"></small>` : ''}</span>
+          <span class="p-time">${fmtMin(t[i])}</span>
+          ${fi > -1 ? `<button class="p-check ${log[fi] ? 'on' : ''}" data-fard="${fi}" aria-label="Shëno ${n}" aria-pressed="${!!log[fi]}">${ICONS.check}</button>` : ''}
+        </div>`;
+      }).join('')}
+    </div>
+    <section class="section">
+      <button class="btn" id="month-btn">${ICONS.calendar} Takvimi i muajit</button>
+    </section>
+  `, { tab: '#/kohet' });
+
+  pageEl.querySelectorAll('[data-fard]').forEach(b => b.onclick = () => toggleFard(+b.dataset.fard));
+  $('#city-btn').onclick = citySheet;
+  $('#month-btn').onclick = monthSheet;
+  const tick = () => { const el = $('#row-count'); if (el) el.textContent = Prayer.countdown(nx.min); };
+  tick(); kohetInterval = setInterval(tick, 1000);
+}
+
+function citySheet() {
+  sheet(`<h3>Zgjedh qytetin</h3>
+    <div class="opt-list">
+      ${CITIES.map(c => `<button class="opt ${c.id === S.cityId ? 'on' : ''}" data-city="${c.id}">
+        ${esc(c.name)} <span class="muted" style="margin-left:auto">${c.off > 0 ? '+' : ''}${c.off} min</span>
+        <span class="o-check">${ICONS.check}</span></button>`).join('')}
+    </div>`,
+    (sh, close) => sh.querySelectorAll('[data-city]').forEach(b => b.onclick = () => {
+      store.set('city', b.dataset.city); close(); toast('Qyteti u ndryshua'); scheduleNotifications(); route();
+    }));
+}
+
+function monthSheet() {
+  const d = new Date();
+  const monthName = d.toLocaleDateString('sq-AL', { month: 'long', year: 'numeric' });
+  const days = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate();
+  let rows = '';
+  for (let day = 1; day <= days; day++) {
+    const dd = new Date(d.getFullYear(), d.getMonth(), day);
+    const t = Prayer.times(dd);
+    rows += `<tr ${day === d.getDate() ? 'style="color:var(--primary-2);font-weight:800"' : ''}>
+      <td style="text-align:left">${day}</td>${[1, 3, 4, 5, 6].map(i => `<td>${fmtMin(t[i])}</td>`).join('')}</tr>`;
+  }
+  sheet(`<h3 style="text-transform:capitalize">${esc(monthName)} — ${esc(S.city.name)}</h3>
+    <table style="width:100%;border-collapse:collapse;font-size:.82rem;font-variant-numeric:tabular-nums" aria-label="Takvimi mujor">
+      <thead><tr style="color:var(--text-3);font-size:.68rem;text-transform:uppercase">
+        <th style="text-align:left;padding:6px 0">Data</th><th>Sabahu</th><th>Dreka</th><th>Ikindia</th><th>Akshami</th><th>Jacia</th></tr></thead>
+      <tbody style="text-align:center;line-height:2.1">${rows}</tbody></table>`);
+}
+
+/* ---------- KURANI ---------- */
+function screenKurani() {
+  const pos = S.quranPos;
+  render(`
+    <header class="page-head">${backBtn('#/')}<h2>Kurani Famëlartë</h2></header>
+    <div class="search-wrap">${ICONS.search}<input class="input" id="surah-q" placeholder="Kërko suren..." aria-label="Kërko suren"></div>
+    ${pos ? `<button class="list-item" style="margin-bottom:14px" onclick="location.hash='#/sure/${pos.s}'">
+      <span class="li-icon" style="background:var(--grad-primary);color:#fff">${ICONS.book}</span>
+      <span class="li-body"><span class="li-title">Vazhdo leximin</span><span class="li-sub">${esc(SURAHS[pos.s - 1][0])} · Ajeti ${pos.a}</span></span>
+      <span class="li-end">${ICONS.chevR}</span></button>` : ''}
+    <div id="surah-list"></div>
+  `, { tab: '#/kurani' });
+
+  const list = $('#surah-list');
+  const read = new Set(S.readSurahs);
+  const draw = q => {
+    list.innerHTML = SURAHS.map(([name, ayahs, place], i) => ({ name, ayahs, place, n: i + 1 }))
+      .filter(s => !q || s.name.toLowerCase().includes(q) || String(s.n) === q)
+      .map(s => `<button class="list-item" onclick="location.hash='#/sure/${s.n}'">
+        <span class="li-icon" style="font-weight:800;font-size:.85rem;${read.has(s.n) ? 'background:var(--grad-primary);color:#fff' : ''}">${s.n}</span>
+        <span class="li-body"><span class="li-title">${esc(s.name)}</span>
+        <span class="li-sub">${s.ayahs} ajete · ${s.place === 'M' ? 'Mekase' : 'Medinase'}</span></span>
+        <span class="li-end">${ICONS.chevR}</span></button>`).join('') || `<div class="empty-state">${ICONS.search}<p>Asnjë sure nuk u gjet</p></div>`;
+  };
+  draw('');
+  $('#surah-q').oninput = e => draw(e.target.value.trim().toLowerCase());
+}
+
+async function screenSure(n) {
+  n = Math.min(114, Math.max(1, +n || 1));
+  const [name, ayahCount, place] = SURAHS[n - 1];
+  render(`
+    <header class="page-head">${backBtn('#/kurani')}<h2>${esc(name)}</h2></header>
+    <div class="surah-head">
+      <p class="s-ar" lang="ar" id="s-ar-name"></p>
+      <h3 class="s-name">${esc(name)}</h3>
+      <p class="s-meta">Surja ${n} · ${ayahCount} ajete · ${place === 'M' ? 'Mekase' : 'Medinase'}</p>
+    </div>
+    <div id="ayah-wrap">
+      ${Array.from({ length: 4 }, () => '<div class="skeleton" style="height:130px;margin-bottom:12px"></div>').join('')}
+    </div>
+  `, { tab: '#/kurani' });
+
+  // shëno si të lexuar + pozicioni
+  if (!S.readSurahs.includes(n)) { store.set('readSurahs', [...S.readSurahs, n]); checkAchievements(); }
+
+  try {
+    const data = await fetchSurah(n);
+    const wrap = $('#ayah-wrap'); if (!wrap) return;
+    const [ar, sq] = data;
+    const arName = $('#s-ar-name'); if (arName) arName.textContent = ar.name;
+    const favs = new Set(S.favAyat.map(f => `${f.s}:${f.a}`));
+    wrap.innerHTML = (n !== 1 && n !== 9 ? `<p class="bismillah" lang="ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>` : '') +
+      ar.ayahs.map((a, i) => {
+        let text = a.text;
+        if (i === 0 && n !== 1 && n !== 9) text = text.replace(/^بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\s*/, '');
+        const key = `${n}:${a.numberInSurah}`;
+        return `<article class="ayah-card" id="ayah-${a.numberInSurah}">
+          <div class="ayah-top">
+            <span class="ayah-num">${a.numberInSurah}</span>
+            <div class="ayah-actions">
+              <button data-fav="${key}" class="${favs.has(key) ? 'on' : ''}" aria-label="Shto në të preferuara" aria-pressed="${favs.has(key)}">${favs.has(key) ? ICONS.starFill : ICONS.star}</button>
+              <button data-mark="${a.numberInSurah}" aria-label="Ruaj pozicionin e leximit">${ICONS.book}</button>
+              <button data-share="${key}" aria-label="Ndaj ajetin">${ICONS.share}</button>
+            </div>
+          </div>
+          <p class="ayah-ar" lang="ar">${esc(text)}</p>
+          <p class="ayah-sq">${esc(sq.ayahs[i]?.text || '')}</p>
+        </article>`;
+      }).join('');
+
+    store.set('quranPos', { s: n, a: 1 });
+
+    wrap.querySelectorAll('[data-fav]').forEach(b => b.onclick = () => {
+      const [s, a] = b.dataset.fav.split(':').map(Number);
+      let favs = S.favAyat;
+      const has = favs.some(f => f.s === s && f.a === a);
+      favs = has ? favs.filter(f => !(f.s === s && f.a === a)) : [...favs, { s, a }];
+      store.set('favAyat', favs);
+      b.classList.toggle('on', !has); b.innerHTML = has ? ICONS.star : ICONS.starFill;
+      b.classList.add('heart-pop'); setTimeout(() => b.classList.remove('heart-pop'), 450);
+      if (!has) checkAchievements();
+    });
+    wrap.querySelectorAll('[data-mark]').forEach(b => b.onclick = () => {
+      store.set('quranPos', { s: n, a: +b.dataset.mark });
+      toast(`Pozicioni u ruajt: ajeti ${b.dataset.mark}`);
+    });
+    wrap.querySelectorAll('[data-share]').forEach(b => b.onclick = async () => {
+      const [s, a] = b.dataset.share.split(':').map(Number);
+      const i = a - 1;
+      const text = `${sq.ayahs[i]?.text}\n— Kurani, ${name} ${s}:${a}\n(via Vakti)`;
+      if (navigator.share) { try { await navigator.share({ text }); } catch {} }
+      else { await navigator.clipboard?.writeText(text); toast('U kopjua në clipboard'); }
+    });
+
+    // shko tek pozicioni i ruajtur
+    const saved = S.quranPos;
+    if (saved && saved.s === n && saved.a > 1) {
+      const el = document.getElementById('ayah-' + saved.a);
+      if (el) { el.scrollIntoView({ block: 'center' }); el.classList.add('highlight'); }
+    }
+  } catch {
+    const wrap = $('#ayah-wrap');
+    if (wrap) wrap.innerHTML = `<div class="empty-state">${ICONS.cloud}<p>S'ka lidhje interneti.<br>Suret e lexuara më parë janë të ruajtura offline.</p>
+      <button class="btn btn-sm mt-2" onclick="location.reload()">Provo përsëri</button></div>`;
+  }
+}
+
+/* ---------- LUTJET ---------- */
+function screenLutjet() {
+  render(`
+    <header class="page-head">${backBtn('#/')}<h2>Lutjet</h2></header>
+    <div class="search-wrap">${ICONS.search}<input class="input" id="dua-q" placeholder="Kërko lutjen..." aria-label="Kërko lutjen"></div>
+    <div class="chips" id="dua-chips" role="tablist">
+      <button class="chip on" data-cat="">Të gjitha</button>
+      <button class="chip" data-cat="__fav">♥ Favoritet</button>
+      ${DUA_CATEGORIES.map(c => `<button class="chip" data-cat="${c.id}">${esc(c.name)}</button>`).join('')}
+    </div>
+    <div id="dua-list"></div>
+  `, { tab: '#/lutjet' });
+
+  let cat = '', q = '';
+  const draw = () => {
+    const favs = new Set(S.favDuas);
+    const items = DUAS.map((d, i) => ({ ...d, i }))
+      .filter(d => cat === '__fav' ? favs.has(d.i) : (!cat || d.cat === cat))
+      .filter(d => !q || d.t.toLowerCase().includes(q) || d.sq.toLowerCase().includes(q));
+    $('#dua-list').innerHTML = items.map(d => `
+      <article class="card daily-card" data-dua="${d.i}">
+        <div class="ayah-top">
+          <span class="daily-tag">${esc(DUA_CATEGORIES.find(c => c.id === d.cat)?.name || '')}</span>
+          <button class="icon-btn" style="width:36px;height:36px" data-favdua="${d.i}" aria-label="E preferuar" aria-pressed="${favs.has(d.i)}">
+            <span style="color:${favs.has(d.i) ? 'var(--danger)' : 'var(--text-3)'}">${favs.has(d.i) ? ICONS.heartFill : ICONS.heart}</span></button>
+        </div>
+        <h3 style="font-size:1.02rem;margin-bottom:10px">${esc(d.t)}</h3>
+        <p class="daily-ar" lang="ar">${d.ar}</p>
+        <p class="muted" style="font-style:italic;margin-bottom:8px">${esc(d.lat)}</p>
+        <p class="daily-sq">${esc(d.sq)}</p>
+        <p class="daily-src">— ${esc(d.src)}</p>
+      </article>`).join('') || `<div class="empty-state">${ICONS.dua}<p>Asnjë lutje nuk u gjet</p></div>`;
+
+    $('#dua-list').querySelectorAll('[data-favdua]').forEach(b => b.onclick = () => {
+      const i = +b.dataset.favdua;
+      let f = S.favDuas;
+      f = f.includes(i) ? f.filter(x => x !== i) : [...f, i];
+      store.set('favDuas', f);
+      const dr = new Set(S.duasRead); dr.add(i); store.set('duasRead', [...dr]);
+      checkAchievements(); draw();
+    });
+    // shëno si të lexuara ato të shfaqura (për arritje)
+    if (items.length && items.length <= 6) {
+      const dr = new Set(S.duasRead); items.forEach(d => dr.add(d.i)); store.set('duasRead', [...dr]);
+    }
+  };
+  draw();
+  $('#dua-q').oninput = e => { q = e.target.value.trim().toLowerCase(); draw(); };
+  document.querySelectorAll('#dua-chips .chip').forEach(c => c.onclick = () => {
+    document.querySelectorAll('#dua-chips .chip').forEach(x => x.classList.remove('on'));
+    c.classList.add('on'); cat = c.dataset.cat; draw();
+  });
+}
+
+/* ---------- KIBLA ---------- */
+let kiblaCleanup = null;
+function screenKibla() {
+  kiblaCleanup?.();
+  render(`
+    <header class="page-head">${backBtn('#/')}<h2>Kibla</h2></header>
+    <div class="compass-wrap">
+      <div class="compass" id="compass">
+        <div class="compass-dial" id="dial">
+          <div class="kaaba-marker">🕋</div>
+          ${[0, 45, 90, 135, 180, 225, 270, 315].map(a => `<span style="position:absolute;top:50%;left:50%;transform:rotate(${a}deg) translateY(calc(min(39vw,160px) * -0.82)) ;font-size:.65rem;font-weight:800;color:var(--text-3)">${{ 0: 'V', 90: 'L', 180: 'J', 270: 'P' }[a] ?? '·'}</span>`).join('')}
+        </div>
+        <div class="compass-center"><p class="deg" id="deg">--°</p><p class="lbl" id="deg-lbl">Drejtimi i Kiblës</p></div>
+      </div>
+    </div>
+    <div class="card center" id="kibla-info">
+      <p class="muted">Kibla nga Kosova është rreth <b style="color:var(--text)">136°</b> (juglindje).</p>
+      <button class="btn btn-primary mt-2" id="kibla-start">${ICONS.compass} Aktivizo busullën</button>
+      <p class="muted mt-2" style="font-size:.72rem">Për saktësi maksimale, mbaje telefonin horizontalisht dhe lëvize në formë 8-she për kalibrim.</p>
+    </div>
+  `, { tab: null });
+
+  const KAABA = { lat: 21.4225, lng: 39.8262 };
+  let qibla = 136; // vlera për Kosovën si parazgjedhje
+  let heading = null;
+
+  const bearing = (lat, lng) => {
+    const toR = x => x * Math.PI / 180;
+    const dL = toR(KAABA.lng - lng);
+    const y = Math.sin(dL) * Math.cos(toR(KAABA.lat));
+    const x = Math.cos(toR(lat)) * Math.sin(toR(KAABA.lat)) - Math.sin(toR(lat)) * Math.cos(toR(KAABA.lat)) * Math.cos(dL);
+    return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+  };
+
+  navigator.geolocation?.getCurrentPosition(p => {
+    qibla = bearing(p.coords.latitude, p.coords.longitude);
+    if (heading === null) { const d = $('#deg'); if (d) d.textContent = Math.round(qibla) + '°'; }
+  }, () => {}, { timeout: 5000 });
+
+  const onOrient = e => {
+    let h = e.webkitCompassHeading ?? (e.absolute || e.alpha !== null ? 360 - e.alpha : null);
+    if (h === null || isNaN(h)) return;
+    heading = h;
+    const rot = qibla - h;
+    const dial = $('#dial'); if (!dial) return;
+    dial.style.transform = `rotate(${rot}deg)`;
+    const diff = Math.abs(((rot % 360) + 360) % 360);
+    const aligned = diff < 4 || diff > 356;
+    $('#compass').classList.toggle('aligned', aligned);
+    $('#deg').textContent = Math.round(((qibla - h) % 360 + 360) % 360) + '°';
+    $('#deg-lbl').textContent = aligned ? '✓ Drejt Kiblës!' : 'Rrotullohu drejt 0°';
+    if (aligned && !dial.dataset.buzzed) { navigator.vibrate?.(60); dial.dataset.buzzed = '1'; }
+    if (!aligned) delete dial.dataset.buzzed;
+  };
+
+  $('#kibla-start').onclick = async () => {
+    try {
+      if (typeof DeviceOrientationEvent !== 'undefined' && DeviceOrientationEvent.requestPermission) {
+        if (await DeviceOrientationEvent.requestPermission() !== 'granted') { toast('Leja u refuzua', 'x'); return; }
+      }
+      window.addEventListener('deviceorientationabsolute', onOrient);
+      window.addEventListener('deviceorientation', onOrient);
+      $('#kibla-start').textContent = 'Busulla aktive';
+      $('#kibla-start').disabled = true;
+    } catch { toast('Busulla nuk mbështetet në këtë pajisje', 'x'); }
+  };
+  kiblaCleanup = () => {
+    window.removeEventListener('deviceorientationabsolute', onOrient);
+    window.removeEventListener('deviceorientation', onOrient);
+  };
+}
+
+/* ---------- LIGJËRATAT ---------- */
+function screenLigjeratat() {
+  render(`
+    <header class="page-head">${backBtn('#/')}<h2>Ligjëratat</h2></header>
+    <div class="search-wrap">${ICONS.search}<input class="input" id="lec-q" placeholder="Kërko ligjëratën ose hoxhën..." aria-label="Kërko"></div>
+    <div class="chips" id="lec-chips">
+      <button class="chip on" data-cat="">Të gjitha</button>
+      <button class="chip" data-cat="__fav">♥ Favoritet</button>
+      <button class="chip" data-cat="__recent">Së fundmi</button>
+      ${LECTURE_CATEGORIES.map(c => `<button class="chip" data-cat="${c.id}">${esc(c.name)}</button>`).join('')}
+    </div>
+    <div id="lec-list"></div>
+  `, { tab: null });
+
+  let cat = '', q = '';
+  const draw = () => {
+    const favs = new Set(S.favLectures);
+    const recent = S.recentLectures;
+    let items = LECTURES.map((l, i) => ({ ...l, i }));
+    if (cat === '__fav') items = items.filter(l => favs.has(l.i));
+    else if (cat === '__recent') items = recent.map(i => items[i]).filter(Boolean);
+    else if (cat) items = items.filter(l => l.cat === cat);
+    if (q) items = items.filter(l => l.t.toLowerCase().includes(q) || l.hoxha.toLowerCase().includes(q));
+
+    $('#lec-list').innerHTML = items.map(l => `
+      <button class="video-card" data-play="${l.i}">
+        <div class="video-thumb">
+          <img src="https://i.ytimg.com/vi/${l.yt}/hqdefault.jpg" alt="" loading="lazy">
+          <span class="play"><i>${ICONS.play}</i></span>
+        </div>
+        <div class="video-body">
+          <span class="li-body"><span class="li-title">${esc(l.t)}</span><span class="li-sub">${esc(l.hoxha)}</span></span>
+          <span style="color:${favs.has(l.i) ? 'var(--danger)' : 'var(--text-3)'}" data-favlec="${l.i}" role="button" aria-label="E preferuar">${favs.has(l.i) ? ICONS.heartFill : ICONS.heart}</span>
+        </div>
+      </button>`).join('') || `<div class="empty-state">${ICONS.video}<p>Asnjë ligjëratë nuk u gjet</p></div>`;
+
+    $('#lec-list').querySelectorAll('[data-play]').forEach(card => card.onclick = e => {
+      const favEl = e.target.closest('[data-favlec]');
+      const i = +card.dataset.play;
+      if (favEl) {
+        e.stopPropagation();
+        let f = S.favLectures;
+        f = f.includes(i) ? f.filter(x => x !== i) : [...f, i];
+        store.set('favLectures', f); checkAchievements(); draw();
+        return;
+      }
+      playLecture(i);
+    });
+  };
+  draw();
+  $('#lec-q').oninput = e => { q = e.target.value.trim().toLowerCase(); draw(); };
+  document.querySelectorAll('#lec-chips .chip').forEach(c => c.onclick = () => {
+    document.querySelectorAll('#lec-chips .chip').forEach(x => x.classList.remove('on'));
+    c.classList.add('on'); cat = c.dataset.cat; draw();
+  });
+}
+
+function playLecture(i) {
+  const l = LECTURES[i];
+  const recent = [i, ...S.recentLectures.filter(x => x !== i)].slice(0, 10);
+  store.set('recentLectures', recent);
+  sheet(`
+    <h3>${esc(l.t)}</h3>
+    <p class="muted" style="margin:-8px 0 14px">${esc(l.hoxha)}</p>
+    <div class="video-frame">
+      <iframe src="https://www.youtube-nocookie.com/embed/${l.yt}?autoplay=1&rel=0" title="${esc(l.t)}"
+        allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+    </div>`);
+}
+
+/* ---------- KALENDARI ISLAM ---------- */
+function screenKalendari(offset = 0) {
+  const now = new Date();
+  const view = new Date(now.getFullYear(), now.getMonth() + offset, 1);
+  const monthName = view.toLocaleDateString('sq-AL', { month: 'long', year: 'numeric' });
+  const daysInMonth = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+  const firstDow = (view.getDay() + 6) % 7; // e hëna = 0
+  const evMap = {};
+  ISLAMIC_EVENTS.forEach(e => evMap[e.date] = e);
+  let hijriDay;
+  try { hijriDay = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', { day: 'numeric' }); } catch { hijriDay = null; }
+
+  let cells = '';
+  for (let i = 0; i < firstDow; i++) cells += `<span class="cal-day other"></span>`;
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(view.getFullYear(), view.getMonth(), d);
+    const iso = todayISO(date);
+    const isToday = iso === todayISO();
+    cells += `<span class="cal-day ${isToday ? 'today' : ''} ${evMap[iso] ? 'event' : ''}" ${evMap[iso] ? `title="${esc(evMap[iso].name)}"` : ''}>
+      ${d}<span class="hij">${hijriDay ? hijriDay.format(date) : ''}</span></span>`;
+  }
+  const upcoming = ISLAMIC_EVENTS.filter(e => new Date(e.date) >= new Date(todayISO())).slice(0, 6);
+
+  render(`
+    <header class="page-head">${backBtn('#/')}<h2>Kalendari Islam</h2></header>
+    <div class="card">
+      <div class="row" style="justify-content:space-between;margin-bottom:14px">
+        <button class="icon-btn" id="cal-prev" aria-label="Muaji i kaluar">${ICONS.back}</button>
+        <b style="text-transform:capitalize">${esc(monthName)}</b>
+        <button class="icon-btn" id="cal-next" aria-label="Muaji i ardhshëm">${ICONS.chevR}</button>
+      </div>
+      <p class="muted center" style="margin-bottom:12px">${esc(hijriDate(view))} — ${esc(hijriDate(new Date(view.getFullYear(), view.getMonth(), daysInMonth)))}</p>
+      <div class="cal-grid">
+        ${['Hën', 'Mar', 'Mër', 'Enj', 'Pre', 'Sht', 'Die'].map(d => `<span class="cal-dow">${d}</span>`).join('')}
+        ${cells}
+      </div>
+    </div>
+    <section class="section">
+      <div class="section-head"><h3>Festat dhe netët e mëdha</h3></div>
+      <div class="stagger">
+        ${upcoming.map(e => `<div class="list-item">
+          <span class="li-icon" style="color:var(--gold)">${ICONS.star}</span>
+          <span class="li-body"><span class="li-title">${esc(e.name)}</span><span class="li-sub">${esc(e.desc)}</span></span>
+          <span class="li-end">${new Date(e.date).toLocaleDateString('sq-AL', { day: 'numeric', month: 'short' })}</span>
+        </div>`).join('')}
+      </div>
+    </section>
+  `, { tab: null });
+  $('#cal-prev').onclick = () => screenKalendari(offset - 1);
+  $('#cal-next').onclick = () => screenKalendari(offset + 1);
+}
+
+/* ---------- XHAMIA MË E AFËRT ---------- */
+function screenXhamia() {
+  render(`
+    <header class="page-head">${backBtn('#/')}<h2>Xhamia më e Afërt</h2></header>
+    <div id="mosque-wrap">
+      <div class="card center">
+        <p class="muted">Gjej xhamitë përreth teje me GPS.</p>
+        <button class="btn btn-primary mt-2" id="mosque-find">${ICONS.map} Gjej xhamitë</button>
+      </div>
+    </div>
+  `, { tab: null });
+
+  $('#mosque-find').onclick = () => {
+    const wrap = $('#mosque-wrap');
+    wrap.innerHTML = Array.from({ length: 3 }, () => '<div class="skeleton" style="height:76px;margin-bottom:10px"></div>').join('');
+    navigator.geolocation.getCurrentPosition(async p => {
+      const { latitude: lat, longitude: lng } = p.coords;
+      try {
+        const q = `[out:json][timeout:12];(node["amenity"="place_of_worship"]["religion"="muslim"](around:5000,${lat},${lng});way["amenity"="place_of_worship"]["religion"="muslim"](around:5000,${lat},${lng}););out center 20;`;
+        const res = await fetch('https://overpass-api.de/api/interpreter', { method: 'POST', body: 'data=' + encodeURIComponent(q) });
+        if (!res.ok) throw 0;
+        const json = await res.json();
+        const dist = (la, lo) => {
+          const R = 6371, dLa = (la - lat) * Math.PI / 180, dLo = (lo - lng) * Math.PI / 180;
+          const a = Math.sin(dLa / 2) ** 2 + Math.cos(lat * Math.PI / 180) * Math.cos(la * Math.PI / 180) * Math.sin(dLo / 2) ** 2;
+          return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        };
+        const mosques = json.elements.map(e => {
+          const la = e.lat ?? e.center?.lat, lo = e.lon ?? e.center?.lon;
+          return { name: e.tags?.name || 'Xhami', la, lo, d: dist(la, lo), addr: [e.tags?.['addr:street'], e.tags?.['addr:city']].filter(Boolean).join(', ') };
+        }).filter(m => m.la).sort((a, b) => a.d - b.d).slice(0, 12);
+
+        if (!mosques.length) throw 0;
+        wrap.innerHTML = `<div class="stagger">` + mosques.map(m => `
+          <a class="list-item" href="https://www.google.com/maps/dir/?api=1&destination=${m.la},${m.lo}&travelmode=walking" target="_blank" rel="noopener">
+            <span class="li-icon">${ICONS.mosque}</span>
+            <span class="li-body"><span class="li-title">${esc(m.name)}</span>
+            <span class="li-sub">${m.addr ? esc(m.addr) + ' · ' : ''}~${Math.round(m.d * 12)} min në këmbë</span></span>
+            <span class="li-end">${m.d < 1 ? Math.round(m.d * 1000) + ' m' : m.d.toFixed(1) + ' km'} ${ICONS.chevR}</span>
+          </a>`).join('') + `</div>
+          <p class="muted center mt-2" style="font-size:.72rem">Të dhënat nga OpenStreetMap. Struktura është gati për programet, imamët dhe njoftimet e xhamive.</p>`;
+      } catch {
+        wrap.innerHTML = `<div class="card center">
+          <p class="muted">Lista nuk u ngarkua dot. Hape direkt në hartë:</p>
+          <a class="btn btn-primary mt-2" href="https://www.google.com/maps/search/xhamia/@${lat},${lng},14z" target="_blank" rel="noopener">${ICONS.map} Xhamitë në hartë</a></div>`;
+      }
+    }, () => {
+      $('#mosque-wrap').innerHTML = `<div class="card center"><p class="muted">Qasja në lokacion u refuzua. Aktivizoje GPS-in dhe lejën e lokacionit për këtë faqe.</p></div>`;
+    }, { enableHighAccuracy: true, timeout: 10000 });
+  };
+}
+
+/* ---------- KËRKIMI GLOBAL ---------- */
+function screenKerko() {
+  render(`
+    <header class="page-head">${backBtn('#/')}<h2>Kërko</h2></header>
+    <div class="search-wrap">${ICONS.search}<input class="input" id="g-q" placeholder="Kërko në Kuran, lutje, ligjërata..." autofocus aria-label="Kërkim global"></div>
+    <div id="g-results"><div class="empty-state">${ICONS.search}<p>Shkruaj për të kërkuar kudo në aplikacion</p></div></div>
+  `, { tab: null });
+
+  let timer;
+  $('#g-q').oninput = e => {
+    clearTimeout(timer);
+    const q = e.target.value.trim().toLowerCase();
+    timer = setTimeout(() => {
+      if (q.length < 2) return;
+      const R = $('#g-results');
+      const surahs = SURAHS.map(([n, a, p], i) => ({ n, i: i + 1 })).filter(s => s.n.toLowerCase().includes(q)).slice(0, 5);
+      const duas = DUAS.map((d, i) => ({ ...d, i })).filter(d => d.t.toLowerCase().includes(q) || d.sq.toLowerCase().includes(q)).slice(0, 5);
+      const lecs = LECTURES.map((l, i) => ({ ...l, i })).filter(l => l.t.toLowerCase().includes(q) || l.hoxha.toLowerCase().includes(q)).slice(0, 5);
+      R.innerHTML = `
+        ${surahs.length ? `<div class="section-head"><h3>Suret</h3></div>` + surahs.map(s => `<button class="list-item" onclick="location.hash='#/sure/${s.i}'"><span class="li-icon">${ICONS.book}</span><span class="li-body"><span class="li-title">${esc(s.n)}</span></span><span class="li-end">${ICONS.chevR}</span></button>`).join('') : ''}
+        ${duas.length ? `<div class="section-head mt-3"><h3>Lutjet</h3></div>` + duas.map(d => `<button class="list-item" onclick="location.hash='#/lutjet'"><span class="li-icon">${ICONS.dua}</span><span class="li-body"><span class="li-title">${esc(d.t)}</span><span class="li-sub">${esc(d.sq.slice(0, 60))}…</span></span></button>`).join('') : ''}
+        ${lecs.length ? `<div class="section-head mt-3"><h3>Ligjëratat</h3></div>` + lecs.map(l => `<button class="list-item" data-lec="${l.i}"><span class="li-icon">${ICONS.video}</span><span class="li-body"><span class="li-title">${esc(l.t)}</span><span class="li-sub">${esc(l.hoxha)}</span></span></button>`).join('') : ''}
+        ${!surahs.length && !duas.length && !lecs.length ? `<div class="empty-state">${ICONS.search}<p>Asgjë nuk u gjet për "${esc(q)}"</p></div>` : ''}`;
+      R.querySelectorAll('[data-lec]').forEach(b => b.onclick = () => playLecture(+b.dataset.lec));
+    }, 250);
+  };
+}
+
+/* ---------- PROFILI ---------- */
+function screenProfili() {
+  const st = stats();
+  const earned = new Set(store.get('achievements', []));
+  ACHIEVEMENTS.forEach(a => { if (a.check(st)) earned.add(a.id); });
+  store.set('achievements', [...earned]);
+
+  render(`
+    <header class="page-head">${backBtn('#/')}<h2>Profili</h2>
+      <button class="icon-btn" id="edit-profile" aria-label="Ndrysho profilin">${ICONS.edit}</button></header>
+    <div class="profile-hero">
+      <div class="profile-avatar">${S.name ? esc(S.name[0].toUpperCase()) : ICONS.user}</div>
+      <h3 style="font-size:1.3rem">${esc(S.name || 'Mysafir')}</h3>
+      <p class="muted">${esc(S.city.name)}${S.mosque ? ' · ' + esc(S.mosque) : ''}</p>
+    </div>
+    <div class="stat-grid mt-3">
+      <div class="stat"><p class="v">${st.streak}</p><p class="k">Ditë seri</p></div>
+      <div class="stat"><p class="v">${st.totalPrayers}</p><p class="k">Namaze</p></div>
+      <div class="stat"><p class="v">${st.surahsRead}</p><p class="k">Sure</p></div>
+    </div>
+    <div class="stat-grid mt-2">
+      <div class="stat"><p class="v">${st.fullDays}</p><p class="k">Ditë të plota</p></div>
+      <div class="stat"><p class="v">${st.favorites}</p><p class="k">Favorite</p></div>
+      <div class="stat"><p class="v">${st.bestStreak}</p><p class="k">Rekord seri</p></div>
+    </div>
+    <section class="section">
+      <div class="section-head"><h3>Arritjet</h3><span class="muted">${earned.size}/${ACHIEVEMENTS.length}</span></div>
+      <div class="badge-grid">
+        ${ACHIEVEMENTS.map(a => `<div class="badge ${earned.has(a.id) ? 'earned' : ''}" title="${esc(a.desc)}">
+          <p class="b-icon">${a.icon}</p><p class="b-name">${esc(a.name)}</p></div>`).join('')}
+      </div>
+    </section>
+    <section class="section">
+      <button class="btn" onclick="location.hash='#/settings'">${ICONS.settings} Cilësimet</button>
+    </section>
+  `, { tab: null });
+
+  $('#edit-profile').onclick = () => sheet(`
+    <h3>Ndrysho profilin</h3>
+    <div class="field"><label for="pf-name">Emri</label><input class="input" id="pf-name" value="${esc(S.name)}" placeholder="Emri yt"></div>
+    <div class="field"><label for="pf-mosque">Xhamia që frekuenton</label><input class="input" id="pf-mosque" value="${esc(S.mosque)}" placeholder="p.sh. Xhamia e Madhe"></div>
+    <button class="btn btn-primary" id="pf-save">Ruaj</button>`,
+    (sh, close) => sh.querySelector('#pf-save').onclick = () => {
+      store.set('name', sh.querySelector('#pf-name').value.trim());
+      store.set('mosque', sh.querySelector('#pf-mosque').value.trim());
+      close(); toast('Profili u ruajt'); screenProfili();
+    });
+}
+
+/* ---------- MË SHUMË ---------- */
+function screenMeShume() {
+  const items = [
+    ['#/lutjet', 'dua', 'Lutjet', 'Sipas kategorive'],
+    ['#/kibla', 'compass', 'Kibla', 'Busulla premium'],
+    ['#/ligjeratat', 'video', 'Ligjëratat', 'Hoxhallarët shqiptarë'],
+    ['#/kalendari', 'calendar', 'Kalendari Islam', 'Festat & data Hixhri'],
+    ['#/xhamia', 'mosque', 'Xhamia më e afërt', 'Me GPS'],
+    ['#/kerko', 'search', 'Kërkimi global', 'Kudo në aplikacion'],
+    ['#/profili', 'user', 'Profili im', 'Statistika & arritje'],
+    ['#/settings', 'settings', 'Cilësimet', 'Tema, qyteti, njoftimet'],
+  ];
+  render(`
+    <header class="page-head"><h2 style="flex:1">Më shumë</h2></header>
+    <div class="stagger">
+      ${items.map(([h, ic, t, s]) => `<button class="list-item" onclick="location.hash='${h}'">
+        <span class="li-icon">${ICONS[ic]}</span>
+        <span class="li-body"><span class="li-title">${t}</span><span class="li-sub">${s}</span></span>
+        <span class="li-end">${ICONS.chevR}</span></button>`).join('')}
+    </div>
+    <p class="muted center mt-3" style="font-size:.72rem">Vakti · Oraret sipas Takvimit zyrtar të BIK-ut<br>BuiltByNiti · v1.0.0</p>
+  `, { tab: '#/me-shume' });
+}
+
+/* ---------- CILËSIMET ---------- */
+function screenSettings() {
+  const themes = [['auto', 'Automatike'], ['light', 'E çelët'], ['dark', 'E errët'], ['oled', 'OLED']];
+  const sizes = [['s', 'I vogël'], ['m', 'Mesatar'], ['l', 'I madh']];
+  render(`
+    <header class="page-head">${backBtn('#/me-shume')}<h2>Cilësimet</h2></header>
+
+    <div class="section-head"><h3>Pamja</h3></div>
+    <div class="set-group">
+      <div class="set-row"><span class="li-icon">${ICONS.moon}</span>
+        <span class="li-body"><span class="li-title">Tema</span></span>
+        <select class="input" id="set-theme" style="width:auto;padding:8px 12px" aria-label="Tema">
+          ${themes.map(([v, l]) => `<option value="${v}" ${S.theme === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+      <div class="set-row"><span class="li-icon">${ICONS.book}</span>
+        <span class="li-body"><span class="li-title">Madhësia e leximit</span></span>
+        <select class="input" id="set-font" style="width:auto;padding:8px 12px" aria-label="Madhësia e shkronjave">
+          ${sizes.map(([v, l]) => `<option value="${v}" ${S.fontSize === v ? 'selected' : ''}>${l}</option>`).join('')}</select></div>
+    </div>
+
+    <div class="section-head mt-3"><h3>Lokacioni & Njoftimet</h3></div>
+    <div class="set-group">
+      <button class="set-row" id="set-city"><span class="li-icon">${ICONS.map}</span>
+        <span class="li-body"><span class="li-title">Qyteti</span><span class="li-sub">${esc(S.city.name)}</span></span>
+        <span class="li-end">${ICONS.chevR}</span></button>
+      <div class="set-row"><span class="li-icon">${ICONS.bell}</span>
+        <span class="li-body"><span class="li-title">Njoftimet e namazit</span><span class="li-sub">Kur aplikacioni është i hapur</span></span>
+        <label class="switch"><input type="checkbox" id="set-notif" ${S.notif ? 'checked' : ''} aria-label="Njoftimet"><i></i></label></div>
+    </div>
+
+    <div class="section-head mt-3"><h3>Të dhënat</h3></div>
+    <div class="set-group">
+      <button class="set-row" id="set-backup"><span class="li-icon">${ICONS.download}</span>
+        <span class="li-body"><span class="li-title">Ruaj kopje rezervë</span><span class="li-sub">Shkarkohet si JSON</span></span></button>
+      <button class="set-row" id="set-restore"><span class="li-icon">${ICONS.upload}</span>
+        <span class="li-body"><span class="li-title">Rikthe nga kopja</span></span></button>
+      <button class="set-row" id="set-reset"><span class="li-icon" style="color:var(--danger)">${ICONS.x}</span>
+        <span class="li-body"><span class="li-title" style="color:var(--danger)">Fshi të gjitha të dhënat</span></span></button>
+    </div>
+
+    <div class="section-head mt-3"><h3>Rreth</h3></div>
+    <div class="set-group">
+      <div class="set-row"><span class="li-icon">${ICONS.info}</span>
+        <span class="li-body"><span class="li-title">Vakti v1.0.0</span>
+        <span class="li-sub">Oraret sipas Takvimit zyrtar të BIK-ut. Të dhënat ruhen vetëm në pajisjen tënde.</span></span></div>
+      <a class="set-row" href="mailto:feedback@builtbyniti.com?subject=Vakti%20Feedback"><span class="li-icon">${ICONS.heart}</span>
+        <span class="li-body"><span class="li-title">Dërgo feedback</span><span class="li-sub">BuiltByNiti</span></span></a>
+    </div>
+    <input type="file" id="restore-file" accept=".json" hidden>
+  `, { tab: null });
+
+  $('#set-theme').onchange = e => { store.set('theme', e.target.value); applyTheme(); };
+  $('#set-font').onchange = e => { store.set('fontSize', e.target.value); applyFontSize(); };
+  $('#set-city').onclick = citySheet;
+  $('#set-notif').onchange = async e => {
+    if (e.target.checked && 'Notification' in window && Notification.permission !== 'granted') {
+      const p = await Notification.requestPermission();
+      if (p !== 'granted') { e.target.checked = false; toast('Leja e njoftimeve u refuzua', 'x'); return; }
+    }
+    store.set('notif', e.target.checked); scheduleNotifications();
+    toast(e.target.checked ? 'Njoftimet u aktivizuan' : 'Njoftimet u çaktivizuan');
+  };
+  $('#set-backup').onclick = () => {
+    const blob = new Blob([JSON.stringify({ app: 'vakti', version: 1, date: todayISO(), data: store.all() }, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = `vakti-backup-${todayISO()}.json`; a.click();
+    URL.revokeObjectURL(a.href); toast('Kopja u shkarkua');
+  };
+  $('#set-restore').onclick = () => $('#restore-file').click();
+  $('#restore-file').onchange = e => {
+    const f = e.target.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      try {
+        const j = JSON.parse(r.result);
+        if (j.app !== 'vakti') throw 0;
+        Object.entries(j.data).forEach(([k, v]) => store.set(k, v));
+        applyTheme(); applyFontSize(); toast('Të dhënat u rikthyen'); route();
+      } catch { toast('Skedar i pavlefshëm', 'x'); }
+    };
+    r.readAsText(f);
+  };
+  $('#set-reset').onclick = () => {
+    if (confirm('A je i sigurt? Të gjitha të dhënat do të fshihen përgjithmonë.')) {
+      Object.keys(store.all()).forEach(k => store.del(k));
+      location.hash = '#/'; location.reload();
+    }
+  };
+}
+
+/* ---------- ONBOARDING ---------- */
+function showOnboarding() {
+  let step = 0;
+  const picks = { city: 'prishtine', theme: 'dark', name: '' };
+  const ob = document.createElement('div');
+  ob.className = 'onboard';
+  document.body.appendChild(ob);
+
+  const steps = [
+    () => `
+      <div class="onboard-body">
+        <div class="onboard-logo">${ICONS.logo}</div>
+        <h1>Es-selamu alejkum!<br>Mirë se vjen në <span style="color:var(--primary)">Vakti</span>.</h1>
+        <p class="lead">Platforma islame më moderne për Kosovën — kohët e namazit sipas Takvimit zyrtar të BIK-ut, Kurani, lutjet, Kibla dhe shumë më tepër. Gjithçka offline, gjithçka private.</p>
+      </div>
+      <button class="btn btn-primary" data-next>Fillojmë ${ICONS.chevR}</button>`,
+    () => `
+      <div class="onboard-body">
+        <h1>Ku ndodhesh?</h1>
+        <p class="lead">Kohët e namazit përshtaten saktë sipas qytetit tënd.</p>
+        <div class="opt-list">
+          ${CITIES.map(c => `<button class="opt ${c.id === picks.city ? 'on' : ''}" data-city="${c.id}">${esc(c.name)}<span class="o-check">${ICONS.check}</span></button>`).join('')}
+        </div>
+      </div>
+      <button class="btn btn-primary" data-next>Vazhdo ${ICONS.chevR}</button>`,
+    () => `
+      <div class="onboard-body">
+        <h1>Zgjedh pamjen.</h1>
+        <p class="lead">Mund ta ndryshosh kurdo te Cilësimet.</p>
+        <div class="opt-list">
+          ${[['dark', '🌙 E errët', 'Elegante dhe e qetë'], ['light', '☀️ E çelët', 'E pastër dhe e ndritshme'], ['oled', '⬛ OLED', 'E zezë absolute — kursen baterinë'], ['auto', '✨ Automatike', 'Ndjek sistemin']].map(([v, t, s]) =>
+            `<button class="opt ${picks.theme === v ? 'on' : ''}" data-theme="${v}"><span><b>${t}</b><br><small class="muted">${s}</small></span><span class="o-check">${ICONS.check}</span></button>`).join('')}
+        </div>
+      </div>
+      <button class="btn btn-primary" data-next>Vazhdo ${ICONS.chevR}</button>`,
+    () => `
+      <div class="onboard-body">
+        <h1>Si të thërrasim?</h1>
+        <p class="lead">Profili ruhet vetëm në pajisjen tënde. Llogaritë me Email, Google dhe Apple vijnë së shpejti.</p>
+        <div class="field mt-3"><input class="input" id="ob-name" placeholder="Emri yt (opsionale)" value="${esc(picks.name)}"></div>
+      </div>
+      <button class="btn btn-primary" data-finish>Përfundo ${ICONS.check}</button>
+      <button class="btn btn-ghost" data-finish style="width:100%;margin-top:8px">Vazhdo si mysafir</button>`,
+  ];
+
+  const draw = () => {
+    ob.innerHTML = `<div class="onboard-dots">${steps.map((_, i) => `<i class="${i <= step ? 'on' : ''}"></i>`).join('')}</div>` + steps[step]();
+    ob.querySelectorAll('[data-city]').forEach(b => b.onclick = () => { picks.city = b.dataset.city; draw(); });
+    ob.querySelectorAll('[data-theme]').forEach(b => b.onclick = () => { picks.theme = b.dataset.theme; store.set('theme', picks.theme); applyTheme(); draw(); });
+    ob.querySelector('[data-next]')?.addEventListener('click', () => { step++; draw(); });
+    ob.querySelectorAll('[data-finish]').forEach(b => b.onclick = () => {
+      picks.name = ob.querySelector('#ob-name')?.value.trim() || '';
+      store.set('city', picks.city); store.set('theme', picks.theme); store.set('name', picks.name);
+      store.set('onboarded', true);
+      ob.style.transition = 'opacity .4s'; ob.style.opacity = '0';
+      setTimeout(() => ob.remove(), 400);
+      route();
+    });
+  };
+  draw();
+}
+
+/* ---------- ROUTER ---------- */
+const routes = {
+  '': screenHome, '#/': screenHome,
+  '#/kohet': screenKohet,
+  '#/kurani': screenKurani,
+  '#/lutjet': screenLutjet,
+  '#/kibla': screenKibla,
+  '#/ligjeratat': screenLigjeratat,
+  '#/kalendari': () => screenKalendari(0),
+  '#/xhamia': screenXhamia,
+  '#/kerko': screenKerko,
+  '#/profili': screenProfili,
+  '#/me-shume': screenMeShume,
+  '#/settings': screenSettings,
+};
+function route() {
+  clearInterval(heroInterval); clearInterval(kohetInterval); kiblaCleanup?.();
+  const h = location.hash;
+  const sure = h.match(/^#\/sure\/(\d+)$/);
+  if (sure) return screenSure(+sure[1]);
+  (routes[h] || screenHome)();
+}
+
+/* ---------- Nisja ---------- */
+function init() {
+  applyTheme(); applyFontSize();
+  matchMedia('(prefers-color-scheme: light)').addEventListener?.('change', () => S.theme === 'auto' && applyTheme());
+
+  // Tab bar
+  const nav = document.createElement('nav');
+  nav.className = 'tab-bar'; nav.setAttribute('aria-label', 'Navigimi kryesor');
+  nav.innerHTML = [
+    ['#/', 'home', 'Ballina'], ['#/kohet', 'clock', 'Kohët'], ['#/kurani', 'book', 'Kurani'],
+    ['#/lutjet2', 'dua', 'Lutjet'], ['#/me-shume', 'grid', 'Më shumë']
+  ].map(([r, ic, l]) => `<button class="tab" data-route="${r === '#/lutjet2' ? '#/lutjet' : r}" aria-label="${l}">${ICONS[ic]}<span>${l}</span></button>`).join('');
+  nav.querySelectorAll('.tab').forEach(t => t.onclick = () => { location.hash = t.dataset.route; });
+  document.body.appendChild(nav);
+
+  window.addEventListener('hashchange', route);
+  route();
+
+  if (!S.onboarded) showOnboarding();
+
+  // Service Worker
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      reg.addEventListener('updatefound', () => {
+        const w = reg.installing;
+        w?.addEventListener('statechange', () => {
+          if (w.state === 'installed' && navigator.serviceWorker.controller) toast('Përditësim i ri — rihape aplikacionin');
+        });
+      });
+    }).catch(() => {});
+  }
+
+  // Install prompt
+  let deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault(); deferredPrompt = e;
+    if (store.get('installDismissed')) return;
+    setTimeout(() => {
+      if (!deferredPrompt) return;
+      sheet(`<h3>Instalo Vaktin 📲</h3>
+        <p class="muted" style="margin-bottom:16px">Shtoje në ekranin kryesor për qasje të shpejtë dhe përvojë të plotë offline.</p>
+        <button class="btn btn-primary" id="pwa-install">Instalo tani</button>
+        <button class="btn btn-ghost" id="pwa-later" style="width:100%;margin-top:8px">Më vonë</button>`,
+        (sh, close) => {
+          sh.querySelector('#pwa-install').onclick = async () => { close(); deferredPrompt.prompt(); deferredPrompt = null; };
+          sh.querySelector('#pwa-later').onclick = () => { store.set('installDismissed', true); close(); };
+        });
+    }, 20000);
+  });
+
+  scheduleNotifications();
+  document.addEventListener('visibilitychange', () => !document.hidden && scheduleNotifications());
+
+  // Splash
+  setTimeout(() => $('#splash')?.classList.add('hide'), 500);
+  setTimeout(() => $('#splash')?.remove(), 1100);
+}
+
+init();
+
+
+  </script>
+</body>
+</html>
